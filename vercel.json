@@ -1,0 +1,9 @@
+{
+	"rewrites": [
+		{
+			"source": "/",
+			"destination": "/components",
+			"has": [{ "type": "host", "value": "components.localhost:3000" }]
+		}
+	]
+}

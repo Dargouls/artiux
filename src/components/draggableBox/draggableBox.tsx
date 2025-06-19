@@ -1,3 +1,5 @@
+'use client';
+
 import { gsap } from 'gsap';
 import { Draggable } from 'gsap/Draggable';
 import React, { ReactNode, useEffect, useRef, useState } from 'react';

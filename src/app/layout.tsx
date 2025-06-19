@@ -2,7 +2,7 @@ import Header from '@/components/layout/header/header';
 import TransitionWrapper from '@/components/layout/transitionWrapper/transitionWrapper';
 import type { Metadata } from 'next';
 import { ViewTransitions } from 'next-view-transitions-gabriel-azv';
-import { Geist, Geist_Mono, Libre_Baskerville, Sen } from 'next/font/google';
+import { Geist, Geist_Mono, Libre_Baskerville, Poppins, Sen } from 'next/font/google';
 import './globals.css';
 
 const geistSans = Geist({
@@ -19,6 +19,11 @@ const baskerfille = Libre_Baskerville({
 const sen = Sen({
 	variable: '--font-sen',
 	subsets: ['latin'],
+});
+const poppins = Poppins({
+	variable: '--font-poppins',
+	subsets: ['latin'],
+	weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
 });
 
 const geistMono = Geist_Mono({
@@ -40,7 +45,7 @@ export default function RootLayout({
 		<ViewTransitions>
 			<html lang='pt-BR'>
 				<body
-					className={`${geistSans.variable} ${geistMono.variable} ${sen.variable} ${baskerfille.variable} antialiased`}
+					className={`${geistSans.variable} ${geistMono.variable} ${sen.variable} ${poppins.variable} ${baskerfille.variable} antialiased`}
 				>
 					<TransitionWrapper>
 						<Header />
