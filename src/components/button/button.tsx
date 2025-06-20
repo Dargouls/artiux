@@ -43,7 +43,7 @@ export default function BubbleButton({ children }: { children: React.ReactNode }
 	return (
 		<button
 			onClick={handleClick}
-			className='active:translate-0 hover:-translate-0.5 relative mt-8 overflow-hidden rounded border border-white px-6 py-2 font-mono tracking-wider text-white transition-all duration-300 hover:shadow-[4px_4px_0_0_#fff] active:shadow-none'
+			className='active:translate-0 hover:-translate-0.5 relative mt-8 overflow-hidden rounded border border-white px-6 py-2 font-mono tracking-wider text-white transition-all duration-150 hover:shadow-[4px_4px_0_0_#fff] active:shadow-none'
 		>
 			{children}
 
