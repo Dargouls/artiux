@@ -101,11 +101,11 @@ function BubbleSystem({ count = 50 }: { count?: number }) {
 			dummy.scale.setScalar(finalScale);
 			dummy.updateMatrix();
 
-			meshRef.current.setMatrixAt(i, dummy.matrix);
+			meshRef.current?.setMatrixAt(i, dummy.matrix);
 
 			// Define cor com opacity (usando instanced attributes seria mais eficiente)
 			const color = new THREE.Color().setHSL(0.55 + Math.sin(time + i) * 0.1, 0.6, 0.8);
-			meshRef.current.setColorAt(i, color);
+			meshRef.current?.setColorAt(i, color);
 		});
 
 		meshRef.current.instanceMatrix.needsUpdate = true;
