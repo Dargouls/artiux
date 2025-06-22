@@ -21,7 +21,7 @@ const MouseTrail: React.FC<MouseTrailProps> = ({
 	lineColor = '#00ffff',
 	lineThickness = 2,
 	dashArray = '10 5',
-	maxTrailLength = 60,
+	maxTrailLength = 30,
 	fadeDuration = 500,
 	segmentLength = 5,
 	smoothCursorRef, // Consumindo a nova prop

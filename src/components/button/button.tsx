@@ -1,7 +1,9 @@
 'use client';
 
+import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import CircularProgress from '../circularProgress/circularProgress';
 
 interface Bubble {
 	id: number;
@@ -10,11 +12,20 @@ interface Bubble {
 	delay: number;
 }
 
-export default function BubbleButton({ children }: { children: React.ReactNode }) {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+	children: React.ReactNode;
+	loading: boolean;
+}
+
+export default function BubbleButton({ loading, children, ...props }: ButtonProps) {
 	const [bubbles, setBubbles] = useState<Bubble[]>([]);
 	const [isCoolingDown, setIsCoolingDown] = useState(false);
 
-	const handleClick = () => {
+	const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+		animateButton();
+	};
+
+	const animateButton = () => {
 		if (isCoolingDown) return;
 
 		setIsCoolingDown(true);
@@ -43,11 +54,17 @@ export default function BubbleButton({ children }: { children: React.ReactNode }
 	return (
 		<button
 			onClick={handleClick}
-			className='active:translate-0 hover:-translate-0.5 relative mt-8 overflow-hidden rounded border border-white px-6 py-2 font-mono tracking-wider text-white transition-all duration-150 hover:shadow-[4px_4px_0_0_#fff] active:shadow-none'
+			className={cn(
+				'active:translate-0 relative flex items-center gap-1 overflow-hidden rounded border border-white px-6 py-2 font-mono tracking-wider text-white transition-all duration-100 active:shadow-none disabled:brightness-75',
+				'[&:hover:not(:disabled):not(:active)]:-translate-y-0.5',
+				'[&:hover:not(:disabled):not(:active)]:shadow-[4px_4px_0_0_#fff]',
+				props.className
+			)}
+			disabled={loading || props.disabled}
 		>
 			{children}
+			{loading && <CircularProgress size={20} color='white' />}
 
-			{/* Bolhas com blur */}
 			{bubbles.map((bubble) => (
 				<motion.span
 					key={bubble.id}
@@ -66,9 +83,4 @@ export default function BubbleButton({ children }: { children: React.ReactNode }
 			))}
 		</button>
 	);
-}
-
-function getRandomColor() {
-	const hue = Math.floor(Math.random() * 360);
-	return `hsl(${hue}, 80%, 70%)`;
 }

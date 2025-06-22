@@ -226,7 +226,7 @@ export const SmoothCursor = forwardRef<SmoothCursorRef, SmoothCursorProps>(
 				transition={{
 					type: 'spring',
 					stiffness: 400,
-					damping: 30,
+					damping: 10,
 				}}
 			>
 				{cursor}

@@ -1,9 +1,12 @@
 import Header from '@/components/layout/header/header';
-import TransitionWrapper from '@/components/layout/transitionWrapper/transitionWrapper';
 import type { Metadata } from 'next';
-import { ViewTransitions } from 'next-view-transitions-gabriel-azv';
 import { Geist, Geist_Mono, Libre_Baskerville, Poppins, Sen } from 'next/font/google';
+
 import './globals.css';
+
+import TransitionWrapper from '@/components/layout/transitionWrapper/transitionWrapper';
+import { ViewTransitions } from 'next-view-transitions-gabriel-azv';
+import { Toaster } from 'react-hot-toast';
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',
@@ -52,6 +55,7 @@ export default function RootLayout({
 
 						{children}
 					</TransitionWrapper>
+					<Toaster position='bottom-center' />
 				</body>
 			</html>
 		</ViewTransitions>

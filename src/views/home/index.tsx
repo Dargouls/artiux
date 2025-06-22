@@ -10,6 +10,7 @@ import react from '@/assets/images/react.png';
 import tailwindcss from '@/assets/images/tailwindcss.png';
 import typescript from '@/assets/images/typescript.png';
 
+import AnimatedForm from '@/components/animatedForm/animatedForm';
 import Button from '@/components/button/button';
 import CopyCode from '@/components/copyCode/copyCode';
 import NoiseSurface from '@/components/meta-noise';
@@ -87,13 +88,19 @@ export default function HomePage() {
 					fill
 					alt='fundo'
 				/>
-				<section className='panel flex h-screen w-full items-center justify-center pt-20 text-4xl font-bold'>
+				<section className='panel flex h-screen w-full items-center justify-center pt-20 font-bold'>
 					<div className='relative z-10 h-full w-full overflow-hidden rounded-b-none text-center'>
-						<div className='font-poppins absolute bottom-10 left-10 right-10 top-10 flex justify-between text-start text-3xl font-normal text-black'>
-							<p className='max-w-[600px]'>
-								Desenhado para funcionar com <b>Next.js</b>, <b>Tailwindcss</b>, <b>React</b> e{' '}
-								<b>Typescript</b>
-							</p>
+						<div className='font-poppins absolute bottom-10 left-10 right-10 top-10 flex justify-between text-start font-normal text-black'>
+							<div className='flex max-w-[600px] flex-col justify-between'>
+								<p className='text-3xl'>
+									Desenhado para funcionar com <b>Next.js</b>, <b>Tailwindcss</b>, <b>React</b> e{' '}
+									<b>Typescript</b>
+								</p>
+
+								<div className='w-max min-w-96'>
+									<AnimatedForm />
+								</div>
+							</div>
 
 							<div className='grid aspect-square grid-cols-4 grid-rows-4 gap-1 rounded-lg p-1'>
 								{staticBlocks.map((block, i) =>
@@ -135,13 +142,13 @@ export default function HomePage() {
 					<nav className='flex flex-1 items-end justify-center gap-4 px-4 pb-7'>
 						<CopyCode />
 					</nav>
-					<div className='h-56'>
-						<h1 className='font-poppins pt-8 text-4xl font-light'>
+					<div className='flex h-56 flex-col items-center gap-8 pt-6'>
+						<h1 className='font-poppins text-4xl font-light'>
 							Apenas copie e cole os componentes
 							<p>e use</p>
 						</h1>
 
-						<Button>Copy</Button>
+						<Button loading={false}>Ver Componentes</Button>
 					</div>
 					{/* <picture className='absolute left-0 top-0 h-1/2 w-full select-none rounded-[48px] rounded-t-none bg-black'></picture> */}
 					{/* <Image
