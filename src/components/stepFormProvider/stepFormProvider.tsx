@@ -9,10 +9,9 @@ interface FormProviderProps {
 
 export default function StepFormProvider({ forms, actualForm }: FormProviderProps) {
 	const [prevForm, setPrevForm] = useState(actualForm);
-	const [direction, setDirection] = useState(0); // 1 = avançar (next), -1 = voltar (prev)
+	const [direction, setDirection] = useState(0);
 	const [transitioning, setTransitioning] = useState(false);
 
-	// Quando actualForm mudar, dispare a transição
 	useEffect(() => {
 		if (actualForm === prevForm) return;
 
@@ -20,7 +19,6 @@ export default function StepFormProvider({ forms, actualForm }: FormProviderProp
 		setTransitioning(true);
 
 		const timer = setTimeout(() => {
-			// após animações, atualiza índice base
 			setPrevForm(actualForm);
 			setTransitioning(false);
 		}, 300); // deve bater com a duração das animações
@@ -46,7 +44,6 @@ export default function StepFormProvider({ forms, actualForm }: FormProviderProp
 			<div
 				className='absolute left-0 top-0 h-full w-full'
 				style={{
-					// se estiver em transição, aplica slide in; senão, posição normal
 					animation: transitioning
 						? `${direction === 1 ? 'slideInRight' : 'slideInLeft'} 300ms ease-in-out forwards`
 						: undefined,
@@ -55,7 +52,6 @@ export default function StepFormProvider({ forms, actualForm }: FormProviderProp
 				{forms[transitioning ? actualForm : prevForm]}
 			</div>
 
-			{/* Keyframes globais */}
 			<style jsx global>{`
         @keyframes slideOutLeft {
           from {
