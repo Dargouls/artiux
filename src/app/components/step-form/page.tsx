@@ -1,5 +1,44 @@
 'use client';
 
+import CopyCode from '@/components/copyCode/copyCode';
+
+import AnimatedForm from '@/components/animatedForm/animatedForm';
+import PreviewCode from '@/components/previewCode/previewCode';
+
+export default function StepFormComponent() {
+	return (
+		<>
+			<div>
+				<h1 className='mt-20 text-5xl font-bold'>Step Form</h1>
+				<p className='text-muted-foreground mt-4 block text-xl'>
+					Um provider de formulário com animação passo-a-passo
+				</p>
+			</div>
+
+			<section className='my-8'>
+				<h3 className='text-2xl font-bold'>Código:</h3>
+				<div className='mt-4 h-52 place-content-start'>
+					<CopyCode installs='yarn add motion' code={componentCode} />
+				</div>
+			</section>
+
+			<section className='my-8'>
+				<PreviewCode code={previewCode}>
+					<div className='w-max min-w-96'>
+						<AnimatedForm />
+					</div>
+				</PreviewCode>
+			</section>
+		</>
+	);
+}
+
+const previewCode = `
+// Instalações
+// yarn add react-hook-form @hookform/resolvers zod lucide-react react-hot-toast
+
+'use client';
+
 import StepFormProvider from '@/components/stepFormProvider/stepFormProvider';
 import { useState } from 'react';
 
@@ -205,3 +244,109 @@ function PasswordStep() {
 function LabelInputContainer({ children, className }: { children: React.ReactNode; className?: string }) {
 	return <div className={cn('flex w-full flex-col space-y-2', className)}>{children}</div>;
 }
+`;
+
+const componentCode =
+	`
+//src/components/stepFormProvider/stepFormProvider.tsx
+'use client';
+
+import { ReactNode, useEffect, useState } from 'react';
+
+interface FormProviderProps {
+	forms: ReactNode[];
+	actualForm: number;
+}
+
+export default function StepFormProvider({ forms, actualForm }: FormProviderProps) {
+	const [prevForm, setPrevForm] = useState(actualForm);
+	const [direction, setDirection] = useState(0);
+	const [transitioning, setTransitioning] = useState(false);
+
+	useEffect(() => {
+		if (actualForm === prevForm) return;
+
+		setDirection(actualForm > prevForm ? 1 : -1);
+		setTransitioning(true);
+
+		const timer = setTimeout(() => {
+			setPrevForm(actualForm);
+			setTransitioning(false);
+		}, 300); // deve bater com a duração das animações
+
+		return () => clearTimeout(timer);
+	}, [actualForm, prevForm]);
+
+	return (
+		<div className='relative h-full w-full overflow-hidden'>
+			{/* Form que está saindo */}
+			{transitioning && (
+				<div
+					className='absolute left-0 top-0 h-full w-full'
+					style={{
+					` +
+	"animation: `${direction === 1 ? 'slideOutLeft' : 'slideOutRight'} 300ms ease-in-out forwards`," +
+	`					}}
+				>
+					{forms[prevForm]}
+				</div>
+			)}
+
+			{/* Form que está entrando */}
+			<div
+				className='absolute left-0 top-0 h-full w-full'
+				style={{
+					animation: transitioning` +
+	"? `${direction === 1 ? 'slideInRight' : 'slideInLeft'} 300ms ease-in-out forwards`" +
+	`: undefined,
+				}}
+			>
+				{forms[transitioning ? actualForm : prevForm]}
+			</div>
+			` +
+	'<style jsx global>{`' +
+	'@keyframes slideOutLeft {' +
+	`from {
+						transform: translateX(0%);
+						opacity: 1;
+					}
+					to {
+						transform: translateX(-100%);
+						opacity: 0;
+					}
+				}
+				@keyframes slideOutRight {
+					from {
+						transform: translateX(0%);
+						opacity: 1;
+					}
+					to {
+						transform: translateX(100%);
+						opacity: 0;
+					}
+				}
+				@keyframes slideInRight {
+					from {
+						transform: translateX(100%);
+						opacity: 0;
+					}
+					to {
+						transform: translateX(0%);
+						opacity: 1;
+					}
+				}
+				@keyframes slideInLeft {
+					from {
+						transform: translateX(-100%);
+						opacity: 0;
+					}
+					to {
+						transform: translateX(0%);
+						opacity: 1;
+					}
+				}` +
+	'`}</style>' +
+	`</div>
+	);
+}
+`;

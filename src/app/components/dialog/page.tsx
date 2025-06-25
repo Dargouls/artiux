@@ -1,0 +1,156 @@
+'use client';
+
+import Button from '@/artiux-components/button';
+import Dialog from '@/artiux-components/dialog';
+import CopyCode from '@/components/copyCode/copyCode';
+import { useEffect, useRef, useState } from 'react';
+
+export default function DialogComponent() {
+	const [open, setOpen] = useState(false);
+	const ref = useRef<any>(null);
+
+	useEffect(() => {
+		console.log(open);
+	}, [open]);
+
+	return (
+		<>
+			<div>
+				<h1 className='mt-20 text-5xl font-bold'>Dialog</h1>
+				<p className='text-muted-foreground mt-4 block text-xl'>Um Dialog com animação de expansão</p>
+			</div>
+
+			<section className='my-8'>
+				<h3 className='text-2xl font-bold'>Código:</h3>
+				<div className='mt-4 h-52 place-content-start'>
+					<CopyCode installs='yarn add motion lucide-react' code={dialogCode} />
+				</div>
+			</section>
+
+			<section className='my-8'>
+				<h3 className='text-2xl font-bold'>Prévia:</h3>
+
+				<div className='border-border relative mt-4 flex min-h-96 items-center justify-center border p-4'>
+					<Button className='w-max' onClick={() => setOpen(true)}>
+						Mostrar Dialog
+					</Button>
+					<Dialog open={open} onClose={() => setOpen(false)}>
+						<Dialog.Header>
+							<h3>Titulo</h3>
+						</Dialog.Header>
+						<Dialog.Body>
+							<p>Corpo do Dialog</p>
+						</Dialog.Body>
+						<Dialog.Footer>
+							<Button onClick={() => setOpen(false)}>Fechar</Button>
+						</Dialog.Footer>
+					</Dialog>
+				</div>
+			</section>
+		</>
+	);
+}
+
+const dialogCode = `
+'use client';
+
+import { forwardRef, useEffect, useRef } from 'react';
+
+import { useOutsideClick } from '@/hook/useOutsideClick';
+import { cn } from '@/lib/utils';
+
+import { X } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+
+interface DialogProps extends React.HTMLAttributes<HTMLDivElement> {
+	open: boolean;
+	onClose: () => void;
+	closeButton?: boolean;
+}
+
+export default function Dialog({ closeButton, open, onClose, children, ...props }: DialogProps) {
+	const modalRef = useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>;
+	useOutsideClick(modalRef, () => onClose());
+
+	useEffect(() => {
+		if (open) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = 'auto';
+		}
+	}, [open]);
+
+	return (
+		<>
+			{open && (
+				<div className='fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/30 transition-all'>
+					<AnimatePresence>
+						{open && (
+							<Wrapper
+								ref={modalRef}
+								className='bg-card text-card-foreground border-border relative w-full max-w-lg rounded-lg border p-4 shadow-2xl'
+							>
+								{closeButton && (
+									<div className='text-foreground absolute right-4 top-4 cursor-pointer rounded-full p-1 transition-colors'>
+										<X size={16} onClick={onClose} />
+									</div>
+								)}
+
+								{children}
+							</Wrapper>
+						)}
+					</AnimatePresence>
+				</div>
+			)}
+		</>
+	);
+}
+
+const Header = ({ children }: { children: React.ReactNode }) => {
+	return (
+		<>
+			<div className='flex items-center pb-4'>{children}</div>
+		</>
+	);
+};
+
+const Body = ({ children }: { children: React.ReactNode }) => {
+	return <div className='block py-2'>{children}</div>;
+};
+
+const Footer = ({ children }: { children: React.ReactNode }) => {
+	return (
+		<>
+			<div className='flex items-center justify-end pt-4'>{children}</div>
+		</>
+	);
+};
+
+Dialog.Header = Header;
+Dialog.Body = Body;
+Dialog.Footer = Footer;
+
+interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+const Wrapper = forwardRef<HTMLDivElement, ContainerProps>(({ children, ...props }, ref) => {
+	return (
+		<>
+			<motion.div
+				ref={ref}
+				className={cn('', props.className)}
+				initial={{ opacity: 0.3, scaleX: 0.9, scaleY: 0.5 }}
+				viewport={{ once: true }}
+				animate={{ opacity: 1, scaleX: 1, scaleY: 1 }}
+				exit={{ opacity: 0.3, scaleX: 0.9, scaleY: 0.5 }}
+				transition={{
+					type: 'spring',
+					bounce: 0.4,
+					duration: 0.5,
+				}}
+			>
+				{children}
+			</motion.div>
+		</>
+	);
+});
+`;

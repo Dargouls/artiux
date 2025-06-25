@@ -11,7 +11,7 @@ interface MovingSquaresProps extends React.HTMLAttributes<HTMLDivElement> {}
 export default function MovingSquares({ children, ...props }: MovingSquaresProps) {
 	// Define em qual posição (0 a 3) está cada cor
 	const [positionsOfColors, setPositionsOfColors] = useState([0, 1, 2, 3]);
-	console.log('filhos: ', children);
+
 	useEffect(() => {
 		const interval = setInterval(() => {
 			setPositionsOfColors((prev) => {

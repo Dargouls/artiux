@@ -2,8 +2,8 @@ import { cn } from '@/lib/utils';
 import { cva } from 'class-variance-authority';
 import { ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
 
-import { RippleContainer } from '@/artiux-components/rippleContainer';
 import CircularProgress from '@/components/circularProgress/circularProgress';
+import { RippleContainer } from './rippleContainer';
 
 interface ButtonProps extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
 	variant?: 'contained' | 'text' | 'outlined' | 'icon';
