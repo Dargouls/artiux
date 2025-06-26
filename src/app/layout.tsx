@@ -48,7 +48,7 @@ export default function RootLayout({
 		<ViewTransitions>
 			<html lang='pt-BR'>
 				<body
-					className={`${geistSans.variable} ${geistMono.variable} ${sen.variable} ${poppins.variable} ${baskerfille.variable} antialiased`}
+					className={`overflow-auto md:overflow-hidden ${geistSans.variable} ${geistMono.variable} ${sen.variable} ${poppins.variable} ${baskerfille.variable} antialiased`}
 				>
 					<TransitionWrapper>
 						<Header />

@@ -1,6 +1,7 @@
 // components/SynthwaveSurface.tsx
 'use client';
 
+import { useIsMobile } from '@/artiux-hooks/use-mobile';
 import { cn } from '@/lib/utils';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { DepthOfField, EffectComposer } from '@react-three/postprocessing';
@@ -75,22 +76,35 @@ interface NoiseSurfaceProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export default function NoiseSurface({ height = 0.3, y = -1, ...props }: NoiseSurfaceProps) {
+	const isMobile = useIsMobile('998');
+
 	return (
 		<div className={cn('inset-0 -z-10 bg-transparent', props.className)}>
 			<Canvas camera={{ position: [0, 0, 12], fov: 40 }} gl={{ antialias: true }}>
-				<ambientLight intensity={0.2} />
-				<directionalLight position={[5, 10, 5]} intensity={1} />
+				{/* <ambientLight intensity={0.2} />
+				<directionalLight position={[5, 10, 5]} intensity={1} /> */}
 				<DeformingPlane height={height} y={y} />
 
 				{/* 5) Efeitos de pós-processamento para blur baseado em profundidade */}
-				<EffectComposer>
-					<DepthOfField
-						focusDistance={0} // distância do foco (0 = câmera, 1 = longe)
-						focalLength={0.05} // comprimento focal (menor = mais blur)
-						bokehScale={8} // intensidade do bokeh/blur
-						height={1080} // resolução do efeito
-					/>
-				</EffectComposer>
+				{isMobile ? (
+					<EffectComposer>
+						<DepthOfField
+							focusDistance={1} // distância do foco (0 = câmera, 1 = longe)
+							focalLength={0.5} // comprimento focal (menor = mais blur)
+							bokehScale={0.8} // intensidade do bokeh/blur
+							height={1080} // resolução do efeito
+						/>
+					</EffectComposer>
+				) : (
+					<EffectComposer>
+						<DepthOfField
+							focusDistance={0.08} // distância do foco (0 = câmera, 1 = longe)
+							focalLength={0.05} // comprimento focal (menor = mais blur)
+							bokehScale={0.8} // intensidade do bokeh/blur
+							height={1080} // resolução do efeito
+						/>
+					</EffectComposer>
+				)}
 			</Canvas>
 		</div>
 	);

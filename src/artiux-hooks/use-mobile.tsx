@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from 'react';
 
-export const useIsMobile = () => {
+type breakpoints = '768' | '998' | '1440';
+export const useIsMobile = (width: breakpoints = '768') => {
 	const [isMobile, setIsMobile] = useState(false);
 
 	useEffect(() => {
 		const checkMobile = () => {
-			setIsMobile(window.matchMedia('(max-width: 768px)').matches);
+			setIsMobile(window.matchMedia(`(max-width:${width}px )`).matches);
 		};
 
 		checkMobile();
