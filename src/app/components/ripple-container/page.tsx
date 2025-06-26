@@ -43,7 +43,7 @@ export default function RippleContainerComponent() {
 const previewCode = `
 import { RippleContainer } from '@/artiux-components/rippleContainer';
 
-<RippleContainer>
+<RippleContainer color={'#919191'}>
 	<button className='bg-primary text-primary-foreground ml-4 rounded-md px-4 py-2 hover:brightness-95'>
 		Eu sou um botão
 	</button>
@@ -64,10 +64,11 @@ interface RippleProps {
 }
 
 interface RippleContainerProps {
+	color?: string;
 	children: React.ReactElement<any, any>;
 }
 
-export function RippleContainer({ children }: RippleContainerProps) {
+export function RippleContainer({ color = 'rgba(56, 56, 56, 0.4)', children }: RippleContainerProps) {
 	const [ripples, setRipples] = useState<RippleProps[]>([]);
 	const containerRef = useRef<HTMLElement>(null);
 	const rippleCount = useRef(0);
@@ -134,7 +135,7 @@ export function RippleContainer({ children }: RippleContainerProps) {
 							style={{
 								position: 'absolute',
 								borderRadius: '50%',
-								backgroundColor: 'rgba(56, 56, 56, 0.4)',
+								backgroundColor: color,
 								pointerEvents: 'none',
 							}}
 						/>

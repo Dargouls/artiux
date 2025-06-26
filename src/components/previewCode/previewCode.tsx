@@ -48,7 +48,7 @@ export default function PreviewCode({ children, code, ...props }: PreviewCodePro
 				))}
 			</div>
 
-			<div className='border-border scrollbar-thin scrollbar-thumb-zinc-400 scrollbar-track-zinc-100/0 relative mt-1 h-96 overflow-auto border'>
+			<div className='border-border scrollbar-thin scrollbar-thumb-zinc-400 scrollbar-track-zinc-100/0 relative mt-1 overflow-auto border'>
 				{pre === 'Uso' && (
 					<div className='relative'>
 						<CodeButton code={code} className='sticky top-4 z-10 flex place-self-end pr-4' />
@@ -67,7 +67,7 @@ export default function PreviewCode({ children, code, ...props }: PreviewCodePro
 				)}
 
 				{pre === 'Prévia' && (
-					<div className='@container flex h-full w-full items-center justify-center overflow-auto'>
+					<div className='@container flex h-96 w-full items-center justify-center overflow-auto'>
 						{children}
 					</div>
 				)}

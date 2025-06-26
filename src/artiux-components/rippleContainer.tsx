@@ -11,10 +11,11 @@ interface RippleProps {
 }
 
 interface RippleContainerProps {
+	color?: string;
 	children: React.ReactElement<any, any>;
 }
 
-export function RippleContainer({ children }: RippleContainerProps) {
+export function RippleContainer({ color = 'rgba(56, 56, 56, 0.4)', children }: RippleContainerProps) {
 	const [ripples, setRipples] = useState<RippleProps[]>([]);
 	const containerRef = useRef<HTMLElement>(null);
 	const rippleCount = useRef(0);
@@ -81,7 +82,7 @@ export function RippleContainer({ children }: RippleContainerProps) {
 							style={{
 								position: 'absolute',
 								borderRadius: '50%',
-								backgroundColor: 'rgba(56, 56, 56, 0.4)',
+								backgroundColor: color,
 								pointerEvents: 'none',
 							}}
 						/>
