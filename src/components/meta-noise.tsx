@@ -88,7 +88,7 @@ export default function NoiseSurface({ height = 0.3, y = -1, ...props }: NoiseSu
 						focusDistance={0} // distância do foco (0 = câmera, 1 = longe)
 						focalLength={0.05} // comprimento focal (menor = mais blur)
 						bokehScale={8} // intensidade do bokeh/blur
-						height={720} // resolução do efeito
+						height={1080} // resolução do efeito
 					/>
 				</EffectComposer>
 			</Canvas>
