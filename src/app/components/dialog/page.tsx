@@ -3,15 +3,10 @@
 import Button from '@/artiux-components/button';
 import Dialog from '@/artiux-components/dialog';
 import CopyCode from '@/components/copyCode/copyCode';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 
 export default function DialogComponent() {
 	const [open, setOpen] = useState(false);
-	const ref = useRef<any>(null);
-
-	useEffect(() => {
-		console.log(open);
-	}, [open]);
 
 	return (
 		<>
@@ -36,7 +31,7 @@ export default function DialogComponent() {
 					</Button>
 					<Dialog open={open} onClose={() => setOpen(false)}>
 						<Dialog.Header>
-							<h3>Titulo</h3>
+							<Dialog.Title>Titulo</Dialog.Title>
 						</Dialog.Header>
 						<Dialog.Body>
 							<p>Corpo do Dialog</p>
@@ -83,7 +78,7 @@ export default function Dialog({ closeButton, open, onClose, children, ...props 
 	return (
 		<>
 			{open && (
-				<div className='fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/30 transition-all'>
+				<div className='fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/30 p-4 transition-all'>
 					<AnimatePresence>
 						{open && (
 							<Wrapper
@@ -106,6 +101,14 @@ export default function Dialog({ closeButton, open, onClose, children, ...props 
 	);
 }
 
+const Title = ({ children }: { children: React.ReactNode }) => {
+	return (
+		<>
+			<h3 className='text-lg font-semibold leading-none tracking-tight'>{children}</h3>
+		</>
+	);
+};
+
 const Header = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<>
@@ -127,6 +130,7 @@ const Footer = ({ children }: { children: React.ReactNode }) => {
 };
 
 Dialog.Header = Header;
+Dialog.Title = Title;
 Dialog.Body = Body;
 Dialog.Footer = Footer;
 
@@ -138,7 +142,7 @@ const Wrapper = forwardRef<HTMLDivElement, ContainerProps>(({ children, ...props
 			<motion.div
 				ref={ref}
 				className={cn('', props.className)}
-				initial={{ opacity: 0.3, scaleX: 0.9, scaleY: 0.5 }}
+				initial={{ opacity: 0.3, scaleX: 0.9, scaleY: 0.2 }}
 				viewport={{ once: true }}
 				animate={{ opacity: 1, scaleX: 1, scaleY: 1 }}
 				exit={{ opacity: 0.3, scaleX: 0.9, scaleY: 0.5 }}

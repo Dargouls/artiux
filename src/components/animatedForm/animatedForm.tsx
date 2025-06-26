@@ -109,7 +109,7 @@ export default function AnimatedForm({ ...props }: AnimatedFormProps) {
 			<FormProvider {...methods}>
 				<form
 					onSubmit={methods.handleSubmit(onSubmit)}
-					className={cn('text-foreground rounded-lg bg-zinc-800 p-4', props.className)}
+					className={cn('text-foreground min-w-[300px] rounded-lg bg-zinc-800 p-4', props.className)}
 				>
 					<div className='relative h-[200px]'>
 						<StepFormProvider forms={formComponents} actualForm={step} />

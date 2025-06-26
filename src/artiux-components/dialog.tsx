@@ -29,7 +29,7 @@ export default function Dialog({ closeButton, open, onClose, children, ...props 
 	return (
 		<>
 			{open && (
-				<div className='fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/30 transition-all'>
+				<div className='fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/30 p-4 transition-all'>
 					<AnimatePresence>
 						{open && (
 							<Wrapper
@@ -52,6 +52,14 @@ export default function Dialog({ closeButton, open, onClose, children, ...props 
 	);
 }
 
+const Title = ({ children }: { children: React.ReactNode }) => {
+	return (
+		<>
+			<h3 className='text-lg font-semibold leading-none tracking-tight'>{children}</h3>
+		</>
+	);
+};
+
 const Header = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<>
@@ -73,6 +81,7 @@ const Footer = ({ children }: { children: React.ReactNode }) => {
 };
 
 Dialog.Header = Header;
+Dialog.Title = Title;
 Dialog.Body = Body;
 Dialog.Footer = Footer;
 

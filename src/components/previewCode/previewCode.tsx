@@ -67,7 +67,9 @@ export default function PreviewCode({ children, code, ...props }: PreviewCodePro
 				)}
 
 				{pre === 'Prévia' && (
-					<div className='flex h-full w-full items-center justify-center overflow-auto'>{children}</div>
+					<div className='@container flex h-full w-full items-center justify-center overflow-auto'>
+						{children}
+					</div>
 				)}
 			</div>
 		</>

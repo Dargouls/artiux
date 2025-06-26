@@ -24,7 +24,7 @@ export default function StepFormComponent() {
 
 			<section className='my-8'>
 				<PreviewCode code={previewCode}>
-					<div className='w-max min-w-96'>
+					<div className='w-max'>
 						<AnimatedForm />
 					</div>
 				</PreviewCode>
@@ -148,7 +148,7 @@ export default function AnimatedForm({ ...props }: AnimatedFormProps) {
 			<FormProvider {...methods}>
 				<form
 					onSubmit={methods.handleSubmit(onSubmit)}
-					className={cn('text-foreground rounded-lg bg-zinc-800 p-4', props.className)}
+					className={cn('text-foreground min-w-[300px] rounded-lg bg-zinc-800 p-4', props.className)}
 				>
 					<div className='relative h-[200px]'>
 						<StepFormProvider forms={formComponents} actualForm={step} />

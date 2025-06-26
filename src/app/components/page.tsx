@@ -11,7 +11,7 @@ export default function Page() {
 			<main className='mt-20 px-10 text-center'>
 				<h1 className='text-4xl'>Descubra todos os componentes que temos</h1>
 
-				<div className='mt-20 grid grid-cols-2 gap-4 place-self-center'>
+				<div className='mt-20 grid grid-cols-1 gap-4 place-self-center md:grid-cols-2'>
 					<ComponentCard
 						title='Dialog'
 						description='Um Dialog com animação de expansão'

@@ -10,8 +10,8 @@ import react from '@/assets/images/react.png';
 import tailwindcss from '@/assets/images/tailwindcss.png';
 import typescript from '@/assets/images/typescript.png';
 
+import BubbleButton from '@/artiux-components/bubbleButton';
 import AnimatedForm from '@/components/animatedForm/animatedForm';
-import Button from '@/components/button/button';
 import CopyCode from '@/components/copyCode/copyCode';
 import NoiseSurface from '@/components/meta-noise';
 import MovingSquares from '@/components/movingSquares/movingSquares';
@@ -22,6 +22,7 @@ import SpotlightCard from '@/components/ui/spotlight-card';
 import MouseTrail from '@/components/ui/trail-cursor';
 import useScrollSmoother from '@/hook/useScrollSmoother';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function HomePage() {
 	const [peaks, setPeaks] = useState(0.3);
@@ -29,6 +30,8 @@ export default function HomePage() {
 	const cursorRef = useRef<HTMLElement>(null);
 	const sectionRef = useRef<HTMLDivElement>(null);
 	const elementRef = useRef<HTMLDivElement>(null);
+
+	const { push } = useRouter();
 
 	useSnap(mainRef as any);
 	useScrollSmoother(sectionRef as any, elementRef as any);
@@ -46,7 +49,7 @@ export default function HomePage() {
 	});
 	return (
 		<main ref={mainRef} className='min-h-screen'>
-			<section className='panel relative flex h-screen items-center justify-between overflow-hidden px-20'>
+			<section className='panel relative flex h-screen items-center justify-between overflow-hidden px-10 sm:px-20'>
 				<NoiseSurface className='absolute inset-0 -z-10' height={peaks} />
 				<BubbleParticles className='absolute inset-0 -z-10 h-full w-full' />
 
@@ -81,28 +84,28 @@ export default function HomePage() {
 			</section>
 			{/* end - Ignore section */}
 
-			<div ref={sectionRef} className='relative border-x-[2.5rem] border-black'>
+			<div ref={sectionRef} className='relative border-x-[1rem] border-black sm:border-x-[2.5rem]'>
 				<Image
 					src={gradient.src}
 					className='absolute !bottom-0 !left-0 !right-0 !top-20 !h-[calc(100%-20rem)] rounded-[48] bg-no-repeat object-cover'
 					fill
 					alt='fundo'
 				/>
-				<section className='panel flex h-screen w-full items-center justify-center pt-20 font-bold'>
+				<section className='panel @container flex h-screen w-full items-center justify-center pt-20 font-bold'>
 					<div className='relative z-10 h-full w-full overflow-hidden rounded-b-none text-center'>
-						<div className='font-poppins absolute bottom-10 left-10 right-10 top-10 flex justify-between text-start font-normal text-black'>
-							<div className='flex max-w-[600px] flex-col justify-between'>
+						<div className='font-poppins @md:flex absolute bottom-10 left-10 right-10 top-10 justify-between text-start font-normal text-black'>
+							<div className='flex flex-col justify-between'>
 								<p className='text-3xl'>
 									Desenhado para funcionar com <b>Next.js</b>, <b>Tailwindcss</b>, <b>React</b> e{' '}
 									<b>Typescript</b>
 								</p>
 
-								<div className='w-max min-w-96'>
+								<div className='w-max'>
 									<AnimatedForm />
 								</div>
 							</div>
 
-							<div className='grid aspect-square grid-cols-4 grid-rows-4 gap-1 rounded-lg p-1'>
+							<div className='hidden aspect-square grid-cols-4 grid-rows-4 gap-1 rounded-lg p-1 lg:grid'>
 								{staticBlocks.map((block, i) =>
 									[5, 6, 9, 10].includes(i) && i === 5 ? (
 										<div key='moving' className='relative col-span-2 row-span-2'>
@@ -148,7 +151,9 @@ export default function HomePage() {
 							<p>e use</p>
 						</h1>
 
-						<Button loading={false}>Ver Componentes</Button>
+						<BubbleButton loading={false} onClick={() => push('/components')}>
+							Ver Componentes
+						</BubbleButton>
 					</div>
 					{/* <picture className='absolute left-0 top-0 h-1/2 w-full select-none rounded-[48px] rounded-t-none bg-black'></picture> */}
 					{/* <Image
@@ -172,12 +177,12 @@ export default function HomePage() {
 				</section>
 			</div>
 
-			<section
+			{/* <section
 				className='panel flex h-screen w-full items-center justify-center text-4xl font-bold text-white'
 				style={{ backgroundColor: '#71f8c4' }}
 			>
 				Seção 4
-			</section>
+			</section> */}
 
 			<SmoothCursor ref={cursorRef as any} />
 			<MouseTrail
