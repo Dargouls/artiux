@@ -53,7 +53,7 @@ const useSnap = (containerRef: RefObject<HTMLElement>) => {
 
 			// Criar observer para controlar o scroll
 			const observer = ScrollTrigger.observe({
-				type: 'wheel,touch',
+				type: 'wheel',
 				preventDefault: true,
 				tolerance: 10,
 				wheelSpeed: 5,

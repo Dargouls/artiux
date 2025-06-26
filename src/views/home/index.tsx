@@ -11,6 +11,7 @@ import tailwindcss from '@/assets/images/tailwindcss.png';
 import typescript from '@/assets/images/typescript.png';
 
 import BubbleButton from '@/artiux-components/bubbleButton';
+import { useIsMobile } from '@/artiux-hooks/use-mobile';
 import AnimatedForm from '@/components/animatedForm/animatedForm';
 import CopyCode from '@/components/copyCode/copyCode';
 import NoiseSurface from '@/components/meta-noise';
@@ -31,6 +32,7 @@ export default function HomePage() {
 	const sectionRef = useRef<HTMLDivElement>(null);
 	const elementRef = useRef<HTMLDivElement>(null);
 
+	const isMobile = useIsMobile();
 	const { push } = useRouter();
 
 	useSnap(mainRef as any);
@@ -69,14 +71,19 @@ export default function HomePage() {
 			</section>
 
 			{/* init - Ignore section */}
-			<section className='h-screen bg-gradient-to-b from-black to-black'>
+			<section className='hidden h-screen bg-gradient-to-b from-black to-black sm:block'>
 				<div className='relative flex h-full w-full flex-col'>
 					<Image src={ret} alt='logo' height={50} className='w-full' />
 					<div className='flex-1 bg-white' />
 				</div>
 			</section>
 
-			<section className='h-screen bg-gradient-to-b from-black to-black'>
+			<section className='block sm:hidden'>
+				<Image src={ret} alt='logo' height={50} className='w-full' />
+				<Image src={ret} alt='logo' height={50} className='w-full -translate-y-1 -rotate-180' />
+			</section>
+
+			<section className='hidden h-screen bg-gradient-to-b from-black to-black sm:block'>
 				<div className='relative flex h-full w-full flex-col'>
 					<div className='flex-1 bg-white' />
 					<Image src={ret} alt='logo' height={50} className='w-full -translate-y-1 -rotate-180' />
@@ -93,8 +100,8 @@ export default function HomePage() {
 				/>
 				<section className='panel @container flex h-screen w-full items-center justify-center pt-20 font-bold'>
 					<div className='relative z-10 h-full w-full overflow-hidden rounded-b-none text-center'>
-						<div className='font-poppins @md:flex absolute bottom-10 left-10 right-10 top-10 justify-between text-start font-normal text-black'>
-							<div className='flex flex-col justify-between'>
+						<div className='font-poppins @md:flex absolute bottom-10 left-4 right-4 top-10 justify-between text-start font-normal text-black sm:left-10 sm:right-10'>
+							<div className='flex flex-col items-center justify-between gap-2 md:items-start'>
 								<p className='text-3xl'>
 									Desenhado para funcionar com <b>Next.js</b>, <b>Tailwindcss</b>, <b>React</b> e{' '}
 									<b>Typescript</b>
@@ -145,13 +152,13 @@ export default function HomePage() {
 					<nav className='flex flex-1 items-end justify-center gap-4 px-4 pb-7'>
 						<CopyCode />
 					</nav>
-					<div className='flex h-56 flex-col items-center gap-8 pt-6'>
+					<div className='flex h-56 flex-col items-center gap-4 pt-6'>
 						<h1 className='font-poppins text-4xl font-light'>
 							Apenas copie e cole os componentes
 							<p>e use</p>
 						</h1>
 
-						<BubbleButton loading={false} onClick={() => push('/components')}>
+						<BubbleButton className='py-4' loading={false} onClick={() => push('/components')}>
 							Ver Componentes
 						</BubbleButton>
 					</div>
@@ -184,18 +191,22 @@ export default function HomePage() {
 				Seção 4
 			</section> */}
 
-			<SmoothCursor ref={cursorRef as any} />
-			<MouseTrail
-				lineColor='#fff'
-				// lineThickness={6}
-				// dashArray='8 20'
-				lineThickness={2}
-				dashArray='8 10'
-				maxTrailLength={20}
-				fadeDuration={1000}
-				segmentLength={5}
-				smoothCursorRef={cursorRef as any} // AGORA O RASTRO SEGUE O CURSOR SUAVIZADO
-			/>
+			{!isMobile && (
+				<>
+					<SmoothCursor ref={cursorRef as any} />
+					<MouseTrail
+						lineColor='#fff'
+						// lineThickness={6}
+						// dashArray='8 20'
+						lineThickness={2}
+						dashArray='8 10'
+						maxTrailLength={20}
+						fadeDuration={1000}
+						segmentLength={5}
+						smoothCursorRef={cursorRef as any} // AGORA O RASTRO SEGUE O CURSOR SUAVIZADO
+					/>
+				</>
+			)}
 		</main>
 	);
 }
