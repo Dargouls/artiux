@@ -2,13 +2,12 @@
 
 import { HTMLMotionProps, motion } from 'motion/react';
 
-// Component for page transition (testing)
-const TransitionWrapper = (props: HTMLMotionProps<'div'>) => {
+const PageWrapper = (props: HTMLMotionProps<'div'>) => {
 	return (
 		<div>
-			<motion.div initial={{ opacity: 1 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} {...props} />
+			<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} {...props} />
 		</div>
 	);
 };
 
-export default TransitionWrapper;
+export default PageWrapper;

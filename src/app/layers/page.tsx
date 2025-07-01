@@ -1,30 +1,28 @@
 'use client';
 
-import Button from '@/artiux-components/button';
-import Dialog from '@/artiux-components/dialog';
-
 import { useState } from 'react';
+
+import { motion } from 'motion/react';
 
 export default function Layers() {
 	const [open, setOpen] = useState(false);
 
 	return (
 		<>
-			<main className='flex items-center justify-center'>
-				<Button className='mt-40 w-max' onClick={() => setOpen(true)}>
-					Mostrar Dialog
-				</Button>
-				<Dialog open={open} onClose={() => setOpen(false)}>
-					<Dialog.Header>
-						<h3>Titulo</h3>
-					</Dialog.Header>
-					<Dialog.Body>
-						<p>Corpo do Dialog</p>
-					</Dialog.Body>
-					<Dialog.Footer>
-						<Button onClick={() => setOpen(false)}>Fechar</Button>
-					</Dialog.Footer>
-				</Dialog>
+			<main className='flex h-screen w-screen items-center'>
+				<motion.div
+					className='flex items-center justify-center bg-gray-400'
+					initial={{ height: 50, width: 100, borderRadius: 50 }}
+					animate={open && { height: '100vh', width: '100vw', borderRadius: 0 }}
+					onClick={() => setOpen(!open)}
+					transition={{
+						duration: 0.5,
+
+						ease: [0.42, 0, 0.58, 1], // cubic-bezier equivalente
+					}}
+				>
+					<span className={open ? 'opacity-0 transition-all duration-500' : ''}>Olá</span>
+				</motion.div>
 			</main>
 		</>
 	);

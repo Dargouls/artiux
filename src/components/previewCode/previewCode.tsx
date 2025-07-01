@@ -50,7 +50,7 @@ export default function PreviewCode({ children, code, ...props }: PreviewCodePro
 
 			<div className='border-border scrollbar-thin scrollbar-thumb-zinc-400 scrollbar-track-zinc-100/0 relative mt-1 overflow-auto border'>
 				{pre === 'Uso' && (
-					<div className='relative'>
+					<div className='relative max-h-96'>
 						<CodeButton code={code} className='sticky top-4 z-10 flex place-self-end pr-4' />
 						<SyntaxHighlighter
 							language='tsx'

@@ -1,6 +1,5 @@
 'use client';
 
-import { Maximize2 } from 'lucide-react';
 import { motion, useInView } from 'motion/react';
 import { useRef } from 'react';
 import CodeButton from './codebutton';
@@ -48,7 +47,7 @@ export default function CopyCode({
 				>
 					<nav className='absolute right-2 top-2 flex gap-2'>
 						<CodeButton code={code} />
-						<Maximize2 size={16} />
+						{/* <Maximize2 size={16} /> */}
 					</nav>
 					<pre className='whitespace-pre-wrap break-words font-mono'>{code}</pre>
 				</motion.div>

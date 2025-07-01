@@ -20,12 +20,8 @@ export default function SidebarWrapper({ children, ...props }: SidebarWrapperPro
 			type: 'group',
 			items: [
 				{
-					label: 'Instalação',
-					href: '/installation',
-				},
-				{
 					label: 'Utils',
-					href: '/installation',
+					href: '/components/utils',
 				},
 			],
 		},
@@ -65,7 +61,7 @@ export default function SidebarWrapper({ children, ...props }: SidebarWrapperPro
 			items: [
 				{
 					label: 'To Left',
-					href: '/components/dialog',
+					href: '/components/to-left',
 				},
 			],
 		},

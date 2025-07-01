@@ -3,6 +3,7 @@
 import Button from '@/artiux-components/button';
 import Dialog from '@/artiux-components/dialog';
 import CopyCode from '@/components/copyCode/copyCode';
+import PreviewCode from '@/components/previewCode/previewCode';
 import { useState } from 'react';
 
 export default function DialogComponent() {
@@ -23,9 +24,7 @@ export default function DialogComponent() {
 			</section>
 
 			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Prévia:</h3>
-
-				<div className='border-border relative mt-4 flex min-h-96 items-center justify-center border p-4'>
+				<PreviewCode code={codePreview}>
 					<Button className='w-max' onClick={() => setOpen(true)}>
 						Mostrar Dialog
 					</Button>
@@ -40,7 +39,7 @@ export default function DialogComponent() {
 							<Button onClick={() => setOpen(false)}>Fechar</Button>
 						</Dialog.Footer>
 					</Dialog>
-				</div>
+				</PreviewCode>
 			</section>
 		</>
 	);
@@ -158,3 +157,22 @@ const Wrapper = forwardRef<HTMLDivElement, ContainerProps>(({ children, ...props
 	);
 });
 `;
+
+const codePreview = `
+const [open, setOpen] = useState(false);
+
+<Button className='w-max' onClick={() => setOpen(true)}>
+	Mostrar Dialog
+</Button>
+<Dialog open={open} onClose={() => setOpen(false)}>
+	<Dialog.Header>
+		<Dialog.Title>Titulo</Dialog.Title>
+	</Dialog.Header>
+	<Dialog.Body>
+		<p>Corpo do Dialog</p>
+	</Dialog.Body>
+	<Dialog.Footer>
+		<Button onClick={() => setOpen(false)}>Fechar</Button>
+	</Dialog.Footer>
+</Dialog>
+					`;

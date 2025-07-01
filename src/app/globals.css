@@ -138,3 +138,57 @@
 		background-position: 200%;
 	}
 }
+
+/* Por padrão, overflow-auto para todos os dispositivos */
+.device-overflow {
+	overflow: auto;
+}
+
+/* Detecta dispositivos desktop/PC - remove scroll */
+@media only screen and (min-width: 1024px) and (pointer: fine) and (hover: hover) {
+	.device-overflow {
+		overflow: hidden;
+	}
+}
+
+/* Força scroll em dispositivos touch independente do tamanho */
+@media only screen and (pointer: coarse) {
+	.device-overflow {
+		overflow: auto !important;
+	}
+}
+
+/* Smartphones e tablets sempre com scroll */
+@media only screen and (max-width: 1023px) {
+	.device-overflow {
+		overflow: auto !important;
+	}
+}
+
+/* Detecta tablets no modo landscape */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) {
+	.device-overflow {
+		overflow: auto !important;
+	}
+}
+
+/* ViewTransitions */
+::view-transition-group(root) {
+	z-index: auto !important;
+}
+
+::view-transition-image-pair(root) {
+	isolation: isolate;
+	will-change: transform, opacity, scale;
+	z-index: 1;
+}
+
+::view-transition-new(root) {
+	z-index: 2;
+	animation: none !important;
+}
+
+::view-transition-old(root) {
+	z-index: 1;
+	animation: none !important;
+}
