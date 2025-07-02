@@ -16,7 +16,7 @@ export default function Header({ ...props }: HeaderProps) {
 
 	return (
 		<>
-			<header className='fixed top-0 z-[999] flex w-full items-center justify-between px-2 py-4'>
+			<header className='fixed top-0 z-[999] flex w-full items-center justify-between px-2 pt-4'>
 				<Link href={'/'}>
 					<Image src={logo} alt='logo' priority width={100} />
 				</Link>
@@ -63,7 +63,7 @@ const NavMobile = () => {
 const NavDesktop = () => {
 	return (
 		<nav>
-			<ul className='flex items-center gap-4'>
+			<ul className='flex items-center gap-4 rounded-full bg-black/10 p-4 backdrop-blur-md'>
 				<li>
 					<Link href='/'>Início</Link>
 				</li>

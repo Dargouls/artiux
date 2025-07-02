@@ -29,14 +29,16 @@ export default function ToLeft() {
 
 				<section className='my-8'>
 					<h3 className='text-2xl font-bold'>Código:</h3>
-					<div className='mt-4 h-52 place-content-start'>
-						<CopyCode installs='yarn add motion clsx tailwind-merge' code={pageAnimationCode} />
-					</div>
-					<div className='mt-4 h-52 place-content-start'>
-						<CopyCode installs='yarn add motion clsx tailwind-merge' code={transitionWrapper} />
-					</div>
-					<div className='mt-4 h-52 place-content-start'>
-						<CopyCode installs='Inclua no globals.css' code={globals} />
+					<div className='flex flex-wrap'>
+						<div className='mt-4 h-52 place-content-start'>
+							<CopyCode installs='yarn add motion clsx tailwind-merge' code={pageAnimationCode} />
+						</div>
+						<div className='mt-4 h-52 place-content-start'>
+							<CopyCode installs='yarn add motion clsx tailwind-merge' code={transitionWrapper} />
+						</div>
+						<div className='mt-4 h-52 place-content-start'>
+							<CopyCode installs='Inclua no globals.css' code={globals} />
+						</div>
 					</div>
 				</section>
 
