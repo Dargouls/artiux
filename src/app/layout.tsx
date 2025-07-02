@@ -1,4 +1,5 @@
 import Header from '@/components/layout/header/header';
+import { Analytics } from '@vercel/analytics/next';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Libre_Baskerville, Poppins, Sen } from 'next/font/google';
 
@@ -56,6 +57,7 @@ export default function RootLayout({
 						{children}
 					</TransitionWrapper>
 					<Toaster position='bottom-center' />
+					<Analytics />
 				</body>
 			</html>
 		</ViewTransitions>
