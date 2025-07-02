@@ -35,6 +35,9 @@ export default function ToLeft() {
 					<div className='mt-4 h-52 place-content-start'>
 						<CopyCode installs='yarn add motion clsx tailwind-merge' code={transitionWrapper} />
 					</div>
+					<div className='mt-4 h-52 place-content-start'>
+						<CopyCode installs='Inclua no globals.css' code={globals} />
+					</div>
 				</section>
 
 				<section className='my-8'>
@@ -115,7 +118,7 @@ export const pageAnimation = ({ direction = 'vertical' }: pageAnimationProps) =>
 };
 `;
 
-const transitionWrapper = `// @/components/layout/transitionWrapper.tsx
+const transitionWrapper = `//@/components/layout/transitionWrapper.tsx
 'use client';
 
 import { HTMLMotionProps, motion } from 'motion/react';
