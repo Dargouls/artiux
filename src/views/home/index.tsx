@@ -58,7 +58,7 @@ export default function HomePage() {
 				<main className='flex flex-col items-center gap-4 sm:items-start'>
 					<h1 className='text-7xl font-bold'>
 						<PointerHighlight rectangleClassName='border-2 border-white' containerClassName=''>
-							<span className='z-10'>ArtIux Studio's</span>
+							<span className='z-10'>ArtIux Lab</span>
 						</PointerHighlight>
 					</h1>
 					<code className='rounded bg-black/[.05] px-1 py-0.5 font-[family-name:var(--font-geist-mono)] font-semibold dark:bg-white/[.06]'>
