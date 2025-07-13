@@ -34,7 +34,10 @@ export default function ToLeft() {
 							<CopyCode installs='yarn add motion clsx tailwind-merge' code={pageAnimationCode} />
 						</div>
 						<div className='mt-4 h-52 place-content-start'>
-							<CopyCode installs='yarn add motion clsx tailwind-merge' code={transitionWrapper} />
+							<CopyCode
+								installs='yarn add motion clsx tailwind-merge next-view-transitions-gabriel-azv'
+								code={transitionWrapper}
+							/>
 						</div>
 						<div className='mt-4 h-52 place-content-start'>
 							<CopyCode installs='Inclua no globals.css' code={globals} />
