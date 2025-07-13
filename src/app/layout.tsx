@@ -38,6 +38,21 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
 	title: 'ArtIux',
 	description: 'Biblioteca de componentes hiperanimados para React',
+	openGraph: {
+		title: 'ArtIux',
+		description: 'Biblioteca de componentes animados para Next.js',
+		url: 'https://artiux.vercel.app/',
+		siteName: 'ArtIux',
+		type: 'website',
+		images: [
+			{
+				url: '/image.png',
+				width: 1200,
+				height: 630,
+				alt: 'ArtIux - Biblioteca de componentes animados para Next.js',
+			},
+		],
+	},
 };
 
 export default function RootLayout({
