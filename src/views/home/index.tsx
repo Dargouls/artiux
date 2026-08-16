@@ -71,19 +71,19 @@ export default function HomePage() {
 			</section>
 
 			{/* init - Ignore section */}
-			<section className='hidden h-screen bg-gradient-to-b from-black to-black sm:block'>
+			<section className='hidden h-screen bg-gradient-to-b from-black to-black md:block'>
 				<div className='relative flex h-full w-full flex-col'>
 					<Image src={ret} alt='logo' height={50} className='w-full' />
 					<div className='flex-1 bg-white' />
 				</div>
 			</section>
 
-			<section className='block sm:hidden'>
+			<section className='block md:hidden'>
 				<Image src={ret} alt='logo' height={50} className='w-full' />
 				<Image src={ret} alt='logo' height={50} className='w-full -translate-y-1 -rotate-180' />
 			</section>
 
-			<section className='hidden h-screen bg-gradient-to-b from-black to-black sm:block'>
+			<section className='hidden h-screen bg-gradient-to-b from-black to-black md:block'>
 				<div className='relative flex h-full w-full flex-col'>
 					<div className='flex-1 bg-white' />
 					<Image src={ret} alt='logo' height={50} className='w-full -translate-y-1 -rotate-180' />

@@ -170,7 +170,7 @@ function SidebarProvider({
 
 							<motion.span
 								className='flex-1 text-lg font-semibold'
-								initial={{ opacity: 1 }}
+								initial={{ opacity: 0 }}
 								animate={{ opacity: state === 'collapsed' ? 0 : 1 }}
 							>
 								{headerItems[0].label}
@@ -332,7 +332,7 @@ function Sidebar({
 			<div
 				data-slot='sidebar-container'
 				className={cn(
-					'w-(--sidebar-width) fixed inset-y-0 z-[9999] hidden h-svh transition-[left,right,width] duration-200 ease-linear md:flex',
+					'w-(--sidebar-width) sticky inset-y-0 z-[9999] hidden h-svh transition-[left,right,width] duration-200 ease-linear md:flex',
 					side === 'left'
 						? 'left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]'
 						: 'right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]',
@@ -347,7 +347,7 @@ function Sidebar({
 				<div
 					data-sidebar='sidebar'
 					data-slot='sidebar-inner'
-					className='bg-sidebar group-data-[variant=floating]:border-sidebar-border mt-4 flex h-full w-full flex-col rounded-tl-2xl group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm'
+					className='bg-sidebar group-data-[variant=floating]:border-sidebar-border mt-4 flex w-full flex-col rounded-tl-2xl group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm'
 				>
 					{children}
 					{collapsible !== 'none' && <SidebarRail />}
@@ -412,7 +412,7 @@ function SidebarInset({ className, ...props }: React.ComponentProps<'main'>) {
 			data-slot='sidebar-inset'
 			className={cn(
 				'md:scrollbar-thin md:scrollbar-thumb-zinc-400 md:scrollbar-track-zinc-100/0',
-				'bg-background relative h-screen w-full flex-1 flex-col overflow-auto p-4 pb-20',
+				'bg-background relative h-screen w-full flex-1 flex-col overflow-auto p-4',
 				'border-sidebar md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-tl-xl md:peer-data-[variant=inset]:border-t-2 md:peer-data-[variant=inset]:shadow-sm',
 				className
 			)}

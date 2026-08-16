@@ -13,7 +13,10 @@ export default function ComponentsLayout({
 }>) {
 	return (
 		<main>
-			<SidebarWrapper>{children}</SidebarWrapper>
+			<SidebarWrapper>
+				{children}
+				<div className='mt-20'></div>
+			</SidebarWrapper>
 		</main>
 	);
 }
