@@ -34,6 +34,7 @@
 		"motion": "^12.17.0",
 		"next": "15.3.3",
 		"next-view-transitions-gabriel-azv": "^0.3.5",
+		"ogl": "^1.0.11",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
 		"react-hook-form": "^7.58.1",

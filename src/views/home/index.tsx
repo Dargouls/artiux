@@ -4,7 +4,6 @@ import useSnap from '@/hook/useSnap';
 import { useRef, useState } from 'react';
 
 import ret from '@/assets/brand/retangle.svg';
-import gradient from '@/assets/images/Gradient.svg';
 import next from '@/assets/images/next.png';
 import react from '@/assets/images/react.png';
 import tailwindcss from '@/assets/images/tailwindcss.png';
@@ -14,6 +13,7 @@ import BubbleButton from '@/artiux-components/bubbleButton';
 import { useIsMobile } from '@/artiux-hooks/use-mobile';
 import AnimatedForm from '@/components/animatedForm/animatedForm';
 import CopyCode from '@/components/copyCode/copyCode';
+import Grainient from '@/components/grainient';
 import NoiseSurface from '@/components/meta-noise';
 import MovingSquares from '@/components/movingSquares/movingSquares';
 import { BubbleParticles } from '@/components/ui/background-beam';
@@ -91,20 +91,43 @@ export default function HomePage() {
 			</section>
 			{/* end - Ignore section */}
 
-			<div ref={sectionRef} className='relative border-x-[1rem] border-black sm:border-x-[2.5rem]'>
-				<Image
-					src={gradient.src}
-					className='absolute !bottom-0 !left-0 !right-0 !top-20 !h-[calc(100%-20rem)] rounded-[48] bg-no-repeat object-cover'
-					fill
-					alt='fundo'
-				/>
+			<div ref={sectionRef} className='relative'>
+				{/* <Image src={gradient.src} fill alt='fundo' /> */}
+
+				<div className='absolute left-0 right-0 px-10'>
+					<Grainient
+						className='absolute !bottom-0 !left-0 !right-0 !top-20 !h-[calc(100vh-8rem)] rounded-[48]'
+						color1='#3e193e'
+						color2='#fefefe'
+						color3='#47484d'
+						timeSpeed={0.25}
+						colorBalance={0}
+						warpStrength={1}
+						warpFrequency={8}
+						warpSpeed={1.3}
+						warpAmplitude={5}
+						blendAngle={0}
+						blendSoftness={0.05}
+						rotationAmount={500}
+						noiseScale={2}
+						grainAmount={0.1}
+						grainScale={2}
+						grainAnimated={false}
+						contrast={1.5}
+						gamma={1}
+						saturation={1}
+						centerX={0}
+						centerY={0}
+						zoom={0.9}
+					/>
+				</div>
+
 				<section className='panel @container flex h-screen w-full items-center justify-center pt-20 font-bold'>
 					<div className='relative z-10 h-full w-full overflow-hidden rounded-b-none text-center'>
-						<div className='font-poppins @md:flex absolute bottom-10 left-4 right-4 top-10 justify-between text-start font-normal text-black sm:left-10 sm:right-10'>
+						<div className='font-poppins @md:flex absolute bottom-10 left-4 right-4 top-10 justify-between text-start font-normal sm:left-10 sm:right-10'>
 							<div className='flex flex-col items-center justify-between gap-2 md:items-start'>
-								<p className='text-3xl'>
-									Desenhado para funcionar com <b>Next.js</b>, <b>Tailwindcss</b>, <b>React</b> e{' '}
-									<b>Typescript</b>
+								<p className='ml-4 text-3xl text-black'>
+									Desenhado para funcionar com <b>Next.js</b>, <b>Tailwindcss</b>, <b>React</b> e <b>Typescript</b>
 								</p>
 
 								<div className='w-max'>
