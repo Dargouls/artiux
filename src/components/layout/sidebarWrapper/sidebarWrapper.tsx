@@ -45,6 +45,86 @@ export default function SidebarWrapper({ children, ...props }: SidebarWrapperPro
 					label: 'Ripple Container',
 					href: '/components/ripple-container',
 				},
+				{
+					label: 'Calendar',
+					href: '/components/calendar',
+				},
+				{
+					label: 'Input Number',
+					href: '/components/inputNumber',
+				},
+				{
+					label: 'Progress Bar',
+					href: '/components/progressBar',
+				},
+				{
+					label: 'Text',
+					href: '/components/text',
+				},
+				{
+					label: 'Button',
+					href: '/components/button',
+				},
+				{
+					label: 'Button Group',
+					href: '/components/buttonGroup',
+				},
+				{
+					label: 'Icon Button',
+					href: '/components/iconButton',
+				},
+				{
+					label: 'Badge',
+					href: '/components/badge',
+				},
+				{
+					label: 'Card',
+					href: '/components/card',
+				},
+				{
+					label: 'Drawer',
+					href: '/components/drawer',
+				},
+				{
+					label: 'Tabs',
+					href: '/components/tabs',
+				},
+				{
+					label: 'Switch',
+					href: '/components/switch',
+				},
+				{
+					label: 'Checkbox Compose',
+					href: '/components/checkboxCompose',
+				},
+				{
+					label: 'Radio Compose',
+					href: '/components/radioCompose',
+				},
+				{
+					label: 'Radio Group',
+					href: '/components/radioGroup',
+				},
+				{
+					label: 'Text Field',
+					href: '/components/textField',
+				},
+				{
+					label: 'Circular Progress',
+					href: '/components/circularProgress',
+				},
+				{
+					label: 'Icons',
+					href: '/components/icons',
+				},
+				{
+					label: 'Select',
+					href: '/components/select',
+				},
+				{
+					label: 'Multi Select',
+					href: '/components/multiSelect',
+				},
 				// {
 				// 	label: 'Sidebar',
 				// 	href: '/components/sidebar',

@@ -7,7 +7,7 @@ import * as React from 'react';
 
 import { useIsMobile } from '@/artiux-hooks/use-mobile';
 
-import Button from '@/artiux-components/button';
+import { Button } from '@/artiux-components/button';
 
 import TextField from '@/components/textField/textField';
 import { cn } from '@/lib/utils';
@@ -15,6 +15,7 @@ import { Icon } from '@iconify/react';
 import { motion } from 'motion/react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Sheet } from './sheet';
 import Tooltip from './tooltip';
 
@@ -77,6 +78,7 @@ function SidebarProvider({
 	collapsible?: 'offcanvas' | 'icon' | 'none';
 }) {
 	const isMobile = useIsMobile();
+	const pathname = usePathname();
 	const [openMobile, setOpenMobile] = React.useState(false);
 
 	// This is the internal state of the sidebar.
@@ -152,12 +154,7 @@ function SidebarProvider({
 										transition={{ type: 'spring', stiffness: 300, damping: 30 }}
 										className='flex w-40' // 2x logo width
 									>
-										<Image
-											priority
-											src={headerItems[0].logo}
-											alt={headerItems[0].label || 'Logo'}
-											className='w-20 shrink-0'
-										/>
+										<Image priority src={headerItems[0].logo} alt={headerItems[0].label || 'Logo'} className='w-20 shrink-0' />
 										<Image
 											priority
 											src={headerItems[0].logoMini}
@@ -193,7 +190,7 @@ function SidebarProvider({
 										<SidebarMenu>
 											{item.items?.map((subItem, subIndex) => (
 												<SidebarMenuItem key={subIndex}>
-													<SidebarMenuButton asChild>
+													<SidebarMenuButton asChild isActive={pathname === subItem.href}>
 														<Link href={subItem.href || '/'}>
 															{subItem.icon && <Icon icon={subItem.icon} />}
 															<span>{subItem.label}</span>
@@ -213,7 +210,7 @@ function SidebarProvider({
 								<SidebarGroupContent>
 									<SidebarMenu>
 										<SidebarMenuItem>
-											<SidebarMenuButton asChild>
+											<SidebarMenuButton asChild isActive={pathname === item.href}>
 												<Link href={item.href || '/'}>
 													{item.icon && <Icon icon={item.icon} />}
 													<span>{item.label}</span>
@@ -253,10 +250,7 @@ function SidebarProvider({
 							...style,
 						} as React.CSSProperties
 					}
-					className={cn(
-						'group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex min-h-svh w-full',
-						className
-					)}
+					className={cn('group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex min-h-svh w-full', className)}
 					{...props}
 				>
 					<Sidebar variant={'inset'} collapsible={collapsible}>
@@ -392,7 +386,7 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
 		<Button
 			data-sidebar='trigger'
 			data-slot='sidebar-trigger'
-			variant='text'
+			variant='ghost'
 			className={cn('size-7', className)}
 			onClick={(event) => {
 				onClick?.(event);
@@ -433,25 +427,11 @@ function SidebarInput({ className, ...props }: React.ComponentProps<typeof TextF
 }
 
 function SidebarHeader({ className, ...props }: React.ComponentProps<'div'>) {
-	return (
-		<div
-			data-slot='sidebar-header'
-			data-sidebar='header'
-			className={cn('flex gap-2 p-2', className)}
-			{...props}
-		/>
-	);
+	return <div data-slot='sidebar-header' data-sidebar='header' className={cn('flex gap-2 p-2', className)} {...props} />;
 }
 
 function SidebarFooter({ className, ...props }: React.ComponentProps<'div'>) {
-	return (
-		<div
-			data-slot='sidebar-footer'
-			data-sidebar='footer'
-			className={cn('flex flex-col gap-2 p-2', className)}
-			{...props}
-		/>
-	);
+	return <div data-slot='sidebar-footer' data-sidebar='footer' className={cn('flex flex-col gap-2 p-2', className)} {...props} />;
 }
 
 function SidebarSeparator({ className, ...props }: React.HTMLAttributes<HTMLHRElement>) {
@@ -475,20 +455,11 @@ function SidebarContent({ className, ...props }: React.ComponentProps<'div'>) {
 
 function SidebarGroup({ className, ...props }: React.ComponentProps<'div'>) {
 	return (
-		<div
-			data-slot='sidebar-group'
-			data-sidebar='group'
-			className={cn('relative flex w-full min-w-0 flex-col p-2', className)}
-			{...props}
-		/>
+		<div data-slot='sidebar-group' data-sidebar='group' className={cn('relative flex w-full min-w-0 flex-col p-2', className)} {...props} />
 	);
 }
 
-function SidebarGroupLabel({
-	className,
-	asChild = false,
-	...props
-}: React.ComponentProps<'div'> & { asChild?: boolean }) {
+function SidebarGroupLabel({ className, asChild = false, ...props }: React.ComponentProps<'div'> & { asChild?: boolean }) {
 	const Comp = asChild ? Slot : 'div';
 
 	return (
@@ -505,11 +476,7 @@ function SidebarGroupLabel({
 	);
 }
 
-function SidebarGroupAction({
-	className,
-	asChild = false,
-	...props
-}: React.ComponentProps<'button'> & { asChild?: boolean }) {
+function SidebarGroupAction({ className, asChild = false, ...props }: React.ComponentProps<'button'> & { asChild?: boolean }) {
 	const Comp = asChild ? Slot : 'button';
 
 	return (
@@ -529,36 +496,15 @@ function SidebarGroupAction({
 }
 
 function SidebarGroupContent({ className, ...props }: React.ComponentProps<'div'>) {
-	return (
-		<div
-			data-slot='sidebar-group-content'
-			data-sidebar='group-content'
-			className={cn('w-full text-sm', className)}
-			{...props}
-		/>
-	);
+	return <div data-slot='sidebar-group-content' data-sidebar='group-content' className={cn('w-full text-sm', className)} {...props} />;
 }
 
 function SidebarMenu({ className, ...props }: React.ComponentProps<'ul'>) {
-	return (
-		<ul
-			data-slot='sidebar-menu'
-			data-sidebar='menu'
-			className={cn('flex w-full min-w-0 flex-col gap-1', className)}
-			{...props}
-		/>
-	);
+	return <ul data-slot='sidebar-menu' data-sidebar='menu' className={cn('flex w-full min-w-0 flex-col gap-1', className)} {...props} />;
 }
 
 function SidebarMenuItem({ className, ...props }: React.ComponentProps<'li'>) {
-	return (
-		<li
-			data-slot='sidebar-menu-item'
-			data-sidebar='menu-item'
-			className={cn('group/menu-item relative', className)}
-			{...props}
-		/>
-	);
+	return <li data-slot='sidebar-menu-item' data-sidebar='menu-item' className={cn('group/menu-item relative', className)} {...props} />;
 }
 
 const sidebarMenuButtonVariants = cva(

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
-import Button from '@/artiux-components/button';
+import { Button } from '@/artiux-components/button';
 import { motion } from 'motion/react';
 import CodeButton from '../copyCode/codebutton';
 
@@ -24,7 +24,7 @@ export default function PreviewCode({ children, code, ...props }: PreviewCodePro
 				{list.map((item) => (
 					<Button
 						key={item}
-						variant='text'
+						variant='ghost'
 						size='sm'
 						className={`bg-background hover:bg-background relative rounded-none px-2 py-1 ${
 							pre === item ? 'text-primary' : 'text-muted-foreground'
@@ -66,11 +66,7 @@ export default function PreviewCode({ children, code, ...props }: PreviewCodePro
 					</div>
 				)}
 
-				{pre === 'Prévia' && (
-					<div className='@container flex h-96 w-full items-center justify-center overflow-auto'>
-						{children}
-					</div>
-				)}
+				{pre === 'Prévia' && <div className='@container flex h-96 w-full items-center justify-center overflow-auto'>{children}</div>}
 			</div>
 		</>
 	);

@@ -4,10 +4,8 @@ import StepFormProvider from '@/components/stepFormProvider/stepFormProvider';
 import { useState } from 'react';
 
 import { cn } from '@/lib/utils';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { z } from 'zod';
 
 import Button from '@/components/button/button';
 import Label from '@/components/label/label';
@@ -16,22 +14,17 @@ import { ArrowLeft, ArrowRight, Check, FormInput } from 'lucide-react';
 
 interface AnimatedFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-const formSchema = z.object({
-	username: z.string().min(2, { message: 'Nome deve ter pelo menos 2 caracteres' }),
-	email: z.string().email({ message: 'Email inválido' }),
-	password: z.string().min(6, { message: 'Senha deve ter pelo menos 6 caracteres' }),
-});
-
-export type FormSignUpData = z.infer<typeof formSchema>;
+export type FormSignUpData = {
+	username: string;
+	email: string;
+	password: string;
+};
 
 export default function AnimatedForm({ ...props }: AnimatedFormProps) {
 	const [step, setStep] = useState(0);
 	const [loading, setLoading] = useState(false);
 
-	const methods = useForm<FormSignUpData>({
-		resolver: zodResolver(formSchema),
-		mode: 'onChange',
-	});
+	const methods = useForm<FormSignUpData>();
 
 	const steps = [
 		{ title: 'Email', component: EmailStep },
@@ -43,29 +36,6 @@ export default function AnimatedForm({ ...props }: AnimatedFormProps) {
 	const isFirstStep = step === 0;
 
 	const nextStep = () => {
-		if (step === 0) {
-			// Validar email
-			const emailValue = methods.getValues('email');
-			if (!emailValue || !formSchema.shape.email.safeParse(emailValue).success) {
-				methods.trigger('email');
-				return;
-			}
-		} else if (step === 1) {
-			// Validar nome
-			const usernameValue = methods.getValues('username');
-			if (!usernameValue || !formSchema.shape.username.safeParse(usernameValue).success) {
-				methods.trigger('username');
-				return;
-			}
-		} else if (step === 2) {
-			// Validar senha
-			const passwordValue = methods.getValues('password');
-			if (!passwordValue || !formSchema.shape.password.safeParse(passwordValue).success) {
-				methods.trigger('password');
-				return;
-			}
-		}
-
 		if (step < steps.length - 1) {
 			setStep(step + 1);
 		}
@@ -142,10 +112,7 @@ export default function AnimatedForm({ ...props }: AnimatedFormProps) {
 }
 
 function EmailStep() {
-	const {
-		register,
-		formState: { errors },
-	} = useFormContext<FormSignUpData>();
+	const { register } = useFormContext<FormSignUpData>();
 
 	return (
 		<div className='flex h-full w-full flex-col space-y-4'>
@@ -156,17 +123,13 @@ function EmailStep() {
 			<LabelInputContainer>
 				<Label htmlFor='email'>Endereço de e-mail</Label>
 				<TextField id='email' type='email' placeholder='Digite seu email' register={register('email')} />
-				{errors.email && <p className='text-xs text-red-500'>{errors.email.message}</p>}
 			</LabelInputContainer>
 		</div>
 	);
 }
 
 function NameStep() {
-	const {
-		register,
-		formState: { errors },
-	} = useFormContext<FormSignUpData>();
+	const { register } = useFormContext<FormSignUpData>();
 
 	return (
 		<div className='flex h-full w-full flex-col space-y-4'>
@@ -176,17 +139,13 @@ function NameStep() {
 			<LabelInputContainer>
 				<Label htmlFor='username'>Nome</Label>
 				<TextField id='username' placeholder='Digite seu nome' register={register('username')} />
-				{errors.username && <p className='text-xs text-red-500'>{errors.username.message}</p>}
 			</LabelInputContainer>
 		</div>
 	);
 }
 
 function PasswordStep() {
-	const {
-		register,
-		formState: { errors },
-	} = useFormContext<FormSignUpData>();
+	const { register } = useFormContext<FormSignUpData>();
 
 	return (
 		<div className='flex h-full w-full flex-col space-y-4'>
@@ -196,7 +155,6 @@ function PasswordStep() {
 			<LabelInputContainer>
 				<Label htmlFor='password'>Senha</Label>
 				<TextField id='password' type='password' placeholder='••••••••' register={register('password')} />
-				{errors.password && <p className='text-xs text-red-500'>{errors.password.message}</p>}
 			</LabelInputContainer>
 		</div>
 	);

@@ -1,6 +1,6 @@
 'use client';
 
-import Button from '@/artiux-components/button';
+import { Button } from '@/artiux-components/button';
 import Dialog from '@/artiux-components/dialog';
 import CopyCode from '@/components/copyCode/copyCode';
 import PreviewCode from '@/components/previewCode/previewCode';
