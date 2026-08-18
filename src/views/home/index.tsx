@@ -92,11 +92,9 @@ export default function HomePage() {
 			{/* end - Ignore section */}
 
 			<div ref={sectionRef} className='relative'>
-				{/* <Image src={gradient.src} fill alt='fundo' /> */}
-
 				<div className='absolute left-0 right-0 px-10'>
 					<Grainient
-						className='absolute !bottom-0 !left-0 !right-0 !top-20 !h-[calc(100vh-8rem)] rounded-[48]'
+						className='absolute !bottom-0 !left-0 !right-0 !top-20 !h-[calc(150vh)] rounded-[48]'
 						color1='#3e193e'
 						color2='#fefefe'
 						color3='#47484d'
@@ -216,7 +214,15 @@ export default function HomePage() {
 
 			{!isMobile && (
 				<>
-					<SmoothCursor ref={cursorRef as any} />
+					<SmoothCursor
+						ref={cursorRef as any}
+						springConfig={{
+							damping: 40,
+							stiffness: 800,
+							mass: 0.5,
+							restDelta: 0.01,
+						}}
+					/>
 					<MouseTrail
 						lineColor='#fff'
 						// lineThickness={6}

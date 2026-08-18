@@ -126,16 +126,13 @@ export const SmoothCursor = forwardRef<SmoothCursorRef, SmoothCursorProps>(
 		// --- FIM DA NOVIDADE ---
 
 		useEffect(() => {
-			const styleEl = document.createElement('style');
-			styleEl.id = 'smooth-cursor-style';
-			styleEl.textContent = `
-        *, *::before, *::after {
-          cursor: none !important;
-        }
-      `;
-			document.head.appendChild(styleEl);
+			const clickableSelector = 'a, button, [role="button"], input[type="button"], input[type="submit"], label, [onclick]';
 
-			let rafId: number;
+			const prevCursor = document.body.style.cursor;
+			document.body.style.cursor = 'none';
+
+			let rafId = 0;
+			let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
 			const updateVelocity = (pos: Position) => {
 				const now = Date.now();
@@ -150,11 +147,7 @@ export const SmoothCursor = forwardRef<SmoothCursorRef, SmoothCursorProps>(
 				lastMousePos.current = pos;
 			};
 
-			const smoothMouseMove = (e: MouseEvent) => {
-				const el = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
-				const clickableSelector = 'a, button, [role="button"], input[type="button"], input[type="submit"], label, [onclick]';
-				setIsPointer(!!el && el.matches(clickableSelector));
-
+			const smoothPointerMove = (e: PointerEvent) => {
 				const pos = { x: e.clientX, y: e.clientY };
 				updateVelocity(pos);
 
@@ -172,25 +165,41 @@ export const SmoothCursor = forwardRef<SmoothCursorRef, SmoothCursorProps>(
 					previousAngle.current = angle;
 
 					scale.set(0.95);
-					const t = setTimeout(() => scale.set(1), 150);
-					return () => clearTimeout(t);
+					if (timeoutId !== null) clearTimeout(timeoutId);
+					timeoutId = setTimeout(() => scale.set(1), 150);
 				}
 			};
 
-			const throttled = (e: MouseEvent) => {
+			const throttledPointerMove = (e: PointerEvent) => {
 				if (rafId) return;
 				rafId = requestAnimationFrame(() => {
-					smoothMouseMove(e);
+					smoothPointerMove(e);
 					rafId = 0;
 				});
 			};
 
-			window.addEventListener('mousemove', throttled);
+			// Detecta hover em elementos clicáveis via delegação, sem elementFromPoint
+			// (elementFromPoint força reflow síncrono a cada chamada).
+			const onOver = (e: PointerEvent) => {
+				const target = e.target as HTMLElement | null;
+				setIsPointer(!!target?.closest(clickableSelector));
+			};
+			const onOut = (e: PointerEvent) => {
+				const related = e.relatedTarget as HTMLElement | null;
+				if (!related?.closest(clickableSelector)) setIsPointer(false);
+			};
+
+			window.addEventListener('pointermove', throttledPointerMove, { passive: true });
+			window.addEventListener('pointerover', onOver, { passive: true });
+			window.addEventListener('pointerout', onOut, { passive: true });
 
 			return () => {
-				window.removeEventListener('mousemove', throttled);
+				window.removeEventListener('pointermove', throttledPointerMove);
+				window.removeEventListener('pointerover', onOver);
+				window.removeEventListener('pointerout', onOut);
 				if (rafId) cancelAnimationFrame(rafId);
-				document.head.removeChild(styleEl);
+				if (timeoutId !== null) clearTimeout(timeoutId);
+				document.body.style.cursor = prevCursor;
 			};
 		}, [cursorX, cursorY, rotation, scale]);
 
@@ -198,8 +207,10 @@ export const SmoothCursor = forwardRef<SmoothCursorRef, SmoothCursorProps>(
 			<motion.div
 				style={{
 					position: 'fixed',
-					left: cursorX, // Usa MotionValue aqui
-					top: cursorY, // Usa MotionValue aqui
+					left: 0,
+					top: 0,
+					x: cursorX,
+					y: cursorY,
 					translateX: '-50%',
 					translateY: '-50%',
 					rotate: rotation,
