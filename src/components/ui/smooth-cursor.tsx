@@ -2,7 +2,7 @@
 
 'use client';
 
-import { motion, useSpring } from 'framer-motion'; // Importe MotionValue
+import { motion, useSpring } from 'motion/react'; // Importe MotionValue
 import { FC, forwardRef, JSX, useEffect, useImperativeHandle, useRef, useState } from 'react'; // Importe forwardRef e useImperativeHandle
 
 interface Position {
@@ -44,14 +44,7 @@ const PointerCursorSVG: FC = () => {
 
 const DefaultCursorSVG: FC = () => {
 	return (
-		<svg
-			xmlns='http://www.w3.org/2000/svg'
-			width={50}
-			height={54}
-			viewBox='0 0 50 54'
-			fill='none'
-			style={{ scale: 0.5 }}
-		>
+		<svg xmlns='http://www.w3.org/2000/svg' width={50} height={54} viewBox='0 0 50 54' fill='none' style={{ scale: 0.5 }}>
 			<g filter='url(#filter0_d_91_7928)'>
 				<path
 					d='M42.6817 41.1495L27.5103 6.79925C26.7269 5.02557 24.2082 5.02558 23.3927 6.79925L7.59814 41.1495C6.75833 42.9759 8.52712 44.8902 10.4125 44.1954L24.3757 39.0496C24.8829 38.8627 25.4385 38.8627 25.9422 39.0496L39.8121 44.1954C41.6849 44.8902 43.4884 42.9759 42.6817 41.1495Z'
@@ -74,12 +67,7 @@ const DefaultCursorSVG: FC = () => {
 					colorInterpolationFilters='sRGB'
 				>
 					<feFlood floodOpacity={0} result='BackgroundImageFix' />
-					<feColorMatrix
-						in='SourceAlpha'
-						type='matrix'
-						values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0'
-						result='hardAlpha'
-					/>
+					<feColorMatrix in='SourceAlpha' type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0' result='hardAlpha' />
 					<feOffset dy={2.25825} />
 					<feGaussianBlur stdDeviation={2.25825} />
 					<feComposite in2='hardAlpha' operator='out' />
@@ -164,8 +152,7 @@ export const SmoothCursor = forwardRef<SmoothCursorRef, SmoothCursorProps>(
 
 			const smoothMouseMove = (e: MouseEvent) => {
 				const el = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
-				const clickableSelector =
-					'a, button, [role="button"], input[type="button"], input[type="submit"], label, [onclick]';
+				const clickableSelector = 'a, button, [role="button"], input[type="button"], input[type="submit"], label, [onclick]';
 				setIsPointer(!!el && el.matches(clickableSelector));
 
 				const pos = { x: e.clientX, y: e.clientY };
