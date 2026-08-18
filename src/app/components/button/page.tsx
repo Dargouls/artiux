@@ -1,11 +1,49 @@
 'use client';
 
+import { useState } from 'react';
+
 import CopyCode from '@/components/copyCode/copyCode';
+import { ControlDropdown, ControlSwitch, Customize } from '@/components/customize/customize';
+import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
 import { Button } from '@/artiux-components/button';
 
+const variants = ['primary', 'secondary', 'ghost'] as const;
+const colors = ['primary', 'warning', 'destructive', 'success', 'info'] as const;
+const sizes = ['lg', 'sm'] as const;
+const ornaments = ['none', 'settings', 'heart'] as const;
+const ornamentPositions = ['left', 'right'] as const;
+
 export default function ButtonComponent() {
+	const [variant, setVariant] = useState<(typeof variants)[number]>('primary');
+	const [color, setColor] = useState<(typeof colors)[number]>('primary');
+	const [size, setSize] = useState<(typeof sizes)[number]>('lg');
+	const [ornament, setOrnament] = useState<(typeof ornaments)[number]>('settings');
+	const [ornamentPosition, setOrnamentPosition] = useState<(typeof ornamentPositions)[number]>('left');
+	const [loading, setLoading] = useState(false);
+	const [disabled, setDisabled] = useState(false);
+
+	const props = [
+		`variant='${variant}'`,
+		`color='${color}'`,
+		size === 'sm' ? `size='sm'` : null,
+		ornament !== 'none' ? `ornament='${ornament}'` : null,
+		ornament !== 'none' && ornamentPosition === 'right' ? `ornamentPosition='right'` : null,
+		loading ? 'loading' : null,
+		disabled ? 'disabled' : null,
+	]
+		.filter(Boolean)
+		.join(' ');
+
+	const previewCode = `
+import { Button } from '@/artiux-components/button';
+
+<Button ${props}>
+	Button
+</Button>
+`;
+
 	return (
 		<>
 			<div>
@@ -22,49 +60,65 @@ export default function ButtonComponent() {
 
 			<section className='my-8'>
 				<PreviewCode code={previewCode}>
-					<Button variant='primary' color='primary' ornament='settings'>
-						Primary
-					</Button>
-					<Button variant='secondary' color='info'>
-						Secondary
-					</Button>
-					<Button variant='ghost' color='destructive'>
-						Ghost
-					</Button>
-					<Button variant='primary' size='sm'>
-						Small
-					</Button>
-					<Button variant='primary' loading>
-						Loading
-					</Button>
-					<Button variant='primary' disabled>
-						Disabled
+					<Button
+						variant={variant}
+						color={color}
+						size={size === 'lg' ? undefined : size}
+						ornament={ornament === 'none' ? undefined : ornament}
+						ornamentPosition={ornamentPosition}
+						loading={loading}
+						disabled={disabled}
+					>
+						Button
 					</Button>
 				</PreviewCode>
+			</section>
+
+			<section className='my-8'>
+				<Customize>
+					<ControlDropdown label='Variant' value={variant} options={variants} onChange={setVariant} />
+					<ControlDropdown label='Color' value={color} options={colors} onChange={setColor} />
+					<ControlDropdown label='Size' value={size} options={sizes} onChange={setSize} />
+					<ControlDropdown label='Ornament' value={ornament} options={ornaments} onChange={setOrnament} />
+					<ControlDropdown label='Ornament position' value={ornamentPosition} options={ornamentPositions} onChange={setOrnamentPosition} />
+					<ControlSwitch label='Loading' checked={loading} onChange={setLoading} />
+					<ControlSwitch label='Disabled' checked={disabled} onChange={setDisabled} />
+				</Customize>
+			</section>
+
+			<section className='my-8'>
+				<PropsTable rows={propRows} />
 			</section>
 		</>
 	);
 }
 
-const previewCode = `
-import { Button } from '@/artiux-components/button';
-
-<Button variant='primary' color='primary' ornament='settings'>
-	Primary
-</Button>
-<Button variant='secondary' color='info'>
-	Secondary
-</Button>
-<Button variant='ghost' color='destructive'>
-	Ghost
-</Button>
-<Button variant='primary' size='sm'>
-	Small
-</Button>
-<Button variant='primary' loading>
-	Loading
-</Button>
-`;
+const propRows = [
+	{ property: 'variant', type: "'primary' | 'secondary' | 'ghost'", default: "'primary'", description: 'Estilo visual do botão.' },
+	{
+		property: 'color',
+		type: "'primary' | 'warning' | 'destructive' | 'success' | 'info'",
+		default: "'primary'",
+		description: 'Cor semântica aplicada ao botão.',
+	},
+	{ property: 'size', type: "'sm' | 'lg'", default: "'lg'", description: 'Tamanho do botão.' },
+	{ property: 'ornament', type: 'IconName', description: 'Ícone exibido junto ao texto.' },
+	{ property: 'ornamentPosition', type: "'left' | 'right'", default: "'left'", description: 'Posição do ícone em relação ao texto.' },
+	{ property: 'loading', type: 'boolean', default: 'false', description: 'Exibe indicador de carregamento e desabilita o botão.' },
+	{ property: 'disabled', type: 'boolean', default: 'false', description: 'Desabilita o botão.' },
+	{
+		property: 'typography',
+		type: "VariantProps<typeof textVariants>['typography']",
+		default: "'action'",
+		description: 'Variante tipográfica do texto.',
+	},
+	{
+		property: 'forceTextCentered',
+		type: 'boolean',
+		default: 'false',
+		description: 'Força texto e ornamento centralizados mesmo fora da variante ghost.',
+	},
+];
 
 const componentCode = `
 'use client';

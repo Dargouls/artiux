@@ -2,21 +2,23 @@
 
 import { Slot } from '@radix-ui/react-slot';
 import { cva, VariantProps } from 'class-variance-authority';
-import { GripVertical, PanelLeftIcon } from 'lucide-react';
+import { GripVertical, PanelLeftIcon, SearchIcon } from 'lucide-react';
 import * as React from 'react';
 
 import { useIsMobile } from '@/artiux-hooks/use-mobile';
 
 import { Button } from '@/artiux-components/button';
 
+import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/command';
 import TextField from '@/components/textField/textField';
 import { cn } from '@/lib/utils';
 import { Icon } from '@iconify/react';
 import { motion } from 'motion/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Sheet } from './sheet';
+import { textFieldVariants } from './textField';
 import Tooltip from './tooltip';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state';
@@ -79,7 +81,10 @@ function SidebarProvider({
 }) {
 	const isMobile = useIsMobile();
 	const pathname = usePathname();
+	const router = useRouter();
 	const [openMobile, setOpenMobile] = React.useState(false);
+	const [commandOpen, setCommandOpen] = React.useState(false);
+	const [search, setSearch] = React.useState('');
 
 	// This is the internal state of the sidebar.
 	// We use openProp and setOpenProp for control from outside the component.
@@ -112,11 +117,50 @@ function SidebarProvider({
 				event.preventDefault();
 				toggleSidebar();
 			}
+
+			if (event.key === 'k' && (event.metaKey || event.ctrlKey)) {
+				event.preventDefault();
+				setCommandOpen((value) => !value);
+			}
 		};
 
 		window.addEventListener('keydown', handleKeyDown);
 		return () => window.removeEventListener('keydown', handleKeyDown);
 	}, [toggleSidebar]);
+
+	// Lista achatada de páginas navegáveis, usada na busca do CommandDialog.
+	const searchItems = React.useMemo(() => {
+		if (!navItems) return [];
+
+		return navItems
+			.filter((item) => item.type === 'group')
+			.flatMap((group) =>
+				(group.items || []).map((subItem) => ({
+					label: subItem.label || '',
+					href: subItem.href || '/',
+					category: group.label || '',
+				}))
+			);
+	}, [navItems]);
+
+	const searchCategories = React.useMemo(() => {
+		return Array.from(new Set(searchItems.map((item) => item.category))).filter(Boolean);
+	}, [searchItems]);
+
+	const filteredSearchItems = React.useMemo(() => {
+		if (!search) return searchItems;
+		const query = search.toLowerCase();
+		return searchItems.filter((item) => item.label.toLowerCase().includes(query) || item.category.toLowerCase().includes(query));
+	}, [searchItems, search]);
+
+	const handleSelectItem = React.useCallback(
+		(href: string) => {
+			setCommandOpen(false);
+			setSearch('');
+			router.push(href);
+		},
+		[router]
+	);
 
 	// We add a state so that we can do data-state="expanded" or "collapsed".
 	// This makes it easier to style the sidebar with Tailwind classes.
@@ -144,7 +188,7 @@ function SidebarProvider({
 		return (
 			<>
 				{headerItems[0] && (
-					<SidebarHeader>
+					<SidebarHeader className='flex-col items-stretch'>
 						<Link href={headerItems[0].href || '/'} className='flex items-center gap-2'>
 							{headerItems[0].logo && headerItems[0].logoMini && (
 								<div className='w-20 overflow-hidden'>
@@ -173,6 +217,24 @@ function SidebarProvider({
 								{headerItems[0].label}
 							</motion.span>
 						</Link>
+
+						<button
+							type='button'
+							onClick={() => setCommandOpen(true)}
+							className={cn(
+								textFieldVariants(),
+								'text-sidebar-foreground/70 hover:bg-accent hover:text-accent-foreground mt-2 flex h-8 w-full items-center gap-2 rounded-md px-2 text-sm transition-colors'
+							)}
+						>
+							<SearchIcon className='size-4 shrink-0 opacity-50' />
+							<motion.span
+								className='flex-1 truncate text-left'
+								initial={{ opacity: 0 }}
+								animate={{ opacity: state === 'collapsed' ? 0 : 1 }}
+							>
+								Buscar...
+							</motion.span>
+						</button>
 					</SidebarHeader>
 				)}
 
@@ -234,6 +296,34 @@ function SidebarProvider({
 						))}
 					</SidebarFooter>
 				)}
+
+				<CommandDialog open={commandOpen} onClose={() => setCommandOpen(false)}>
+					<CommandInput placeholder='Buscar artigo ou categoria...' value={search} onValueChange={setSearch} />
+					<CommandList>
+						<CommandEmpty>Sem resultados.</CommandEmpty>
+						{filteredSearchItems.length > 0 && (
+							<CommandGroup heading='Sugestões'>
+								{filteredSearchItems.map((item) => (
+									<CommandItem key={item.href} value={`${item.label} ${item.category}`} onSelect={() => handleSelectItem(item.href)}>
+										{item.label}
+									</CommandItem>
+								))}
+							</CommandGroup>
+						)}
+						{searchCategories.length > 0 && (
+							<>
+								<CommandSeparator />
+								<CommandGroup heading='Categorias'>
+									{searchCategories.map((category) => (
+										<CommandItem key={category} value={category} onSelect={() => setSearch(category)}>
+											#{category}
+										</CommandItem>
+									))}
+								</CommandGroup>
+							</>
+						)}
+					</CommandList>
+				</CommandDialog>
 			</>
 		);
 	};
