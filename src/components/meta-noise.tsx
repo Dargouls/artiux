@@ -103,8 +103,8 @@ export default function NoiseSurface({ height = 0.3, y = -1, ...props }: NoiseSu
 						<DepthOfField
 							// focusDistance={0.08} // distância do foco (0 = câmera, 1 = longe)
 							// focalLength={0.05} // comprimento focal (menor = mais blur)
-							bokehScale={0.8} // intensidade do bokeh/blur
-							height={640} // resolução do efeito, bem abaixo da resolução da tela
+							bokehScale={0.125} // intensidade do bokeh/blur
+							height={240} // resolução do efeito, bem abaixo da resolução da tela
 						/>
 					</EffectComposer>
 				)}

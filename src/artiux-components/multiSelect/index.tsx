@@ -36,7 +36,7 @@ export interface MultiSelectProps {
 }
 
 export const multiSelectVariants = cva(
-	'w-full outline-none bg-input transition-all rounded-xl disabled:cursor-not-allowed disabled:opacity-50 duration-150 ease-out focus-within:bg-accent [&:hover:not(:focus-within)]:bg-accent cursor-pointer',
+	'w-full outline-none bg-input transition-all rounded-xl disabled:cursor-not-allowed disabled:opacity-50 duration-150 ease-out focus-within:bg-accent [&:hover:not(:focus-within)]:bg-accent/30 cursor-pointer',
 	{
 		variants: {
 			size: {

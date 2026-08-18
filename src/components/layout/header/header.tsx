@@ -3,11 +3,11 @@
 import { Sheet } from '@/artiux-components/sheet';
 import { useIsMobile } from '@/artiux-hooks/use-mobile';
 import logo from '@/assets/brand/logo.svg';
+import { Link } from '@/components/link';
 import { RainbowButton } from '@/components/ui/rainbow-button';
 import { Menu } from 'lucide-react';
 
 import Image from 'next/image';
-import Link from 'next/link';
 
 interface HeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -48,7 +48,7 @@ const NavMobile = () => {
 								<Link href='/contact'>Contato</Link>
 							</li> */}
 							<li>
-								<Link href='https://www.gabriel-azv.com' target='_blank'>
+								<Link href='https://www.gabrielzv.com' target='_blank'>
 									<RainbowButton>Meu Portfólio</RainbowButton>
 								</Link>
 							</li>
@@ -74,7 +74,7 @@ const NavDesktop = () => {
 					<Link href='/contact'>Contato</Link>
 				</li> */}
 				<li>
-					<Link href='https://www.gabriel-azv.com' target='_blank'>
+					<Link href='https://www.gabrielzv.com' target='_blank'>
 						<RainbowButton>Meu Portfólio</RainbowButton>
 					</Link>
 				</li>

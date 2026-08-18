@@ -30,36 +30,12 @@ export default function SidebarWrapper({ children, ...props }: SidebarWrapperPro
 			type: 'group',
 			items: [
 				{
-					label: 'Dialog',
-					href: '/components/dialog',
+					label: 'Badge',
+					href: '/components/badge',
 				},
 				{
 					label: 'Bubble Button',
 					href: '/components/bubble-button',
-				},
-				{
-					label: 'Step Form',
-					href: '/components/step-form',
-				},
-				{
-					label: 'Ripple Container',
-					href: '/components/ripple-container',
-				},
-				{
-					label: 'Calendar',
-					href: '/components/calendar',
-				},
-				{
-					label: 'Input Number',
-					href: '/components/inputNumber',
-				},
-				{
-					label: 'Progress Bar',
-					href: '/components/progressBar',
-				},
-				{
-					label: 'Text',
-					href: '/components/text',
 				},
 				{
 					label: 'Button',
@@ -70,32 +46,48 @@ export default function SidebarWrapper({ children, ...props }: SidebarWrapperPro
 					href: '/components/buttonGroup',
 				},
 				{
-					label: 'Icon Button',
-					href: '/components/iconButton',
-				},
-				{
-					label: 'Badge',
-					href: '/components/badge',
+					label: 'Calendar',
+					href: '/components/calendar',
 				},
 				{
 					label: 'Card',
 					href: '/components/card',
 				},
 				{
+					label: 'Checkbox Compose',
+					href: '/components/checkboxCompose',
+				},
+				{
+					label: 'Circular Progress',
+					href: '/components/circularProgress',
+				},
+				{
+					label: 'Dialog',
+					href: '/components/dialog',
+				},
+				{
 					label: 'Drawer',
 					href: '/components/drawer',
 				},
 				{
-					label: 'Tabs',
-					href: '/components/tabs',
+					label: 'Icon Button',
+					href: '/components/iconButton',
 				},
 				{
-					label: 'Switch',
-					href: '/components/switch',
+					label: 'Icons',
+					href: '/components/icons',
 				},
 				{
-					label: 'Checkbox Compose',
-					href: '/components/checkboxCompose',
+					label: 'Input Number',
+					href: '/components/inputNumber',
+				},
+				{
+					label: 'Multi Select',
+					href: '/components/multiSelect',
+				},
+				{
+					label: 'Progress Bar',
+					href: '/components/progressBar',
 				},
 				{
 					label: 'Radio Compose',
@@ -106,24 +98,32 @@ export default function SidebarWrapper({ children, ...props }: SidebarWrapperPro
 					href: '/components/radioGroup',
 				},
 				{
-					label: 'Text Field',
-					href: '/components/textField',
-				},
-				{
-					label: 'Circular Progress',
-					href: '/components/circularProgress',
-				},
-				{
-					label: 'Icons',
-					href: '/components/icons',
+					label: 'Ripple Container',
+					href: '/components/ripple-container',
 				},
 				{
 					label: 'Select',
 					href: '/components/select',
 				},
 				{
-					label: 'Multi Select',
-					href: '/components/multiSelect',
+					label: 'Step Form',
+					href: '/components/step-form',
+				},
+				{
+					label: 'Switch',
+					href: '/components/switch',
+				},
+				{
+					label: 'Tabs',
+					href: '/components/tabs',
+				},
+				{
+					label: 'Text',
+					href: '/components/text',
+				},
+				{
+					label: 'Text Field',
+					href: '/components/textField',
 				},
 				// {
 				// 	label: 'Sidebar',

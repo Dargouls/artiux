@@ -33,11 +33,7 @@ export default function Footer() {
 					{/* Social Links */}
 					<div className='text-center md:text-right'>
 						<div className='mb-4 flex justify-center space-x-4 md:justify-end'>
-							<Link
-								href='https://github.com/Dargouls'
-								className='text-gray-400 transition-colors hover:text-white'
-								aria-label='GitHub'
-							>
+							<Link href='https://github.com/Dargouls' className='text-gray-400 transition-colors hover:text-white' aria-label='GitHub'>
 								<Github className='h-5 w-5' />
 							</Link>
 							<Link
@@ -47,11 +43,7 @@ export default function Footer() {
 							>
 								<Linkedin className='h-5 w-5' />
 							</Link>
-							<Link
-								href='https://www.gabriel-azv.com'
-								className='text-gray-400 transition-colors hover:text-white'
-								aria-label='Portfólio'
-							>
+							<Link href='https://www.gabrielzv.com' className='text-gray-400 transition-colors hover:text-white' aria-label='Portfólio'>
 								<Globe className='h-5 w-5' />
 							</Link>
 						</div>

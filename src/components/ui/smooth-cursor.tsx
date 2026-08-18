@@ -131,6 +131,10 @@ export const SmoothCursor = forwardRef<SmoothCursorRef, SmoothCursorProps>(
 			const prevCursor = document.body.style.cursor;
 			document.body.style.cursor = 'none';
 
+			const styleEl = document.createElement('style');
+			styleEl.textContent = '*{cursor:none!important}';
+			document.head.appendChild(styleEl);
+
 			let rafId = 0;
 			let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
@@ -200,6 +204,7 @@ export const SmoothCursor = forwardRef<SmoothCursorRef, SmoothCursorProps>(
 				if (rafId) cancelAnimationFrame(rafId);
 				if (timeoutId !== null) clearTimeout(timeoutId);
 				document.body.style.cursor = prevCursor;
+				styleEl.remove();
 			};
 		}, [cursorX, cursorY, rotation, scale]);
 
