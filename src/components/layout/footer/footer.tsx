@@ -1,5 +1,5 @@
+import { Link } from '@/components/link';
 import { Github, Globe, Linkedin } from 'lucide-react';
-import Link from 'next/link';
 
 export default function Footer() {
 	return (

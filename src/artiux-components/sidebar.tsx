@@ -10,12 +10,12 @@ import { useIsMobile } from '@/artiux-hooks/use-mobile';
 import { Button } from '@/artiux-components/button';
 
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/command';
+import { Link } from '@/components/link';
 import TextField from '@/components/textField/textField';
 import { cn } from '@/lib/utils';
 import { Icon } from '@iconify/react';
 import { motion } from 'motion/react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Sheet } from './sheet';
 import { textFieldVariants } from './textField';
