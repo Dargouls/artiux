@@ -1,6 +1,7 @@
 import { RippleContainer } from '@/artiux-components/rippleContainer';
+import { Link } from '@/components/link';
 import Image, { StaticImageData } from 'next/image';
-import Link, { LinkProps } from 'next/link';
+import { LinkProps } from 'next/link';
 import { AspectRatio } from '../ui/aspect-ratio';
 
 interface ComponentCardProps extends LinkProps {

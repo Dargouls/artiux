@@ -143,6 +143,10 @@ export default function SidebarWrapper({ children, ...props }: SidebarWrapperPro
 					label: 'To Left',
 					href: '/components/to-left',
 				},
+				{
+					label: 'Circle Transition',
+					href: '/components/circle-transition',
+				},
 			],
 		},
 	];
