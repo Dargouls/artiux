@@ -18,6 +18,7 @@ import { Text } from '@/artiux-components/text';
 import { useIsMobile } from '@/artiux-hooks/use-mobile';
 import CopyCode from '@/components/copyCode/copyCode';
 import Grainient from '@/components/grainient';
+import { Link } from '@/components/link';
 import NoiseSurface from '@/components/meta-noise';
 import PageLoader from '@/components/pageLoader/pageLoader';
 import { BubbleParticles } from '@/components/ui/background-beam';
@@ -236,9 +237,11 @@ export default function HomePage() {
 								<p>e use</p>
 							</h1>
 
-							<BubbleButton className='py-4' loading={false} onClick={() => push('/components')}>
-								Ver Componentes
-							</BubbleButton>
+							<Link href='/components' asChild className='z-10'>
+								<BubbleButton className='py-4' loading={false}>
+									Ver Componentes
+								</BubbleButton>
+							</Link>
 						</div>
 						{/* <picture className='absolute left-0 top-0 h-1/2 w-full select-none rounded-[48px] rounded-t-none bg-black'></picture> */}
 						{/* <Image
