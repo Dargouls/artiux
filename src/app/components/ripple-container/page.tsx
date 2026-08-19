@@ -1,17 +1,35 @@
 'use client';
 
+import { useState } from 'react';
+
 import CopyCode from '@/components/copyCode/copyCode';
+import { ControlColor, Customize } from '@/components/customize/customize';
+import { PropsTable } from '@/components/customize/propsTable';
 
 import { RippleContainer } from '@/artiux-components/rippleContainer';
 import PreviewCode from '@/components/previewCode/previewCode';
 
 export default function RippleContainerComponent() {
+	const [color, setColor] = useState('#919191');
+
+	const props = [`color='${color}'`].filter(Boolean).join(' ');
+
+	const previewCode = `
+import { RippleContainer } from '@/artiux-components/rippleContainer';
+
+<RippleContainer ${props}>
+	<button className='bg-primary text-primary-foreground ml-4 rounded-md px-4 py-2 hover:brightness-95'>
+		Eu sou um botão
+	</button>
+</RippleContainer>
+`;
+
 	return (
 		<>
 			<div>
 				<h1 className='mt-20 text-5xl font-bold'>Ripple Container</h1>
 				<p className='text-muted-foreground mt-4 block text-xl'>
-					Container flexível com animação de ripple (útil também para botões)
+					Container flexível com animação de ripple (útil também para botões)
 				</p>
 			</div>
 
@@ -24,31 +42,41 @@ export default function RippleContainerComponent() {
 
 			<section className='my-8'>
 				<PreviewCode code={previewCode}>
-					<RippleContainer>
+					<RippleContainer color={color}>
 						<div className='bg-secondary text-primary-foreground flex h-12 w-32 items-center justify-center rounded-md'>
 							Eu sou uma div
 						</div>
 					</RippleContainer>
-					<RippleContainer>
+					<RippleContainer color={color}>
 						<button className='bg-primary text-primary-foreground ml-4 rounded-md px-4 py-2 hover:brightness-95'>
 							Eu sou um botão
 						</button>
 					</RippleContainer>
 				</PreviewCode>
 			</section>
+
+			<section className='my-8'>
+				<Customize>
+					<ControlColor label='Color' value={color} onChange={setColor} />
+				</Customize>
+			</section>
+
+			<section className='my-8'>
+				<PropsTable rows={propRows} />
+			</section>
 		</>
 	);
 }
 
-const previewCode = `
-import { RippleContainer } from '@/artiux-components/rippleContainer';
-
-<RippleContainer color={'#919191'}>
-	<button className='bg-primary text-primary-foreground ml-4 rounded-md px-4 py-2 hover:brightness-95'>
-		Eu sou um botão
-	</button>
-</RippleContainer>
-`;
+const propRows = [
+	{
+		property: 'color',
+		type: 'string',
+		default: "'rgba(56, 56, 56, 0.4)'",
+		description: 'Cor do efeito ripple exibido ao clicar no elemento filho.',
+	},
+	{ property: 'children', type: 'React.ReactElement', description: 'Elemento único que receberá o efeito de ripple ao ser clicado.' },
+];
 
 const componentCode = `
 'use client';

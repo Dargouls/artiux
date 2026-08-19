@@ -1,10 +1,18 @@
 'use client';
 
+import { useState } from 'react';
+
 import CopyCode from '@/components/copyCode/copyCode';
+import { ControlDropdown, ControlSwitch, Customize } from '@/components/customize/customize';
+import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
 import { TextField } from '@/artiux-components/textField';
 import { useForm } from 'react-hook-form';
+
+const sizes = ['lg', 'sm'] as const;
+const ornaments = ['none', 'settings', 'search'] as const;
+const ornamentPositions = ['left', 'right'] as const;
 
 export default function TextFieldComponent() {
 	const { control } = useForm({
@@ -15,6 +23,32 @@ export default function TextFieldComponent() {
 			comErro: '',
 		},
 	});
+
+	const [size, setSize] = useState<(typeof sizes)[number]>('lg');
+	const [ornament, setOrnament] = useState<(typeof ornaments)[number]>('settings');
+	const [ornamentPosition, setOrnamentPosition] = useState<(typeof ornamentPositions)[number]>('left');
+	const [error, setError] = useState(false);
+
+	const props = [
+		`name='padrao'`,
+		size === 'sm' ? `size='sm'` : null,
+		`placeholder='Placeholder'`,
+		ornament !== 'none' ? `ornament='${ornament}'` : null,
+		ornament !== 'none' && ornamentPosition === 'right' ? `ornamentPosition='right'` : null,
+		error ? 'error' : null,
+		error ? `helperText='Campo obrigatório'` : null,
+	]
+		.filter(Boolean)
+		.join(' ');
+
+	const previewCode = `
+import { TextField } from '@/artiux-components/textField';
+import { useForm } from 'react-hook-form';
+
+const { control } = useForm({ defaultValues: { padrao: '' } });
+
+<TextField ${props} control={control} />
+`;
 
 	return (
 		<>
@@ -35,25 +69,63 @@ export default function TextFieldComponent() {
 			<section className='my-8'>
 				<PreviewCode code={previewCode}>
 					<div className='flex w-full max-w-sm flex-col gap-4'>
-						<TextField name='padrao' control={control} placeholder='Placeholder' ornament='settings' ornamentPosition='left' />
+						<TextField
+							name='padrao'
+							control={control}
+							placeholder='Placeholder'
+							size={size}
+							ornament={ornament === 'none' ? undefined : ornament}
+							ornamentPosition={ornamentPosition}
+							error={error}
+							helperText={error ? 'Campo obrigatório' : undefined}
+						/>
 						<TextField name='cpf' control={control} placeholder='CPF' ornament='search' ornamentPosition='left' mask='999.999.999-99' />
 						<TextField name='valor' control={control} placeholder='Valor' customType='currency' />
 						<TextField name='comErro' control={control} placeholder='Com erro' error helperText='Campo obrigatório' />
 					</div>
 				</PreviewCode>
 			</section>
+
+			<section className='my-8'>
+				<Customize>
+					<ControlDropdown label='Size' value={size} options={sizes} onChange={setSize} />
+					<ControlDropdown label='Ornament' value={ornament} options={ornaments} onChange={setOrnament} />
+					<ControlDropdown label='Ornament position' value={ornamentPosition} options={ornamentPositions} onChange={setOrnamentPosition} />
+					<ControlSwitch label='Error' checked={error} onChange={setError} />
+				</Customize>
+			</section>
+
+			<section className='my-8'>
+				<PropsTable rows={propRows} />
+			</section>
 		</>
 	);
 }
 
-const previewCode = `
-import { TextField } from '@/artiux-components/textField';
-import { useForm } from 'react-hook-form';
-
-const { control } = useForm({ defaultValues: { padrao: '' } });
-
-<TextField name='padrao' control={control} placeholder='Placeholder' ornament='settings' ornamentPosition='left' />
-`;
+const propRows = [
+	{ property: 'name', type: 'Path<TFieldValues>', description: 'Nome do campo controlado pelo react-hook-form.' },
+	{ property: 'control', type: 'Control<TFieldValues>', description: 'Objeto de controle do formulário (react-hook-form). Opcional se usado dentro de um FormProvider.' },
+	{ property: 'placeholder', type: 'string', description: 'Texto exibido quando o campo está vazio.' },
+	{ property: 'size', type: "'sm' | 'lg'", default: "'lg'", description: 'Tamanho do campo.' },
+	{ property: 'mask', type: 'string', description: 'Máscara de formatação aplicada ao valor digitado.' },
+	{ property: 'ornament', type: 'IconName', description: 'Ícone exibido dentro do campo.' },
+	{ property: 'ornamentPosition', type: "'left' | 'right'", description: 'Posição do ícone dentro do campo.' },
+	{ property: 'ornamentClassname', type: 'string', description: 'Classes adicionais aplicadas ao ícone.' },
+	{ property: 'ornamentProps', type: 'React.HTMLAttributes<HTMLDivElement>', description: 'Props repassadas ao container do ícone.' },
+	{
+		property: 'typography',
+		type: "VariantProps<typeof textVariants>['typography']",
+		default: "'body'",
+		description: 'Variante tipográfica do texto do campo.',
+	},
+	{ property: 'error', type: 'boolean', default: 'false', description: 'Exibe o campo em estado de erro.' },
+	{ property: 'helperText', type: 'string', description: 'Texto de ajuda/erro exibido abaixo do campo.' },
+	{
+		property: 'customType',
+		type: "'currency'",
+		description: 'Aplica um comportamento de formatação customizado ao valor (ex: moeda).',
+	},
+];
 
 const componentCode = `
 'use client';

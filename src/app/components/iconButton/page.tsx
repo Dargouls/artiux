@@ -1,11 +1,41 @@
 'use client';
 
+import { useState } from 'react';
+
 import CopyCode from '@/components/copyCode/copyCode';
+import { ControlDropdown, ControlSwitch, Customize } from '@/components/customize/customize';
+import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
 import { IconButton } from '@/artiux-components/iconButton';
 
+const variants = ['primary', 'secondary', 'ghost'] as const;
+const colors = ['primary', 'warning', 'destructive', 'success', 'info'] as const;
+const sizes = ['lg', 'sm'] as const;
+
 export default function IconButtonComponent() {
+	const [variant, setVariant] = useState<(typeof variants)[number]>('primary');
+	const [color, setColor] = useState<(typeof colors)[number]>('primary');
+	const [size, setSize] = useState<(typeof sizes)[number]>('lg');
+	const [loading, setLoading] = useState(false);
+	const [disabled, setDisabled] = useState(false);
+
+	const props = [
+		`variant='${variant}'`,
+		`color='${color}'`,
+		size === 'sm' ? `size='sm'` : null,
+		loading ? 'loading' : null,
+		disabled ? 'disabled' : null,
+	]
+		.filter(Boolean)
+		.join(' ');
+
+	const previewCode = `
+import { IconButton } from '@/artiux-components/iconButton';
+
+<IconButton ${props} icon='settings' />
+`;
+
 	return (
 		<>
 			<div>
@@ -22,27 +52,41 @@ export default function IconButtonComponent() {
 
 			<section className='my-8'>
 				<PreviewCode code={previewCode}>
-					<IconButton variant='primary' color='primary' icon='settings' />
-					<IconButton variant='secondary' color='info' icon='settings' />
-					<IconButton variant='ghost' color='destructive' icon='settings' />
-					<IconButton variant='primary' size='sm' icon='settings' />
-					<IconButton variant='primary' icon='settings' loading />
-					<IconButton variant='primary' icon='settings' disabled />
+					<IconButton variant={variant} color={color} size={size === 'lg' ? undefined : size} icon='settings' loading={loading} disabled={disabled} />
 				</PreviewCode>
+			</section>
+
+			<section className='my-8'>
+				<Customize>
+					<ControlDropdown label='Variant' value={variant} options={variants} onChange={setVariant} />
+					<ControlDropdown label='Color' value={color} options={colors} onChange={setColor} />
+					<ControlDropdown label='Size' value={size} options={sizes} onChange={setSize} />
+					<ControlSwitch label='Loading' checked={loading} onChange={setLoading} />
+					<ControlSwitch label='Disabled' checked={disabled} onChange={setDisabled} />
+				</Customize>
+			</section>
+
+			<section className='my-8'>
+				<PropsTable rows={propRows} />
 			</section>
 		</>
 	);
 }
 
-const previewCode = `
-import { IconButton } from '@/artiux-components/iconButton';
-
-<IconButton variant='primary' color='primary' icon='settings' />
-<IconButton variant='secondary' color='info' icon='settings' />
-<IconButton variant='ghost' color='destructive' icon='settings' />
-<IconButton variant='primary' size='sm' icon='settings' />
-<IconButton variant='primary' icon='settings' loading />
-`;
+const propRows = [
+	{ property: 'variant', type: "'primary' | 'secondary' | 'ghost'", default: "'primary'", description: 'Estilo visual do botão.' },
+	{
+		property: 'color',
+		type: "'primary' | 'warning' | 'destructive' | 'success' | 'info'",
+		default: "'primary'",
+		description: 'Cor semântica aplicada ao botão.',
+	},
+	{ property: 'size', type: "'sm' | 'lg'", default: "'lg'", description: 'Tamanho do botão.' },
+	{ property: 'icon', type: 'IconName', description: 'Ícone exibido dentro do botão.' },
+	{ property: 'iconClassname', type: 'string', description: 'Classes aplicadas diretamente ao ícone.' },
+	{ property: 'loading', type: 'boolean', default: 'false', description: 'Exibe indicador de carregamento e desabilita o botão.' },
+	{ property: 'disabled', type: 'boolean', default: 'false', description: 'Desabilita o botão.' },
+];
 
 const componentCode = `
 'use client';

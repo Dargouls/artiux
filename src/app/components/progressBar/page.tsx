@@ -1,11 +1,31 @@
 'use client';
 
+import { useState } from 'react';
+
 import CopyCode from '@/components/copyCode/copyCode';
+import { ControlDropdown, ControlSlider, ControlSwitch, Customize } from '@/components/customize/customize';
+import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
 import { ProgressBar } from '@/artiux-components/progressBar';
 
+const labelPositions = ['right', 'top', 'bottom', 'left', 'none'] as const;
+
 export default function ProgressBarComponent() {
+	const [progress, setProgress] = useState(50);
+	const [labelPosition, setLabelPosition] = useState<(typeof labelPositions)[number]>('right');
+	const [animated, setAnimated] = useState(true);
+
+	const props = [`progress={${progress}}`, labelPosition !== 'right' ? `labelPosition='${labelPosition}'` : null, animated ? 'animated' : null]
+		.filter(Boolean)
+		.join(' ');
+
+	const previewCode = `
+import { ProgressBar } from '@/artiux-components/progressBar';
+
+<ProgressBar ${props} />
+`;
+
 	return (
 		<>
 			<div>
@@ -22,28 +42,55 @@ export default function ProgressBarComponent() {
 
 			<section className='my-8'>
 				<PreviewCode code={previewCode}>
-					<div className='flex w-full max-w-md flex-col gap-6'>
-						<ProgressBar progress={50} labelPosition='right' animated />
-						<ProgressBar progress={80} labelPosition='top' animated />
-						<ProgressBar progress={30} labelPosition='bottom' animated />
-						<ProgressBar progress={65} labelPosition='left' animated />
-						<ProgressBar progress={100} labelPosition='none' animated={false} />
+					<div className='w-full max-w-md'>
+						<ProgressBar progress={progress} labelPosition={labelPosition} animated={animated} />
 					</div>
 				</PreviewCode>
+			</section>
+
+			<section className='my-8'>
+				<Customize>
+					<ControlSlider label='Progress' value={progress} min={0} max={100} step={1} unit='%' onChange={setProgress} />
+					<ControlDropdown label='Label position' value={labelPosition} options={labelPositions} onChange={setLabelPosition} />
+					<ControlSwitch label='Animated' checked={animated} onChange={setAnimated} />
+				</Customize>
+			</section>
+
+			<section className='my-8'>
+				<PropsTable rows={propRows} />
+			</section>
+
+			<section className='my-8'>
+				<h3 className='text-2xl font-bold'>Exemplos:</h3>
+				<div className='mt-4 flex w-full max-w-md flex-col gap-6'>
+					<ProgressBar progress={50} labelPosition='right' animated />
+					<ProgressBar progress={80} labelPosition='top' animated />
+					<ProgressBar progress={30} labelPosition='bottom' animated />
+					<ProgressBar progress={65} labelPosition='left' animated />
+					<ProgressBar progress={100} labelPosition='none' animated={false} />
+				</div>
 			</section>
 		</>
 	);
 }
 
-const previewCode = `
-import { ProgressBar } from '@/artiux-components/progressBar';
-
-<ProgressBar progress={50} labelPosition='right' animated />
-<ProgressBar progress={80} labelPosition='top' animated />
-<ProgressBar progress={30} labelPosition='bottom' animated />
-<ProgressBar progress={65} labelPosition='left' animated />
-<ProgressBar progress={100} labelPosition='none' animated={false} />
-`;
+const propRows = [
+	{ property: 'progress', type: 'number', description: 'Valor do progresso, de 0 a 100.' },
+	{
+		property: 'animated',
+		type: 'boolean',
+		default: 'true',
+		description: 'Anima a transição de preenchimento e o efeito de shimmer.',
+	},
+	{
+		property: 'labelPosition',
+		type: "'top' | 'bottom' | 'left' | 'right' | 'none'",
+		default: "'right'",
+		description: 'Posição do rótulo de porcentagem em relação à barra.',
+	},
+	{ property: 'backgroundClassName', type: 'string', description: 'Classes aplicadas ao trilho de fundo da barra.' },
+	{ property: 'fillClassName', type: 'string', description: 'Classes aplicadas ao preenchimento da barra.' },
+];
 
 const componentCode = `
 'use client';

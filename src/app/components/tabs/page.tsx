@@ -1,11 +1,19 @@
 'use client';
 
+import { useState } from 'react';
+
 import CopyCode from '@/components/copyCode/copyCode';
+import { ControlDropdown, Customize } from '@/components/customize/customize';
+import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
 import { Tabs } from '@/artiux-components/tabs';
 
+const defaultValues = ['1', '2', '3', '4'] as const;
+
 export default function TabsComponent() {
+	const [defaultValue, setDefaultValue] = useState<(typeof defaultValues)[number]>('1');
+
 	const tabs = [
 		{
 			title: 'Criar',
@@ -45,6 +53,21 @@ export default function TabsComponent() {
 		},
 	];
 
+	const props = [`defaultValue='${defaultValue}'`].filter(Boolean).join(' ');
+
+	const previewCode = `
+import { Tabs } from '@/artiux-components/tabs';
+
+const tabs = [
+	{ title: 'Criar', value: '1', content: <h1>Criar</h1> },
+	{ title: 'Listar', value: '2', content: <h1>Listar</h1> },
+	{ title: 'Atualizar', value: '3', content: <h1>Atualizar</h1> },
+	{ title: 'Deletar', value: '4', content: <h1>Deletar</h1> },
+];
+
+<Tabs tabs={tabs} ${props} />
+`;
+
 	return (
 		<>
 			<div>
@@ -61,25 +84,32 @@ export default function TabsComponent() {
 
 			<section className='my-8'>
 				<PreviewCode code={previewCode}>
-					<Tabs tabs={tabs} />
+					<Tabs tabs={tabs} defaultValue={defaultValue} key={defaultValue} />
 				</PreviewCode>
+			</section>
+
+			<section className='my-8'>
+				<Customize>
+					<ControlDropdown label='Default value' value={defaultValue} options={defaultValues} onChange={setDefaultValue} />
+				</Customize>
+			</section>
+
+			<section className='my-8'>
+				<PropsTable rows={propRows} />
 			</section>
 		</>
 	);
 }
 
-const previewCode = `
-import { Tabs } from '@/artiux-components/tabs';
-
-const tabs = [
-	{ title: 'Criar', value: '1', content: <h1>Criar</h1> },
-	{ title: 'Listar', value: '2', content: <h1>Listar</h1> },
-	{ title: 'Atualizar', value: '3', content: <h1>Atualizar</h1> },
-	{ title: 'Deletar', value: '4', content: <h1>Deletar</h1> },
+const propRows = [
+	{ property: 'tabs', type: 'Tab[]', description: 'Lista de abas, cada uma com title, value e content.' },
+	{ property: 'defaultValue', type: 'string', description: 'Valor da aba selecionada inicialmente (usa a primeira aba se ausente).' },
+	{ property: 'onTabChange', type: '(tab: Tab) => void', description: 'Chamado quando a aba ativa é alterada.' },
+	{ property: 'containerClassName', type: 'string', description: 'Classes aplicadas ao container das abas.' },
+	{ property: 'activeTabClassName', type: 'string', description: 'Classes aplicadas ao indicador da aba ativa.' },
+	{ property: 'tabClassName', type: 'string', description: 'Classes aplicadas a cada botão de aba.' },
+	{ property: 'contentClassName', type: 'string', description: 'Classes aplicadas ao container do conteúdo exibido.' },
 ];
-
-<Tabs tabs={tabs} />
-`;
 
 const componentCode = `
 'use client';

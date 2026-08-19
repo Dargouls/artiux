@@ -1,6 +1,10 @@
 'use client';
 
+import { useState } from 'react';
+
 import CopyCode from '@/components/copyCode/copyCode';
+import { ControlSlider, ControlSwitch, Customize } from '@/components/customize/customize';
+import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
 import { InputNumber } from '@/artiux-components/inputNumber';
@@ -14,6 +18,31 @@ export default function InputNumberComponent() {
 			desabilitado: 5,
 		},
 	});
+
+	const [min, setMin] = useState(0);
+	const [max, setMax] = useState(15);
+	const [step, setStep] = useState(1);
+	const [disabled, setDisabled] = useState(false);
+	const [currency, setCurrency] = useState(false);
+
+	const props = [
+		`min={${min}}`,
+		`max={${max}}`,
+		`step={${step}}`,
+		disabled ? 'disabled' : null,
+		currency ? `formatter={(v) => \`R$ \${v}\`}` : null,
+	]
+		.filter(Boolean)
+		.join(' ');
+
+	const previewCode = `
+import { InputNumber } from '@/artiux-components/inputNumber';
+import { useForm } from 'react-hook-form';
+
+const { control } = useForm({ defaultValues: { quantidade: 0 } });
+
+<InputNumber name='quantidade' control={control} ${props} />
+`;
 
 	return (
 		<>
@@ -32,28 +61,53 @@ export default function InputNumberComponent() {
 			<section className='my-8'>
 				<PreviewCode code={previewCode}>
 					<div className='flex flex-wrap items-center gap-6'>
-						<InputNumber name='quantidade' control={control} min={0} max={15} step={1} />
+						<InputNumber
+							name='quantidade'
+							control={control}
+							min={min}
+							max={max}
+							step={step}
+							disabled={disabled}
+							formatter={currency ? (v) => `R$ ${v}` : undefined}
+						/>
 						<InputNumber name='preco' control={control} min={0} max={1000} step={5} formatter={(v) => `R$ ${v}`} />
 						<InputNumber name='desabilitado' control={control} min={0} max={10} disabled />
 						<InputNumber name='quantidade' control={control} min={0} max={15} step={1} size='sm' />
 					</div>
 				</PreviewCode>
 			</section>
+
+			<section className='my-8'>
+				<Customize>
+					<ControlSlider label='Min' value={min} min={-50} max={50} onChange={setMin} />
+					<ControlSlider label='Max' value={max} min={0} max={200} onChange={setMax} />
+					<ControlSlider label='Step' value={step} min={1} max={20} onChange={setStep} />
+					<ControlSwitch label='Disabled' checked={disabled} onChange={setDisabled} />
+					<ControlSwitch label='Formatter (R$)' checked={currency} onChange={setCurrency} />
+				</Customize>
+			</section>
+
+			<section className='my-8'>
+				<PropsTable rows={propRows} />
+			</section>
 		</>
 	);
 }
 
-const previewCode = `
-import { InputNumber } from '@/artiux-components/inputNumber';
-import { useForm } from 'react-hook-form';
-
-const { control } = useForm({ defaultValues: { quantidade: 0, preco: 10 } });
-
-<InputNumber name='quantidade' control={control} min={0} max={15} step={1} />
-<InputNumber name='preco' control={control} min={0} max={1000} step={5} formatter={(v) => \`R$ \${v}\`} />
-<InputNumber name='desabilitado' control={control} min={0} max={10} disabled />
-<InputNumber name='quantidade' control={control} min={0} max={15} step={1} size='sm' />
-`;
+const propRows = [
+	{ property: 'name', type: 'Path<TFieldValues>', description: 'Nome do campo controlado pelo react-hook-form.' },
+	{ property: 'control', type: 'Control<TFieldValues>', description: 'Instância de controle retornada por useForm.' },
+	{ property: 'min', type: 'number', default: '0', description: 'Valor mínimo permitido.' },
+	{ property: 'max', type: 'number', default: '100', description: 'Valor máximo permitido.' },
+	{ property: 'step', type: 'number', default: '1', description: 'Incremento/decremento aplicado a cada clique.' },
+	{ property: 'size', type: "'sm' | 'lg'", default: "'lg'", description: 'Tamanho do input.' },
+	{ property: 'disabled', type: 'boolean', default: 'false', description: 'Desabilita os controles de incremento e decremento.' },
+	{
+		property: 'formatter',
+		type: '(value: number) => string',
+		description: 'Função para formatar o valor exibido (ex: moeda).',
+	},
+];
 
 const componentCode = `
 'use client';

@@ -1,12 +1,36 @@
 'use client';
 
+import { useState } from 'react';
+
 import CopyCode from '@/components/copyCode/copyCode';
+import { ControlSwitch, Customize } from '@/components/customize/customize';
+import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
 import { RadioComposeItem } from '@/artiux-components/radioCompose';
 import { RadioGroup } from '@/artiux-components/radioGroup';
 
 export default function RadioComposeComponent() {
+	const [withDescription, setWithDescription] = useState(true);
+	const [withAction, setWithAction] = useState(true);
+
+	const props = [
+		withDescription ? `description='Descrição'` : null,
+		withAction ? `actionName='Visualizar' action={() => console.log(1)}` : null,
+	]
+		.filter(Boolean)
+		.join(' ');
+
+	const previewCode = `
+import { RadioComposeItem } from '@/artiux-components/radioCompose';
+import { RadioGroup } from '@/artiux-components/radioGroup';
+
+<RadioGroup defaultValue='1'>
+	<RadioComposeItem title='Item 1' value='1' ${props} />
+	<RadioComposeItem title='Item 2' value='2' ${props} />
+</RadioGroup>
+`;
+
 	return (
 		<>
 			<div>
@@ -26,25 +50,46 @@ export default function RadioComposeComponent() {
 			<section className='my-8'>
 				<PreviewCode code={previewCode}>
 					<RadioGroup defaultValue='1' className='flex w-full max-w-md flex-col gap-4'>
-						<RadioComposeItem title='Item 1' description='Descrição' value='1' actionName='Visualizar' action={() => console.log(1)} />
-						<RadioComposeItem title='Item 2' description='Descrição' value='2' actionName='Visualizar' action={() => console.log(2)} />
+						<RadioComposeItem
+							title='Item 1'
+							value='1'
+							description={withDescription ? 'Descrição' : undefined}
+							actionName={withAction ? 'Visualizar' : undefined}
+							action={withAction ? () => console.log(1) : undefined}
+						/>
+						<RadioComposeItem
+							title='Item 2'
+							value='2'
+							description={withDescription ? 'Descrição' : undefined}
+							actionName={withAction ? 'Visualizar' : undefined}
+							action={withAction ? () => console.log(2) : undefined}
+						/>
 						<RadioComposeItem title='Item 3' description='Sem ação' value='3' />
 					</RadioGroup>
 				</PreviewCode>
+			</section>
+
+			<section className='my-8'>
+				<Customize>
+					<ControlSwitch label='Com descrição' checked={withDescription} onChange={setWithDescription} />
+					<ControlSwitch label='Com ação' checked={withAction} onChange={setWithAction} />
+				</Customize>
+			</section>
+
+			<section className='my-8'>
+				<PropsTable rows={propRows} />
 			</section>
 		</>
 	);
 }
 
-const previewCode = `
-import { RadioComposeItem } from '@/artiux-components/radioCompose';
-import { RadioGroup } from '@/artiux-components/radioGroup';
-
-<RadioGroup defaultValue='1'>
-	<RadioComposeItem title='Item 1' description='Descrição' value='1' actionName='Visualizar' action={() => console.log(1)} />
-	<RadioComposeItem title='Item 2' description='Descrição' value='2' actionName='Visualizar' action={() => console.log(2)} />
-</RadioGroup>
-`;
+const propRows = [
+	{ property: 'title', type: 'string', description: 'Título exibido no item.' },
+	{ property: 'description', type: 'string', description: 'Descrição exibida abaixo do título.' },
+	{ property: 'actionName', type: 'string', description: 'Texto do botão de ação exibido no item.' },
+	{ property: 'action', type: '() => void', description: 'Função chamada ao clicar no botão de ação, sem selecionar o item.' },
+	{ property: 'value', type: 'string', description: 'Valor do item dentro do RadioGroup.' },
+];
 
 const componentCode = `
 import { cn } from '@/lib/utils';

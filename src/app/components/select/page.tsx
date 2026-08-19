@@ -1,10 +1,17 @@
 'use client';
 
+import { useState } from 'react';
+
 import CopyCode from '@/components/copyCode/copyCode';
+import { ControlDropdown, ControlSwitch, Customize } from '@/components/customize/customize';
+import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
 import { Select } from '@/artiux-components/select';
 import { useForm } from 'react-hook-form';
+
+const sizes = ['lg', 'sm'] as const;
+const ornaments = ['none', 'globe', 'search', 'settings'] as const;
 
 export default function SelectComponent() {
 	const { control: statusControl } = useForm({
@@ -19,6 +26,10 @@ export default function SelectComponent() {
 		},
 	});
 
+	const [size, setSize] = useState<(typeof sizes)[number]>('lg');
+	const [ornament, setOrnament] = useState<(typeof ornaments)[number]>('none');
+	const [showDescription, setShowDescription] = useState(true);
+
 	const statusOptions = [
 		{ label: 'Ativo', value: 'ativo' },
 		{ label: 'Inativo', value: 'inativo' },
@@ -32,6 +43,36 @@ export default function SelectComponent() {
 		{ label: 'Rio de Janeiro', value: 'rj' },
 		{ label: 'Belo Horizonte', value: 'bh' },
 	];
+
+	const props = [
+		`name='status'`,
+		`options={options}`,
+		size === 'sm' ? `size='sm'` : null,
+		`title='Status'`,
+		showDescription ? `description='Selecione o status'` : null,
+		ornament !== 'none' ? `ornament='${ornament}'` : null,
+	]
+		.filter(Boolean)
+		.join('\n\t');
+
+	const previewCode = `
+import { Select } from '@/artiux-components/select';
+import { useForm } from 'react-hook-form';
+
+const { control } = useForm({ defaultValues: { status: '' } });
+
+const options = [
+	{ label: 'Ativo', value: 'ativo' },
+	{ label: 'Inativo', value: 'inativo' },
+];
+
+<Select
+	${props}
+	control={control}
+	content={() => <p>O status define a situação do registro</p>}
+	footerClassname='flex flex-wrap flex-row'
+/>
+`;
 
 	return (
 		<>
@@ -57,8 +98,10 @@ export default function SelectComponent() {
 								control={statusControl}
 								options={statusOptions}
 								title='Status'
-								description='Selecione o status'
+								description={showDescription ? 'Selecione o status' : undefined}
 								placeholder='Selecionar'
+								size={size}
+								ornament={ornament === 'none' ? undefined : ornament}
 								content={() => <p className='text-muted-foreground text-sm'>O status define a situação do registro</p>}
 								footerClassname='flex flex-wrap flex-row'
 							/>
@@ -79,31 +122,42 @@ export default function SelectComponent() {
 					</div>
 				</PreviewCode>
 			</section>
+
+			<section className='my-8'>
+				<Customize>
+					<ControlDropdown label='Size' value={size} options={sizes} onChange={setSize} />
+					<ControlDropdown label='Ornament' value={ornament} options={ornaments} onChange={setOrnament} />
+					<ControlSwitch label='Description' checked={showDescription} onChange={setShowDescription} />
+				</Customize>
+			</section>
+
+			<section className='my-8'>
+				<PropsTable rows={propRows} />
+			</section>
 		</>
 	);
 }
 
-const previewCode = `
-import { Select } from '@/artiux-components/select';
-import { useForm } from 'react-hook-form';
-
-const { control } = useForm({ defaultValues: { status: '' } });
-
-const options = [
-	{ label: 'Ativo', value: 'ativo' },
-	{ label: 'Inativo', value: 'inativo' },
+const propRows = [
+	{ property: 'name', type: 'Path<TFieldValues>', description: 'Nome do campo controlado pelo react-hook-form.' },
+	{ property: 'control', type: 'Control<TFieldValues>', description: 'Objeto de controle do formulário (react-hook-form).' },
+	{ property: 'options', type: '{ label: string; value: string | number }[]', description: 'Opções exibidas no drawer.' },
+	{ property: 'placeholder', type: 'string', default: "'Selecionar'", description: 'Texto exibido quando nenhum valor está selecionado.' },
+	{ property: 'title', type: 'string', description: 'Título exibido no cabeçalho do drawer.' },
+	{ property: 'description', type: 'string', description: 'Descrição exibida abaixo do título no drawer.' },
+	{ property: 'ornament', type: 'IconName', description: 'Ícone exibido dentro do gatilho de seleção.' },
+	{ property: 'size', type: "'sm' | 'lg'", default: "'lg'", description: 'Tamanho do gatilho de seleção.' },
+	{
+		property: 'typography',
+		type: "VariantProps<typeof textVariants>['typography']",
+		default: "'caption'",
+		description: 'Variante tipográfica do texto do gatilho.',
+	},
+	{ property: 'footerClassname', type: 'string', description: 'Classes aplicadas ao rodapé do drawer com os botões de opção.' },
+	{ property: 'drawerProps', type: 'DrawerProps', description: 'Props repassadas diretamente para o componente Drawer.' },
+	{ property: 'buttonsProps', type: 'ButtonProps', description: 'Props repassadas para os botões de opção do drawer.' },
+	{ property: 'content', type: '(ctx) => React.ReactNode', description: 'Conteúdo customizado renderizado dentro do drawer.' },
 ];
-
-<Select
-	name='status'
-	control={control}
-	options={options}
-	title='Status'
-	description='Selecione o status'
-	content={() => <p>O status define a situação do registro</p>}
-	footerClassname='flex flex-wrap flex-row'
-/>
-`;
 
 const componentCode = `
 'use client';

@@ -1,11 +1,33 @@
 'use client';
 
+import { useState } from 'react';
+
 import CopyCode from '@/components/copyCode/copyCode';
+import { ControlSwitch, Customize } from '@/components/customize/customize';
+import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
 import { Calendar } from '@/artiux-components/calendar';
 
 export default function CalendarComponent() {
+	const [range, setRange] = useState(true);
+	const [disablePastDates, setDisablePastDates] = useState(true);
+	const [allowClickOnDisabled, setAllowClickOnDisabled] = useState(false);
+
+	const props = [
+		range ? 'range' : 'range={false}',
+		disablePastDates ? null : 'disablePastDates={false}',
+		allowClickOnDisabled ? 'allowClickOnDisabled' : null,
+	]
+		.filter(Boolean)
+		.join(' ');
+
+	const previewCode = `
+import { Calendar } from '@/artiux-components/calendar';
+
+<Calendar ${props} />
+`;
+
 	return (
 		<>
 			<div>
@@ -24,8 +46,8 @@ export default function CalendarComponent() {
 				<PreviewCode code={previewCode}>
 					<div className='flex flex-wrap gap-8'>
 						<div className='flex flex-col gap-2'>
-							<span className='text-muted-foreground text-sm'>Intervalo de datas</span>
-							<Calendar range />
+							<span className='text-muted-foreground text-sm'>Preview interativo</span>
+							<Calendar range={range} disablePastDates={disablePastDates} allowClickOnDisabled={allowClickOnDisabled} />
 						</div>
 						<div className='flex flex-col gap-2'>
 							<span className='text-muted-foreground text-sm'>Data única (sem passadas)</span>
@@ -34,19 +56,39 @@ export default function CalendarComponent() {
 					</div>
 				</PreviewCode>
 			</section>
+
+			<section className='my-8'>
+				<Customize>
+					<ControlSwitch label='Range' checked={range} onChange={setRange} />
+					<ControlSwitch label='Disable past dates' checked={disablePastDates} onChange={setDisablePastDates} />
+					<ControlSwitch label='Allow click on disabled' checked={allowClickOnDisabled} onChange={setAllowClickOnDisabled} />
+				</Customize>
+			</section>
+
+			<section className='my-8'>
+				<PropsTable rows={propRows} />
+			</section>
 		</>
 	);
 }
 
-const previewCode = `
-import { Calendar } from '@/artiux-components/calendar';
-
-// intervalo de datas
-<Calendar range />
-
-// data única, bloqueando datas passadas
-<Calendar range={false} disablePastDates />
-`;
+const propRows = [
+	{ property: 'range', type: 'boolean', default: 'false', description: 'Habilita a seleção de um intervalo de datas (início e fim).' },
+	{ property: 'onRangeChange', type: '(start: Date | null, end: Date | null) => void', description: 'Callback disparado quando as datas selecionadas mudam.' },
+	{ property: 'availability', type: 'Record<string, boolean> | string[]', description: 'Define a disponibilidade de cada dia.' },
+	{ property: 'indicators', type: 'DateIndicator[]', default: '[]', description: 'Marcadores coloridos exibidos em datas específicas.' },
+	{ property: 'monthsBefore', type: 'number', default: '12', description: 'Quantidade de meses exibidos antes do mês atual.' },
+	{ property: 'monthsAfter', type: 'number', default: '12', description: 'Quantidade de meses exibidos após o mês atual.' },
+	{ property: 'disablePastDates', type: 'boolean', default: 'true', description: 'Bloqueia a seleção de datas anteriores a hoje.' },
+	{ property: 'disabledDates', type: 'Date[]', default: '[]', description: 'Lista de datas específicas desabilitadas para seleção.' },
+	{ property: 'disabledWeekdays', type: 'number[]', default: '[]', description: 'Dias da semana desabilitados (0 = domingo … 6 = sábado).' },
+	{
+		property: 'allowClickOnDisabled',
+		type: 'boolean',
+		default: 'false',
+		description: 'Permite clicar em dias desabilitados mesmo assim.',
+	},
+];
 
 const componentCode = `
 'use client';

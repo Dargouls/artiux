@@ -1,11 +1,44 @@
 'use client';
 
+import { useState } from 'react';
+
 import CopyCode from '@/components/copyCode/copyCode';
+import { ControlDropdown, ControlSwitch, Customize } from '@/components/customize/customize';
+import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
 import { Badge } from '@/artiux-components/badge';
 
+const colors = ['primary', 'warning', 'destructive', 'success', 'info'] as const;
+const sizes = ['lg', 'sm'] as const;
+const ornaments = ['none', 'settings', 'heart'] as const;
+const ornamentPositions = ['left', 'right'] as const;
+
 export default function BadgeComponent() {
+	const [color, setColor] = useState<(typeof colors)[number]>('primary');
+	const [size, setSize] = useState<(typeof sizes)[number]>('lg');
+	const [ornament, setOrnament] = useState<(typeof ornaments)[number]>('none');
+	const [ornamentPosition, setOrnamentPosition] = useState<(typeof ornamentPositions)[number]>('left');
+	const [active, setActive] = useState(true);
+
+	const props = [
+		`color='${color}'`,
+		size === 'sm' ? `size='sm'` : null,
+		ornament !== 'none' ? `ornament='${ornament}'` : null,
+		ornament !== 'none' && ornamentPosition === 'right' ? `ornamentPosition='right'` : null,
+		active ? null : 'active={false}',
+	]
+		.filter(Boolean)
+		.join(' ');
+
+	const previewCode = `
+import { Badge } from '@/artiux-components/badge';
+
+<Badge ${props}>
+	Badge
+</Badge>
+`;
+
 	return (
 		<>
 			<div>
@@ -22,7 +55,15 @@ export default function BadgeComponent() {
 
 			<section className='my-8'>
 				<PreviewCode code={previewCode}>
-					<Badge color='primary'>Badge</Badge>
+					<Badge
+						color={color}
+						size={size === 'lg' ? undefined : size}
+						ornament={ornament === 'none' ? undefined : ornament}
+						ornamentPosition={ornamentPosition}
+						active={active}
+					>
+						Badge
+					</Badge>
 					<Badge color='info' ornament='settings'>
 						Com ícone
 					</Badge>
@@ -34,21 +75,42 @@ export default function BadgeComponent() {
 					</Badge>
 				</PreviewCode>
 			</section>
+
+			<section className='my-8'>
+				<Customize>
+					<ControlDropdown label='Color' value={color} options={colors} onChange={setColor} />
+					<ControlDropdown label='Size' value={size} options={sizes} onChange={setSize} />
+					<ControlDropdown label='Ornament' value={ornament} options={ornaments} onChange={setOrnament} />
+					<ControlDropdown label='Ornament position' value={ornamentPosition} options={ornamentPositions} onChange={setOrnamentPosition} />
+					<ControlSwitch label='Active' checked={active} onChange={setActive} />
+				</Customize>
+			</section>
+
+			<section className='my-8'>
+				<PropsTable rows={propRows} />
+			</section>
 		</>
 	);
 }
 
-const previewCode = `
-import { Badge } from '@/artiux-components/badge';
-
-<Badge color='primary'>Badge</Badge>
-<Badge color='info' ornament='settings'>
-	Com ícone
-</Badge>
-<Badge color='destructive' active={false}>
-	Inativo
-</Badge>
-`;
+const propRows = [
+	{
+		property: 'color',
+		type: "'primary' | 'warning' | 'destructive' | 'success' | 'info'",
+		default: "'primary'",
+		description: 'Cor semântica aplicada à badge.',
+	},
+	{ property: 'size', type: "'sm' | 'lg'", default: "'lg'", description: 'Tamanho da badge.' },
+	{ property: 'active', type: 'boolean', default: 'true', description: 'Quando falso, exibe a badge em estado inativo (contorno).' },
+	{ property: 'ornament', type: 'IconName', description: 'Ícone exibido junto ao texto.' },
+	{ property: 'ornamentPosition', type: "'left' | 'right'", default: "'left'", description: 'Posição do ícone em relação ao texto.' },
+	{
+		property: 'typography',
+		type: "VariantProps<typeof textVariants>['typography']",
+		default: "'caption'",
+		description: 'Variante tipográfica do texto.',
+	},
+];
 
 const componentCode = `
 import { cva, type VariantProps } from 'class-variance-authority';

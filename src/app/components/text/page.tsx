@@ -1,11 +1,40 @@
 'use client';
 
+import { useState } from 'react';
+
 import CopyCode from '@/components/copyCode/copyCode';
+import { ControlDropdown, Customize } from '@/components/customize/customize';
+import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
 import { Text } from '@/artiux-components/text';
 
+const typographies = [
+	'h1',
+	'h2',
+	'h3',
+	'h4',
+	'h5',
+	'subtitle-1',
+	'subtitle-2',
+	'body',
+	'description-1',
+	'description-2',
+	'action',
+	'caption',
+] as const;
+
 export default function TextComponent() {
+	const [typography, setTypography] = useState<(typeof typographies)[number]>('body');
+
+	const props = [`typography='${typography}'`].filter(Boolean).join(' ');
+
+	const previewCode = `
+import { Text } from '@/artiux-components/text';
+
+<Text ${props}>Text</Text>
+`;
+
 	return (
 		<>
 			<div>
@@ -22,33 +51,50 @@ export default function TextComponent() {
 
 			<section className='my-8'>
 				<PreviewCode code={previewCode}>
-					<div className='flex flex-col items-start gap-2'>
-						<Text typography='h1'>Headline 1</Text>
-						<Text typography='h2'>Headline 2</Text>
-						<Text typography='h3'>Headline 3</Text>
-						<Text typography='h4'>Headline 4</Text>
-						<Text typography='h5'>Headline 5</Text>
-						<Text typography='subtitle-1'>Subtitle 1</Text>
-						<Text typography='subtitle-2'>Subtitle 2</Text>
-						<Text typography='body'>Body</Text>
-						<Text typography='description-1'>Description 1</Text>
-						<Text typography='description-2'>Description 2</Text>
-						<Text typography='action'>Action</Text>
-						<Text typography='caption'>Caption</Text>
-					</div>
+					<Text typography={typography}>Text</Text>
 				</PreviewCode>
+			</section>
+
+			<section className='my-8'>
+				<Customize>
+					<ControlDropdown label='Typography' value={typography} options={typographies} onChange={setTypography} />
+				</Customize>
+			</section>
+
+			<section className='my-8'>
+				<PropsTable rows={propRows} />
+			</section>
+
+			<section className='my-8'>
+				<h3 className='text-2xl font-bold'>Variantes:</h3>
+				<div className='mt-4 flex flex-col items-start gap-2'>
+					<Text typography='h1'>Headline 1</Text>
+					<Text typography='h2'>Headline 2</Text>
+					<Text typography='h3'>Headline 3</Text>
+					<Text typography='h4'>Headline 4</Text>
+					<Text typography='h5'>Headline 5</Text>
+					<Text typography='subtitle-1'>Subtitle 1</Text>
+					<Text typography='subtitle-2'>Subtitle 2</Text>
+					<Text typography='body'>Body</Text>
+					<Text typography='description-1'>Description 1</Text>
+					<Text typography='description-2'>Description 2</Text>
+					<Text typography='action'>Action</Text>
+					<Text typography='caption'>Caption</Text>
+				</div>
 			</section>
 		</>
 	);
 }
 
-const previewCode = `
-import { Text } from '@/artiux-components/text';
-
-<Text typography='h1'>Headline 1</Text>
-<Text typography='body'>Body</Text>
-<Text typography='caption'>Caption</Text>
-`;
+const propRows = [
+	{
+		property: 'typography',
+		type: "'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'subtitle-1' | 'subtitle-2' | 'body' | 'description-1' | 'description-2' | 'action' | 'caption'",
+		default: "'body'",
+		description: 'Variante tipográfica aplicada, também define a tag HTML renderizada.',
+	},
+	{ property: 'className', type: 'string', description: 'Classes adicionais aplicadas ao elemento.' },
+];
 
 const componentCode = `
 import { cn } from '@/lib/utils';

@@ -1,12 +1,34 @@
 'use client';
 
+import { useState } from 'react';
+
 import CopyCode from '@/components/copyCode/copyCode';
+import { ControlDropdown, ControlSwitch, Customize } from '@/components/customize/customize';
+import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
 import { Button } from '@/artiux-components/button';
 import { ButtonGroup } from '@/artiux-components/buttonGroup';
 
+const orientations = ['horizontal', 'vertical'] as const;
+
 export default function ButtonGroupComponent() {
+	const [orientation, setOrientation] = useState<(typeof orientations)[number]>('horizontal');
+	const [showSeparator, setShowSeparator] = useState(true);
+
+	const props = [`orientation='${orientation}'`, showSeparator ? 'showSeparator' : 'showSeparator={false}'].filter(Boolean).join(' ');
+
+	const previewCode = `
+import { Button } from '@/artiux-components/button';
+import { ButtonGroup } from '@/artiux-components/buttonGroup';
+
+<ButtonGroup ${props}>
+	<Button variant='secondary'>Botão 1</Button>
+	<Button variant='secondary'>Botão 2</Button>
+	<Button variant='secondary'>Botão 3</Button>
+</ButtonGroup>
+`;
+
 	return (
 		<>
 			<div>
@@ -23,33 +45,42 @@ export default function ButtonGroupComponent() {
 
 			<section className='my-8'>
 				<PreviewCode code={previewCode}>
-					<ButtonGroup orientation='horizontal' showSeparator>
-						<Button variant='secondary'>Botão 1</Button>
-						<Button variant='secondary'>Botão 2</Button>
-						<Button variant='secondary'>Botão 3</Button>
-					</ButtonGroup>
-
-					<ButtonGroup orientation='vertical' showSeparator={false} className='w-max'>
+					<ButtonGroup orientation={orientation} showSeparator={showSeparator} className={orientation === 'vertical' ? 'w-max' : undefined}>
 						<Button variant='primary'>Topo</Button>
 						<Button variant='primary'>Meio</Button>
 						<Button variant='primary'>Baixo</Button>
 					</ButtonGroup>
 				</PreviewCode>
 			</section>
+
+			<section className='my-8'>
+				<Customize>
+					<ControlDropdown label='Orientation' value={orientation} options={orientations} onChange={setOrientation} />
+					<ControlSwitch label='Show separator' checked={showSeparator} onChange={setShowSeparator} />
+				</Customize>
+			</section>
+
+			<section className='my-8'>
+				<PropsTable rows={propRows} />
+			</section>
 		</>
 	);
 }
 
-const previewCode = `
-import { Button } from '@/artiux-components/button';
-import { ButtonGroup } from '@/artiux-components/buttonGroup';
-
-<ButtonGroup orientation='horizontal' showSeparator>
-	<Button variant='secondary'>Botão 1</Button>
-	<Button variant='secondary'>Botão 2</Button>
-	<Button variant='secondary'>Botão 3</Button>
-</ButtonGroup>
-`;
+const propRows = [
+	{
+		property: 'orientation',
+		type: "'horizontal' | 'vertical'",
+		default: "'horizontal'",
+		description: 'Direção em que os botões são agrupados.',
+	},
+	{
+		property: 'showSeparator',
+		type: 'boolean',
+		default: 'true',
+		description: 'Exibe um separador entre cada item do grupo.',
+	},
+];
 
 const componentCode = `
 import { cva, type VariantProps } from 'class-variance-authority';

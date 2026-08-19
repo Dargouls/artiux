@@ -1,11 +1,36 @@
 'use client';
 
+import { useState } from 'react';
+
 import CopyCode from '@/components/copyCode/copyCode';
+import { ControlDropdown, ControlSwitch, Customize } from '@/components/customize/customize';
+import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
 import { RadioGroup, RadioGroupItem } from '@/artiux-components/radioGroup';
 
+const orientations = ['horizontal', 'vertical'] as const;
+
 export default function RadioGroupComponent() {
+	const [orientation, setOrientation] = useState<(typeof orientations)[number]>('horizontal');
+	const [disabled, setDisabled] = useState(false);
+
+	const props = [
+		orientation === 'vertical' ? `orientation='vertical'` : null,
+		disabled ? 'disabled' : null,
+	]
+		.filter(Boolean)
+		.join(' ');
+
+	const previewCode = `
+import { RadioGroup, RadioGroupItem } from '@/artiux-components/radioGroup';
+
+<RadioGroup defaultValue='1' ${props}>
+	<RadioGroupItem value='1' />
+	<RadioGroupItem value='2' />
+</RadioGroup>
+`;
+
 	return (
 		<>
 			<div>
@@ -22,25 +47,48 @@ export default function RadioGroupComponent() {
 
 			<section className='my-8'>
 				<PreviewCode code={previewCode}>
-					<RadioGroup defaultValue='1' className='flex flex-row gap-4'>
+					<RadioGroup
+						defaultValue='1'
+						orientation={orientation}
+						disabled={disabled}
+						className={`flex gap-4 ${orientation === 'vertical' ? 'flex-col' : 'flex-row'}`}
+					>
 						<RadioGroupItem value='1' />
 						<RadioGroupItem value='2' />
-						<RadioGroupItem value='3' disabled />
+						<RadioGroupItem value='3' />
 					</RadioGroup>
 				</PreviewCode>
+			</section>
+
+			<section className='my-8'>
+				<Customize>
+					<ControlDropdown label='Orientation' value={orientation} options={orientations} onChange={setOrientation} />
+					<ControlSwitch label='Disabled' checked={disabled} onChange={setDisabled} />
+				</Customize>
+			</section>
+
+			<section className='my-8'>
+				<PropsTable rows={propRows} />
 			</section>
 		</>
 	);
 }
 
-const previewCode = `
-import { RadioGroup, RadioGroupItem } from '@/artiux-components/radioGroup';
-
-<RadioGroup defaultValue='1'>
-	<RadioGroupItem value='1' />
-	<RadioGroupItem value='2' />
-</RadioGroup>
-`;
+const propRows = [
+	{ property: 'defaultValue', type: 'string', description: 'Valor inicial selecionado (não controlado). (RadioGroup)' },
+	{ property: 'value', type: 'string', description: 'Valor selecionado, para uso controlado. (RadioGroup)' },
+	{ property: 'onValueChange', type: '(value: string) => void', description: 'Chamado quando o valor selecionado muda. (RadioGroup)' },
+	{
+		property: 'orientation',
+		type: "'horizontal' | 'vertical'",
+		description: 'Orientação do grupo para navegação por teclado. (RadioGroup)',
+	},
+	{ property: 'disabled', type: 'boolean', default: 'false', description: 'Desabilita todos os itens do grupo. (RadioGroup)' },
+	{ property: 'name', type: 'string', description: 'Nome do grupo em um formulário nativo. (RadioGroup)' },
+	{ property: 'required', type: 'boolean', default: 'false', description: 'Indica se a seleção é obrigatória. (RadioGroup)' },
+	{ property: 'value (item)', type: 'string', description: 'Valor do item de rádio. (RadioGroupItem)' },
+	{ property: 'disabled (item)', type: 'boolean', default: 'false', description: 'Desabilita este item específico. (RadioGroupItem)' },
+];
 
 const componentCode = `
 import { cn } from '@/lib/utils';

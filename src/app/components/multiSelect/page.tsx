@@ -1,10 +1,16 @@
 'use client';
 
+import { useState } from 'react';
+
 import CopyCode from '@/components/copyCode/copyCode';
+import { ControlDropdown, ControlSlider, ControlSwitch, Customize } from '@/components/customize/customize';
+import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
 import { MultiSelect } from '@/artiux-components/multiSelect';
 import { useForm } from 'react-hook-form';
+
+const sizes = ['lg', 'sm'] as const;
 
 export default function MultiSelectComponent() {
 	const { control } = useForm({
@@ -18,6 +24,10 @@ export default function MultiSelectComponent() {
 			tags: [],
 		},
 	});
+
+	const [size, setSize] = useState<(typeof sizes)[number]>('lg');
+	const [maxSelections, setMaxSelections] = useState(3);
+	const [disabled, setDisabled] = useState(false);
 
 	const frameworkOptions = [
 		{ value: 'react', label: 'React' },
@@ -36,6 +46,36 @@ export default function MultiSelectComponent() {
 		{ value: 'bug', label: 'Bug' },
 		{ value: 'melhoria', label: 'Melhoria' },
 	];
+
+	const props = [
+		size === 'sm' ? `size='sm'` : null,
+		`maxSelections={${maxSelections}}`,
+		disabled ? 'disabled' : null,
+	]
+		.filter(Boolean)
+		.join(' ');
+
+	const previewCode = `
+import { MultiSelect } from '@/artiux-components/multiSelect';
+import { useForm } from 'react-hook-form';
+
+const { control } = useForm({ defaultValues: { frameworks: [] } });
+
+const options = [
+	{ value: 'react', label: 'React' },
+	{ value: 'vue', label: 'Vue' },
+	{ value: 'angular', label: 'Angular' },
+];
+
+<MultiSelect
+	name='frameworks'
+	control={control}
+	options={options}
+	title='Frameworks'
+	placeholder='Selecione...'
+	${props}
+/>
+`;
 
 	return (
 		<>
@@ -61,10 +101,12 @@ export default function MultiSelectComponent() {
 								control={control as any}
 								options={frameworkOptions}
 								title='Frameworks'
-								description='Escolha até 3 frameworks'
+								description={`Escolha até ${maxSelections} frameworks`}
 								placeholder='Selecione...'
-								maxSelections={3}
+								maxSelections={maxSelections}
 								searchPlaceholder='Buscar...'
+								size={size}
+								disabled={disabled}
 							/>
 						</div>
 
@@ -82,32 +124,36 @@ export default function MultiSelectComponent() {
 					</div>
 				</PreviewCode>
 			</section>
+
+			<section className='my-8'>
+				<Customize>
+					<ControlDropdown label='Size' value={size} options={sizes} onChange={setSize} />
+					<ControlSlider label='Max selections' value={maxSelections} min={1} max={9} step={1} onChange={setMaxSelections} />
+					<ControlSwitch label='Disabled' checked={disabled} onChange={setDisabled} />
+				</Customize>
+			</section>
+
+			<section className='my-8'>
+				<PropsTable rows={propRows} />
+			</section>
 		</>
 	);
 }
 
-const previewCode = `
-import { MultiSelect } from '@/artiux-components/multiSelect';
-import { useForm } from 'react-hook-form';
-
-const { control } = useForm({ defaultValues: { frameworks: [] } });
-
-const options = [
-	{ value: 'react', label: 'React' },
-	{ value: 'vue', label: 'Vue' },
-	{ value: 'angular', label: 'Angular' },
+const propRows = [
+	{ property: 'name', type: 'string', description: 'Nome do campo no formulário (react-hook-form).' },
+	{ property: 'control', type: 'Control<any>', description: 'Objeto de controle do react-hook-form.' },
+	{ property: 'options', type: '{ value: string; label: string }[]', description: 'Lista de opções disponíveis para seleção.' },
+	{ property: 'placeholder', type: 'string', default: "'Selecionar'", description: 'Texto exibido quando nenhuma opção está selecionada.' },
+	{ property: 'title', type: 'string', description: 'Título exibido no cabeçalho do drawer.' },
+	{ property: 'description', type: 'string', description: 'Descrição exibida no cabeçalho do drawer.' },
+	{ property: 'size', type: "'sm' | 'lg'", default: "'lg'", description: 'Tamanho do campo de seleção.' },
+	{ property: 'maxSelections', type: 'number', description: 'Limite máximo de opções selecionáveis.' },
+	{ property: 'searchPlaceholder', type: 'string', default: "'Buscar...'", description: 'Placeholder do campo de busca no drawer.' },
+	{ property: 'disabled', type: 'boolean', default: 'false', description: 'Desabilita a interação com o componente.' },
+	{ property: 'footerClassName', type: 'string', description: 'Classes aplicadas ao rodapé do drawer.' },
+	{ property: 'buttonsProps', type: 'ButtonProps', description: 'Props repassadas aos botões de opção do drawer.' },
 ];
-
-<MultiSelect
-	name='frameworks'
-	control={control}
-	options={options}
-	title='Frameworks'
-	description='Escolha até 3 frameworks'
-	placeholder='Selecione...'
-	maxSelections={3}
-/>
-`;
 
 const componentCode = `
 'use client';

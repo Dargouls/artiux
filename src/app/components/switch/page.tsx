@@ -1,11 +1,26 @@
 'use client';
 
+import { useState } from 'react';
+
 import CopyCode from '@/components/copyCode/copyCode';
+import { ControlSwitch, Customize } from '@/components/customize/customize';
+import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
 import { Switch } from '@/artiux-components/switch';
 
 export default function SwitchComponent() {
+	const [checked, setChecked] = useState(true);
+	const [disabled, setDisabled] = useState(false);
+
+	const props = [checked ? 'checked' : null, disabled ? 'disabled' : null].filter(Boolean).join(' ');
+
+	const previewCode = `
+import { Switch } from '@/artiux-components/switch';
+
+<Switch ${props} />
+`;
+
 	return (
 		<>
 			<div>
@@ -23,6 +38,10 @@ export default function SwitchComponent() {
 			<section className='my-8'>
 				<PreviewCode code={previewCode}>
 					<div className='flex items-center gap-3'>
+						<Switch checked={checked} onCheckedChange={setChecked} disabled={disabled} />
+						<span className='text-sm'>{checked ? 'Ativado' : 'Desativado'}</span>
+					</div>
+					<div className='flex items-center gap-3'>
 						<Switch defaultChecked />
 						<span className='text-sm'>Ativado</span>
 					</div>
@@ -36,15 +55,27 @@ export default function SwitchComponent() {
 					</div>
 				</PreviewCode>
 			</section>
+
+			<section className='my-8'>
+				<Customize>
+					<ControlSwitch label='Checked' checked={checked} onChange={setChecked} />
+					<ControlSwitch label='Disabled' checked={disabled} onChange={setDisabled} />
+				</Customize>
+			</section>
+
+			<section className='my-8'>
+				<PropsTable rows={propRows} />
+			</section>
 		</>
 	);
 }
 
-const previewCode = `
-import { Switch } from '@/artiux-components/switch';
-
-<Switch defaultChecked />
-`;
+const propRows = [
+	{ property: 'checked', type: 'boolean', description: 'Controla o estado ligado/desligado de forma controlada.' },
+	{ property: 'defaultChecked', type: 'boolean', default: 'false', description: 'Estado inicial quando não controlado.' },
+	{ property: 'onCheckedChange', type: '(checked: boolean) => void', description: 'Chamado quando o estado é alterado.' },
+	{ property: 'disabled', type: 'boolean', default: 'false', description: 'Desabilita a interação com o switch.' },
+];
 
 const componentCode = `
 'use client';

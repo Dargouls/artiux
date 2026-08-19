@@ -1,11 +1,30 @@
 'use client';
 
+import { useState } from 'react';
+
 import CopyCode from '@/components/copyCode/copyCode';
+import { ControlDropdown, Customize } from '@/components/customize/customize';
+import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
+import { cn } from '@/lib/utils';
 
 import { CircularProgress } from '@/artiux-components/circularProgress';
 
+const sizes = ['size-8', 'size-12', 'size-16', 'size-24'] as const;
+const colors = ['currentColor', 'text-primary', 'text-destructive', 'text-success', 'text-warning'] as const;
+
 export default function CircularProgressComponent() {
+	const [size, setSize] = useState<(typeof sizes)[number]>('size-8');
+	const [color, setColor] = useState<(typeof colors)[number]>('currentColor');
+
+	const props = [size !== 'size-8' ? size : null, color !== 'currentColor' ? color : null].filter(Boolean).join(' ');
+
+	const previewCode = `
+import { CircularProgress } from '@/artiux-components/circularProgress';
+
+<CircularProgress${props ? ` className='${props}'` : ''} />
+`;
+
 	return (
 		<>
 			<div>
@@ -23,22 +42,40 @@ export default function CircularProgressComponent() {
 			<section className='my-8'>
 				<PreviewCode code={previewCode}>
 					<div className='flex flex-wrap items-center justify-center gap-8'>
-						<CircularProgress />
+						<CircularProgress className={cn(size, color)} />
 						<CircularProgress className='size-12 text-primary' />
 						<CircularProgress className='size-16 text-destructive' />
 					</div>
 				</PreviewCode>
 			</section>
+
+			<section className='my-8'>
+				<Customize>
+					<ControlDropdown label='Tamanho' value={size} options={sizes} onChange={setSize} />
+					<ControlDropdown label='Cor' value={color} options={colors} onChange={setColor} />
+				</Customize>
+			</section>
+
+			<section className='my-8'>
+				<PropsTable rows={propRows} />
+			</section>
 		</>
 	);
 }
 
-const previewCode = `
-import { CircularProgress } from '@/artiux-components/circularProgress';
-
-<CircularProgress />
-<CircularProgress className='size-12 text-primary' />
-`;
+const propRows = [
+	{
+		property: 'className',
+		type: 'string',
+		default: "'animate-spinner-rotate size-8'",
+		description: 'Classes utilitárias para controlar tamanho e cor (via currentColor) do indicador.',
+	},
+	{
+		property: '...props',
+		type: 'React.SVGProps<SVGSVGElement>',
+		description: 'Demais atributos SVG nativos são repassados ao elemento raiz.',
+	},
+];
 
 const componentCode = `
 import { cn } from '@/lib/utils';

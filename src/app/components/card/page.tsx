@@ -1,12 +1,40 @@
 'use client';
 
+import { useState } from 'react';
+
 import CopyCode from '@/components/copyCode/copyCode';
+import { ControlSwitch, Customize } from '@/components/customize/customize';
+import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
 import { Button } from '@/artiux-components/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/artiux-components/card';
 
 export default function CardComponent() {
+	const [ripple, setRipple] = useState(false);
+	const [srOnlyTitle, setSrOnlyTitle] = useState(false);
+
+	const props = [ripple ? 'ripple' : null].filter(Boolean).join(' ');
+
+	const previewCode = `
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/artiux-components/card';
+
+<Card ${props} className='max-w-sm'>
+	<CardHeader>
+		<CardTitle${srOnlyTitle ? ' srOnly' : ''}>Título</CardTitle>
+		<CardDescription>Subtítulo</CardDescription>
+	</CardHeader>
+
+	<CardContent>
+		Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+	</CardContent>
+
+	<CardFooter>
+		<Button>Continuar</Button>
+	</CardFooter>
+</Card>
+`;
+
 	return (
 		<>
 			<div>
@@ -23,54 +51,58 @@ export default function CardComponent() {
 
 			<section className='my-8'>
 				<PreviewCode code={previewCode}>
-					<Card className='max-w-sm'>
+					<Card ripple={ripple} className='max-w-sm'>
 						<CardHeader>
-							<CardTitle>Título</CardTitle>
+							<CardTitle srOnly={srOnlyTitle}>Título</CardTitle>
 							<CardDescription>Subtítulo</CardDescription>
 						</CardHeader>
 
 						<CardContent>
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ultricies mi vitae est. Pellentesque habitant morbi
-							tristique senectus et netus et malesuada fames ac turpis egestas.
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ultricies mi vitae est. Pellentesque habitant morbi tristique
+							senectus et netus et malesuada fames ac turpis egestas.
 						</CardContent>
 
 						<CardFooter>
 							<Button>Continuar</Button>
 						</CardFooter>
 					</Card>
-
-					<Card ripple className='max-w-sm'>
-						<CardHeader>
-							<CardTitle>Com ripple</CardTitle>
-							<CardDescription>Clique em qualquer área do card</CardDescription>
-						</CardHeader>
-
-						<CardContent>Ao passar a prop `ripple`, o card inteiro fica clicável e ganha o efeito de ripple.</CardContent>
-					</Card>
 				</PreviewCode>
+			</section>
+
+			<section className='my-8'>
+				<Customize>
+					<ControlSwitch label='Ripple' checked={ripple} onChange={setRipple} />
+					<ControlSwitch label='Título sr-only' checked={srOnlyTitle} onChange={setSrOnlyTitle} />
+				</Customize>
+			</section>
+
+			<section className='my-8'>
+				<PropsTable rows={propRows} />
 			</section>
 		</>
 	);
 }
 
-const previewCode = `
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/artiux-components/card';
-
-<Card className='max-w-sm'>
-	<CardHeader>
-		<CardTitle>Título</CardTitle>
-		<CardDescription>Subtítulo</CardDescription>
-	</CardHeader>
-
-	<CardContent>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-	</CardContent>
-
-	<CardFooter>
-		<Button>Continuar</Button>
-	</CardFooter>
-</Card>
-`;
+const propRows = [
+	{ property: 'ripple', type: 'boolean', default: 'false', description: 'Torna o card inteiro clicável e adiciona o efeito de ripple.' },
+	{ property: 'className', type: 'string', description: 'Classes utilitárias adicionais aplicadas ao card.' },
+	{
+		property: 'CardTitle.srOnly',
+		type: 'boolean',
+		default: 'false',
+		description: 'Exibe o título apenas para leitores de tela.',
+	},
+	{
+		property: 'CardTitle.typography',
+		type: "VariantProps<typeof textVariants>['typography']",
+		default: "'h4'",
+		description: 'Variante tipográfica do título.',
+	},
+	{ property: 'CardHeader', type: 'React.HTMLAttributes<HTMLDivElement>', description: 'Container do cabeçalho do card.' },
+	{ property: 'CardDescription', type: 'React.HTMLAttributes<HTMLDivElement>', description: 'Texto de descrição/subtítulo do card.' },
+	{ property: 'CardContent', type: 'React.HTMLAttributes<HTMLDivElement>', description: 'Container do conteúdo principal do card.' },
+	{ property: 'CardFooter', type: 'React.HTMLAttributes<HTMLDivElement>', description: 'Container do rodapé do card.' },
+];
 
 const componentCode = `
 import { RippleContainer } from '@/components/ui/rippleContainer';

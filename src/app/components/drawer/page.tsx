@@ -1,6 +1,10 @@
 'use client';
 
+import { useState } from 'react';
+
 import CopyCode from '@/components/copyCode/copyCode';
+import { ControlDropdown, ControlSwitch, Customize } from '@/components/customize/customize';
+import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
 import { Button } from '@/artiux-components/button';
@@ -15,7 +19,46 @@ import {
 	DrawerTrigger,
 } from '@/artiux-components/drawer';
 
+const directions = ['bottom', 'top', 'left', 'right'] as const;
+
 export default function DrawerComponent() {
+	const [direction, setDirection] = useState<(typeof directions)[number]>('bottom');
+	const [fullScreen, setFullScreen] = useState(false);
+	const [dismissible, setDismissible] = useState(true);
+
+	const props = [
+		direction !== 'bottom' ? `direction='${direction}'` : null,
+		fullScreen ? 'fullScreen' : null,
+		!dismissible ? 'dismissible={false}' : null,
+	]
+		.filter(Boolean)
+		.join(' ');
+
+	const dynamicPreviewCode = `
+import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/artiux-components/drawer';
+
+<Drawer ${props}>
+	<DrawerTrigger asChild>
+		<Button size='sm'>Abrir Drawer</Button>
+	</DrawerTrigger>
+	<DrawerContent>
+		<DrawerHeader>
+			<DrawerTitle>Você tem certeza?</DrawerTitle>
+			<DrawerDescription>Essa ação não pode ser desfeita.</DrawerDescription>
+		</DrawerHeader>
+		<div>
+			<p className='text-base'>Tem certeza que deseja continuar?</p>
+		</div>
+		<DrawerFooter>
+			<Button>Confirmar</Button>
+			<DrawerClose>
+				<Button variant='ghost'>Cancelar</Button>
+			</DrawerClose>
+		</DrawerFooter>
+	</DrawerContent>
+</Drawer>
+`;
+
 	return (
 		<>
 			<div>
@@ -31,8 +74,8 @@ export default function DrawerComponent() {
 			</section>
 
 			<section className='my-8'>
-				<PreviewCode code={previewCode}>
-					<Drawer>
+				<PreviewCode code={dynamicPreviewCode}>
+					<Drawer direction={direction} fullScreen={fullScreen} dismissible={dismissible}>
 						<DrawerTrigger asChild>
 							<Button size='sm'>Abrir Drawer</Button>
 						</DrawerTrigger>
@@ -76,34 +119,58 @@ export default function DrawerComponent() {
 					</Drawer>
 				</PreviewCode>
 			</section>
+
+			<section className='my-8'>
+				<Customize>
+					<ControlDropdown label='Direction' value={direction} options={directions} onChange={setDirection} />
+					<ControlSwitch label='Full screen' checked={fullScreen} onChange={setFullScreen} />
+					<ControlSwitch label='Dismissible' checked={dismissible} onChange={setDismissible} />
+				</Customize>
+			</section>
+
+			<section className='my-8'>
+				<PropsTable rows={propRows} />
+			</section>
 		</>
 	);
 }
 
-const previewCode = `
-import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/artiux-components/drawer';
-
-<Drawer>
-	<DrawerTrigger asChild>
-		<Button size='sm'>Abrir Drawer</Button>
-	</DrawerTrigger>
-	<DrawerContent>
-		<DrawerHeader>
-			<DrawerTitle>Você tem certeza?</DrawerTitle>
-			<DrawerDescription>Essa ação não pode ser desfeita.</DrawerDescription>
-		</DrawerHeader>
-		<div>
-			<p className='text-base'>Tem certeza que deseja continuar?</p>
-		</div>
-		<DrawerFooter>
-			<Button>Confirmar</Button>
-			<DrawerClose>
-				<Button variant='ghost'>Cancelar</Button>
-			</DrawerClose>
-		</DrawerFooter>
-	</DrawerContent>
-</Drawer>
-`;
+const propRows = [
+	{
+		property: 'fullScreen',
+		type: 'boolean',
+		default: 'false',
+		description: 'Faz o drawer ocupar toda a viewport, ignorando a direção definida.',
+	},
+	{
+		property: 'direction',
+		type: "'top' | 'bottom' | 'left' | 'right'",
+		default: "'bottom'",
+		description: 'Direção de onde o drawer desliza (herdado do Root do vaul).',
+	},
+	{
+		property: 'dismissible',
+		type: 'boolean',
+		default: 'true',
+		description: 'Permite fechar o drawer arrastando o handle ou clicando fora dele.',
+	},
+	{
+		property: 'open',
+		type: 'boolean',
+		description: 'Controla a visibilidade do drawer de forma controlada.',
+	},
+	{
+		property: 'onOpenChange',
+		type: '(open: boolean) => void',
+		description: 'Callback disparado quando o estado de abertura muda.',
+	},
+	{
+		property: 'modal',
+		type: 'boolean',
+		default: 'true',
+		description: 'Define se o drawer bloqueia a interação com o restante da página.',
+	},
+];
 
 const componentCode = `
 'use client';

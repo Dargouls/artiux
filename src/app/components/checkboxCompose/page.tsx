@@ -1,11 +1,39 @@
 'use client';
 
+import { useState } from 'react';
+
 import CopyCode from '@/components/copyCode/copyCode';
+import { ControlSwitch, Customize } from '@/components/customize/customize';
+import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
 import { CheckboxComposeItem } from '@/artiux-components/checkboxCompose';
 
 export default function CheckboxComposeComponent() {
+	const [checked, setChecked] = useState(false);
+	const [disabled, setDisabled] = useState(false);
+	const [withImage, setWithImage] = useState(true);
+	const [withAction, setWithAction] = useState(true);
+
+	const props = [
+		'title=\'Item 1\'',
+		'description=\'Descrição\'',
+		withAction ? "actionName='Visualizar'\n\taction={() => console.log(1)}" : null,
+		withImage ? "image='/image.png'" : null,
+		checked ? 'checked' : null,
+		disabled ? 'disabled' : null,
+	]
+		.filter(Boolean)
+		.join('\n\t');
+
+	const previewCode = `
+import { CheckboxComposeItem } from '@/artiux-components/checkboxCompose';
+
+<CheckboxComposeItem
+	${props}
+/>
+`;
+
 	return (
 		<>
 			<div>
@@ -28,30 +56,46 @@ export default function CheckboxComposeComponent() {
 						<CheckboxComposeItem
 							title='Item 1'
 							description='Descrição'
-							actionName='Visualizar'
+							actionName={withAction ? 'Visualizar' : undefined}
 							action={() => console.log(1)}
-							image='/image.png'
+							image={withImage ? '/image.png' : undefined}
+							checked={checked}
+							onCheckedChange={(value) => setChecked(value === true)}
+							disabled={disabled}
 						/>
 						<CheckboxComposeItem title='Item 2' description='Sem imagem e sem ação' />
 						<CheckboxComposeItem title='Item 3' description='Desabilitado' disabled />
 					</div>
 				</PreviewCode>
 			</section>
+
+			<section className='my-8'>
+				<Customize>
+					<ControlSwitch label='Checked' checked={checked} onChange={setChecked} />
+					<ControlSwitch label='Disabled' checked={disabled} onChange={setDisabled} />
+					<ControlSwitch label='Com imagem' checked={withImage} onChange={setWithImage} />
+					<ControlSwitch label='Com ação' checked={withAction} onChange={setWithAction} />
+				</Customize>
+			</section>
+
+			<section className='my-8'>
+				<PropsTable rows={propRows} />
+			</section>
 		</>
 	);
 }
 
-const previewCode = `
-import { CheckboxComposeItem } from '@/artiux-components/checkboxCompose';
-
-<CheckboxComposeItem
-	title='Item 1'
-	description='Descrição'
-	actionName='Visualizar'
-	action={() => console.log(1)}
-	image='/image.png'
-/>
-`;
+const propRows = [
+	{ property: 'title', type: 'string', description: 'Título exibido no item.' },
+	{ property: 'description', type: 'string', description: 'Texto descritivo exibido abaixo do título.' },
+	{ property: 'actionName', type: 'string', description: 'Rótulo do botão de ação, exibido quando informado.' },
+	{ property: 'action', type: '() => void', description: 'Função executada ao clicar no botão de ação.' },
+	{ property: 'image', type: 'string | StaticImageData', description: 'Imagem exibida ao lado do título/descrição.' },
+	{ property: 'customNode', type: 'React.ReactNode', description: 'Conteúdo customizado exibido abaixo do item.' },
+	{ property: 'checked', type: 'boolean', description: 'Controla o estado marcado do checkbox.' },
+	{ property: 'onCheckedChange', type: '(checked: boolean) => void', description: 'Callback disparado quando o estado marcado muda.' },
+	{ property: 'disabled', type: 'boolean', default: 'false', description: 'Desabilita a interação com o item.' },
+];
 
 const componentCode = `
 import { cn } from '@/lib/utils';

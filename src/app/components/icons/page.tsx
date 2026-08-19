@@ -1,6 +1,7 @@
 'use client';
 
 import CopyCode from '@/components/copyCode/copyCode';
+import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
 import { Icon, IconName } from '@/artiux-components/icons';
@@ -87,9 +88,22 @@ export default function IconsComponent() {
 					</div>
 				</PreviewCode>
 			</section>
+
+			<section className='my-8'>
+				<PropsTable rows={propRows} />
+			</section>
 		</>
 	);
 }
+
+const propRows = [
+	{ property: 'icon', type: 'IconName', description: 'Nome do ícone a ser renderizado, com base nas chaves do barrel de ícones.' },
+	{
+		property: '...props',
+		type: 'React.SVGProps<SVGSVGElement>',
+		description: 'Demais props nativas de SVG (className, size, color, onClick, etc.), repassadas diretamente ao ícone.',
+	},
+];
 
 const previewCode = `
 import { Icon } from '@/artiux-components/icons';

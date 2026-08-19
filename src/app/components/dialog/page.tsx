@@ -3,11 +3,35 @@
 import { Button } from '@/artiux-components/button';
 import Dialog from '@/artiux-components/dialog';
 import CopyCode from '@/components/copyCode/copyCode';
+import { ControlSwitch, Customize } from '@/components/customize/customize';
+import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 import { useState } from 'react';
 
 export default function DialogComponent() {
 	const [open, setOpen] = useState(false);
+	const [closeButton, setCloseButton] = useState(false);
+
+	const props = [closeButton ? 'closeButton' : null].filter(Boolean).join(' ');
+
+	const codePreview = `
+const [open, setOpen] = useState(false);
+
+<Button className='w-max' onClick={() => setOpen(true)}>
+	Mostrar Dialog
+</Button>
+<Dialog open={open} onClose={() => setOpen(false)}${props ? ` ${props}` : ''}>
+	<Dialog.Header>
+		<Dialog.Title>Titulo</Dialog.Title>
+	</Dialog.Header>
+	<Dialog.Body>
+		<p>Corpo do Dialog</p>
+	</Dialog.Body>
+	<Dialog.Footer>
+		<Button onClick={() => setOpen(false)}>Fechar</Button>
+	</Dialog.Footer>
+</Dialog>
+					`;
 
 	return (
 		<>
@@ -28,7 +52,7 @@ export default function DialogComponent() {
 					<Button className='w-max' onClick={() => setOpen(true)}>
 						Mostrar Dialog
 					</Button>
-					<Dialog open={open} onClose={() => setOpen(false)}>
+					<Dialog open={open} onClose={() => setOpen(false)} closeButton={closeButton}>
 						<Dialog.Header>
 							<Dialog.Title>Titulo</Dialog.Title>
 						</Dialog.Header>
@@ -41,9 +65,30 @@ export default function DialogComponent() {
 					</Dialog>
 				</PreviewCode>
 			</section>
+
+			<section className='my-8'>
+				<Customize>
+					<ControlSwitch label='Aberto' checked={open} onChange={setOpen} />
+					<ControlSwitch label='Botão fechar' checked={closeButton} onChange={setCloseButton} />
+				</Customize>
+			</section>
+
+			<section className='my-8'>
+				<PropsTable rows={propRows} />
+			</section>
 		</>
 	);
 }
+
+const propRows = [
+	{ property: 'open', type: 'boolean', description: 'Controla se o dialog está visível.' },
+	{ property: 'onClose', type: '() => void', description: 'Chamado ao clicar fora do dialog para fechá-lo.' },
+	{ property: 'closeButton', type: 'boolean', default: 'false', description: 'Exibe um botão de fechar no canto superior direito.' },
+	{ property: 'Dialog.Header', type: 'React.HTMLAttributes<HTMLDivElement>', description: 'Container do cabeçalho do dialog.' },
+	{ property: 'Dialog.Title', type: 'React.HTMLAttributes<HTMLHeadingElement>', description: 'Título do dialog.' },
+	{ property: 'Dialog.Body', type: 'React.HTMLAttributes<HTMLDivElement>', description: 'Container do corpo/conteúdo do dialog.' },
+	{ property: 'Dialog.Footer', type: 'React.HTMLAttributes<HTMLDivElement>', description: 'Container do rodapé, geralmente com ações.' },
+];
 
 const dialogCode = `
 'use client';
@@ -157,22 +202,3 @@ const Wrapper = forwardRef<HTMLDivElement, ContainerProps>(({ children, ...props
 	);
 });
 `;
-
-const codePreview = `
-const [open, setOpen] = useState(false);
-
-<Button className='w-max' onClick={() => setOpen(true)}>
-	Mostrar Dialog
-</Button>
-<Dialog open={open} onClose={() => setOpen(false)}>
-	<Dialog.Header>
-		<Dialog.Title>Titulo</Dialog.Title>
-	</Dialog.Header>
-	<Dialog.Body>
-		<p>Corpo do Dialog</p>
-	</Dialog.Body>
-	<Dialog.Footer>
-		<Button onClick={() => setOpen(false)}>Fechar</Button>
-	</Dialog.Footer>
-</Dialog>
-					`;

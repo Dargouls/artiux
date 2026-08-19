@@ -1,12 +1,36 @@
 'use client';
 
+import { useState } from 'react';
+
 import BubbleButton from '@/artiux-components/bubbleButton';
 import CopyCode from '@/components/copyCode/copyCode';
+import { ControlSlider, ControlSwitch, Customize } from '@/components/customize/customize';
+import { PropsTable } from '@/components/customize/propsTable';
 import { Heart } from 'lucide-react';
 
 import PreviewCode from '@/components/previewCode/previewCode';
 
 export default function BubbleButtonComponent() {
+	const [loading, setLoading] = useState(false);
+	const [svgDuration, setSvgDuration] = useState(2);
+	const [svgDelay, setSvgDelay] = useState(0.05);
+
+	const props = [
+		loading ? 'loading' : 'loading={false}',
+		svgDuration !== 2 ? `svgDuration={${svgDuration}}` : null,
+		svgDelay !== 0.05 ? `svgDelay={${svgDelay}}` : null,
+	]
+		.filter(Boolean)
+		.join(' ');
+
+	const previewCode = `
+import { Heart } from 'lucide-react';
+
+<BubbleButton ${props} bubbleIcon={<Heart size={16} color='white' fill='white' />}>
+	❤
+</BubbleButton>
+`;
+
 	return (
 		<>
 			<div>
@@ -24,30 +48,43 @@ export default function BubbleButtonComponent() {
 			</section>
 
 			<section className='my-8'>
-				<PreviewCode
-					code={`
-import { Heart } from 'lucide-react';
-
-<BubbleButton loading={false} bubbleIcon={<Heart size={16} color='white' fill='white' />}>
-	❤
-</BubbleButton>
-				`}
-				>
-					<BubbleButton loading={false} bubbleIcon={<Heart size={16} color='white' fill='white' />}>
+				<PreviewCode code={previewCode}>
+					<BubbleButton loading={loading} svgDuration={svgDuration} svgDelay={svgDelay} bubbleIcon={<Heart size={16} color='white' fill='white' />}>
 						❤
 					</BubbleButton>
 					<BubbleButton
 						className='ml-2'
-						loading={false}
+						loading={loading}
+						svgDuration={svgDuration}
+						svgDelay={svgDelay}
 						bubbleIcon={<Heart size={16} color='white' fill='white' />}
 					>
 						Componentes
 					</BubbleButton>
 				</PreviewCode>
 			</section>
+
+			<section className='my-8'>
+				<Customize>
+					<ControlSwitch label='Loading' checked={loading} onChange={setLoading} />
+					<ControlSlider label='SVG duration' value={svgDuration} min={0.5} max={5} step={0.5} unit='s' onChange={setSvgDuration} />
+					<ControlSlider label='SVG delay' value={svgDelay} min={0} max={0.5} step={0.05} unit='s' onChange={setSvgDelay} />
+				</Customize>
+			</section>
+
+			<section className='my-8'>
+				<PropsTable rows={propRows} />
+			</section>
 		</>
 	);
 }
+
+const propRows = [
+	{ property: 'loading', type: 'boolean', description: 'Exibe indicador de carregamento e desabilita o botão.' },
+	{ property: 'bubbleIcon', type: 'React.ReactNode', description: 'Ícone/elemento exibido em cada bolha animada. Se omitido, usa uma bolha branca padrão.' },
+	{ property: 'svgDuration', type: 'number', default: '2', description: 'Duração base (em segundos) da animação de subida das bolhas.' },
+	{ property: 'svgDelay', type: 'number', default: '0.05', description: 'Intervalo (em segundos) entre o início da animação de cada bolha.' },
+];
 
 const dialogCode =
 	`
