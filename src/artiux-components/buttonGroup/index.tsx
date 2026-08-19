@@ -83,7 +83,11 @@ function ButtonGroupSeparator({
 			data-orientation={orientation}
 			role='separator'
 			aria-orientation={orientation}
-			className={cn('shrink-0', orientation === 'horizontal' ? 'h-[1px] w-full border-b' : 'h-auto w-[1px] border-l', className)}
+			className={cn(
+				'shrink-0',
+				orientation === 'horizontal' ? 'border-border h-[1px] w-full border-b' : 'border-border h-auto w-[1px] border-l',
+				className
+			)}
 			{...props}
 		/>
 	);

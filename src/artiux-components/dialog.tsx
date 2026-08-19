@@ -27,28 +27,30 @@ export default function Dialog({ closeButton, open, onClose, children, ...props 
 	}, [open]);
 
 	return (
-		<>
+		<AnimatePresence>
 			{open && (
-				<div className='fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/30 p-4 transition-all'>
-					<AnimatePresence>
-						{open && (
-							<Wrapper
-								ref={modalRef}
-								className='bg-card text-card-foreground border-border relative w-full max-w-lg rounded-lg border p-4 shadow-2xl'
-							>
-								{closeButton && (
-									<div className='text-foreground absolute right-4 top-4 cursor-pointer rounded-full p-1 transition-colors'>
-										<X size={16} onClick={onClose} />
-									</div>
-								)}
-
-								{children}
-							</Wrapper>
+				<motion.div
+					className='fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/50 p-4 backdrop-blur-[4px] transition-all'
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					exit={{ opacity: 0 }}
+					transition={{ duration: 0.2 }}
+				>
+					<Wrapper
+						ref={modalRef}
+						className='bg-card text-card-foreground border-border relative w-full max-w-lg rounded-lg border p-4 shadow-2xl'
+					>
+						{closeButton && (
+							<div className='text-foreground absolute right-4 top-4 cursor-pointer rounded-full p-1 transition-colors'>
+								<X size={16} onClick={onClose} />
+							</div>
 						)}
-					</AnimatePresence>
-				</div>
+
+						{children}
+					</Wrapper>
+				</motion.div>
 			)}
-		</>
+		</AnimatePresence>
 	);
 }
 

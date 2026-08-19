@@ -3,21 +3,29 @@
 import { useState } from 'react';
 
 import CopyCode from '@/components/copyCode/copyCode';
-import { ControlSwitch, Customize } from '@/components/customize/customize';
+import { ControlSlider, ControlSwitch, Customize } from '@/components/customize/customize';
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
 import { Calendar } from '@/artiux-components/calendar';
 
+const WEEKEND_DAYS = [0, 6];
+
 export default function CalendarComponent() {
 	const [range, setRange] = useState(true);
 	const [disablePastDates, setDisablePastDates] = useState(true);
 	const [allowClickOnDisabled, setAllowClickOnDisabled] = useState(false);
+	const [disableWeekends, setDisableWeekends] = useState(false);
+	const [monthsBefore, setMonthsBefore] = useState(2);
+	const [monthsAfter, setMonthsAfter] = useState(12);
 
 	const props = [
 		range ? 'range' : 'range={false}',
 		disablePastDates ? null : 'disablePastDates={false}',
 		allowClickOnDisabled ? 'allowClickOnDisabled' : null,
+		disableWeekends ? 'disabledWeekdays={[0, 6]}' : null,
+		monthsBefore === 12 ? null : `monthsBefore={${monthsBefore}}`,
+		monthsAfter === 12 ? null : `monthsAfter={${monthsAfter}}`,
 	]
 		.filter(Boolean)
 		.join(' ');
@@ -44,14 +52,18 @@ import { Calendar } from '@/artiux-components/calendar';
 
 			<section className='my-8'>
 				<PreviewCode code={previewCode}>
-					<div className='flex flex-wrap gap-8'>
+					<div className='flex flex-wrap items-start gap-8'>
 						<div className='flex flex-col gap-2'>
-							<span className='text-muted-foreground text-sm'>Preview interativo</span>
-							<Calendar range={range} disablePastDates={disablePastDates} allowClickOnDisabled={allowClickOnDisabled} />
-						</div>
-						<div className='flex flex-col gap-2'>
-							<span className='text-muted-foreground text-sm'>Data única (sem passadas)</span>
-							<Calendar range={false} disablePastDates />
+							<span className='text-muted-foreground text-sm'>Preview interativo ({range ? 'intervalo' : 'data unica'})</span>
+							<Calendar
+								key={range ? 'range' : 'single'}
+								range={range}
+								disablePastDates={disablePastDates}
+								allowClickOnDisabled={allowClickOnDisabled}
+								disabledWeekdays={disableWeekends ? WEEKEND_DAYS : []}
+								monthsBefore={monthsBefore}
+								monthsAfter={monthsAfter}
+							/>
 						</div>
 					</div>
 				</PreviewCode>
@@ -62,6 +74,9 @@ import { Calendar } from '@/artiux-components/calendar';
 					<ControlSwitch label='Range' checked={range} onChange={setRange} />
 					<ControlSwitch label='Disable past dates' checked={disablePastDates} onChange={setDisablePastDates} />
 					<ControlSwitch label='Allow click on disabled' checked={allowClickOnDisabled} onChange={setAllowClickOnDisabled} />
+					<ControlSwitch label='Disable weekends' checked={disableWeekends} onChange={setDisableWeekends} />
+					<ControlSlider label='Months before' value={monthsBefore} min={0} max={24} onChange={setMonthsBefore} />
+					<ControlSlider label='Months after' value={monthsAfter} min={0} max={24} onChange={setMonthsAfter} />
 				</Customize>
 			</section>
 
@@ -74,14 +89,23 @@ import { Calendar } from '@/artiux-components/calendar';
 
 const propRows = [
 	{ property: 'range', type: 'boolean', default: 'false', description: 'Habilita a seleção de um intervalo de datas (início e fim).' },
-	{ property: 'onRangeChange', type: '(start: Date | null, end: Date | null) => void', description: 'Callback disparado quando as datas selecionadas mudam.' },
+	{
+		property: 'onRangeChange',
+		type: '(start: Date | null, end: Date | null) => void',
+		description: 'Callback disparado quando as datas selecionadas mudam.',
+	},
 	{ property: 'availability', type: 'Record<string, boolean> | string[]', description: 'Define a disponibilidade de cada dia.' },
 	{ property: 'indicators', type: 'DateIndicator[]', default: '[]', description: 'Marcadores coloridos exibidos em datas específicas.' },
 	{ property: 'monthsBefore', type: 'number', default: '12', description: 'Quantidade de meses exibidos antes do mês atual.' },
 	{ property: 'monthsAfter', type: 'number', default: '12', description: 'Quantidade de meses exibidos após o mês atual.' },
 	{ property: 'disablePastDates', type: 'boolean', default: 'true', description: 'Bloqueia a seleção de datas anteriores a hoje.' },
 	{ property: 'disabledDates', type: 'Date[]', default: '[]', description: 'Lista de datas específicas desabilitadas para seleção.' },
-	{ property: 'disabledWeekdays', type: 'number[]', default: '[]', description: 'Dias da semana desabilitados (0 = domingo … 6 = sábado).' },
+	{
+		property: 'disabledWeekdays',
+		type: 'number[]',
+		default: '[]',
+		description: 'Dias da semana desabilitados (0 = domingo … 6 = sábado).',
+	},
 	{
 		property: 'allowClickOnDisabled',
 		type: 'boolean',
@@ -101,8 +125,9 @@ dayjs.extend(isBetween);
 
 import { cn } from '@/lib/utils';
 import * as React from 'react';
+import { useStore } from 'zustand';
 import { textVariants } from '../text';
-import { useCalendarStore } from './useCalendar';
+import { createCalendarStore } from './useCalendar';
 
 export interface DateIndicator {
 	date: Date;
@@ -139,7 +164,8 @@ function Calendar({
 	disabledWeekdays = [],
 	allowClickOnDisabled = false,
 }: CalendarProps) {
-	const { startDate, endDate, selectDate, setRange } = useCalendarStore();
+	const [store] = React.useState(() => createCalendarStore());
+	const { startDate, endDate, selectDate, setRange } = useStore(store);
 
 	const today = dayjs();
 	const scrollContainerRef = React.useRef<HTMLDivElement>(null);

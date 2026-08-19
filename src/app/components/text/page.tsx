@@ -51,7 +51,13 @@ import { Text } from '@/artiux-components/text';
 
 			<section className='my-8'>
 				<PreviewCode code={previewCode}>
-					<Text typography={typography}>Text</Text>
+					<div className='flex flex-col items-start gap-2'>
+						{typographies.map((t) => (
+							<Text key={t} typography={t}>
+								Text
+							</Text>
+						))}
+					</div>
 				</PreviewCode>
 			</section>
 

@@ -78,7 +78,9 @@ const options = [
 		<>
 			<div>
 				<h1 className='mt-20 text-5xl font-bold'>Select</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>Um seletor de opções em drawer, com suporte a ícone e descrição</p>
+				<p className='text-muted-foreground mt-4 block text-xl'>
+					Um seletor de opções responsivo: drawer no mobile e dropdown (Radix Select) no desktop, com suporte a ícone e descrição
+				</p>
 			</div>
 
 			<section className='my-8'>
@@ -103,7 +105,6 @@ const options = [
 								size={size}
 								ornament={ornament === 'none' ? undefined : ornament}
 								content={() => <p className='text-muted-foreground text-sm'>O status define a situação do registro</p>}
-								footerClassname='flex flex-wrap flex-row'
 							/>
 						</div>
 

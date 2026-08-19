@@ -28,6 +28,25 @@ const SIDEBAR_WIDTH_MOBILE = '18rem';
 const SIDEBAR_WIDTH_ICON = '3rem';
 const SIDEBAR_KEYBOARD_SHORTCUT = 'b';
 
+// Normaliza texto p/ busca: remove acentos, pontuação/espaços, lowercase.
+function normalizeSearch(value: string) {
+	return value
+		.normalize('NFD')
+		.replace(/[̀-ͯ]/g, '')
+		.toLowerCase()
+		.replace(/[^a-z0-9]/g, '');
+}
+
+// Match "fuzzy": todo char da query aparece em target, na mesma ordem (não precisa ser contíguo).
+// Ex: query "icobutto" casa com target "iconbutton".
+function fuzzyMatch(target: string, query: string) {
+	let queryIndex = 0;
+	for (let i = 0; i < target.length && queryIndex < query.length; i++) {
+		if (target[i] === query[queryIndex]) queryIndex++;
+	}
+	return queryIndex === query.length;
+}
+
 // Tipos para navItems
 interface NavItem {
 	label?: string;
@@ -149,8 +168,10 @@ function SidebarProvider({
 
 	const filteredSearchItems = React.useMemo(() => {
 		if (!search) return searchItems;
-		const query = search.toLowerCase();
-		return searchItems.filter((item) => item.label.toLowerCase().includes(query) || item.category.toLowerCase().includes(query));
+		const query = normalizeSearch(search);
+		return searchItems.filter(
+			(item) => fuzzyMatch(normalizeSearch(item.label), query) || fuzzyMatch(normalizeSearch(item.category), query)
+		);
 	}, [searchItems, search]);
 
 	const handleSelectItem = React.useCallback(
@@ -234,6 +255,13 @@ function SidebarProvider({
 							>
 								Buscar...
 							</motion.span>
+							<motion.kbd
+								className='bg-input text-primary pointer-events-none inline-flex h-5 shrink-0 select-none items-center gap-1 rounded px-1.5 font-mono text-[10px] font-medium'
+								initial={{ opacity: 0 }}
+								animate={{ opacity: state === 'collapsed' ? 0 : 1 }}
+							>
+								<span className='text-xs'>⌘</span>K
+							</motion.kbd>
 						</button>
 					</SidebarHeader>
 				)}

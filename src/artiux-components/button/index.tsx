@@ -35,7 +35,7 @@ export function Button({
 	...props
 }: ButtonProps) {
 	const buttonVariants = cva(
-		`relative flex w-full text-nowrap overflow-hidden scrollbar-none font-semibold items-center box-border justify-center gap-2 rounded-xl duration-300 tracking-wider outline-none transition-all hover:brightness-95 active:brightness-90 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-60 disabled:brightness-100 data-[loading=true]:opacity-80 data-[loading=true]:pointer-events-none`,
+		`relative flex w-full active:scale-[0.99] text-nowrap overflow-hidden scrollbar-none font-semibold items-center box-border justify-center gap-2 rounded-xl duration-300 tracking-wider outline-none transition-all hover:brightness-95 active:brightness-90 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-60 disabled:brightness-100 data-[loading=true]:opacity-80 data-[loading=true]:pointer-events-none`,
 		{
 			variants: {
 				variant: {

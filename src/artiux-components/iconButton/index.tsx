@@ -30,7 +30,7 @@ export function IconButton({
 	...props
 }: IconButtonProps) {
 	const variants = cva(
-		`relative flex aspect-square text-nowrap w-max h-max font-semibold items-center box-border justify-center gap-2 rounded-xl duration-300 tracking-wider outline-none transition-all hover:brightness-95 active:brightness-90 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-60 disabled:brightness-100 data-[loading=true]:opacity-60 data-[loading=true]:pointer-events-none`,
+		`relative flex aspect-square active:scale-[0.99] text-nowrap w-max h-max font-semibold items-center box-border justify-center gap-2 rounded-xl duration-300 tracking-wider outline-none transition-all hover:brightness-95 active:brightness-90 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-60 disabled:brightness-100 data-[loading=true]:opacity-60 data-[loading=true]:pointer-events-none`,
 		{
 			variants: {
 				variant: {

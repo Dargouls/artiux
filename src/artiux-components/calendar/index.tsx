@@ -8,8 +8,9 @@ dayjs.extend(isBetween);
 
 import { cn } from '@/lib/utils';
 import * as React from 'react';
+import { useStore } from 'zustand';
 import { textVariants } from '../text';
-import { useCalendarStore } from './useCalendar';
+import { createCalendarStore } from './useCalendar';
 
 export interface DateIndicator {
 	date: Date;
@@ -46,7 +47,8 @@ function Calendar({
 	disabledWeekdays = [],
 	allowClickOnDisabled = false,
 }: CalendarProps) {
-	const { startDate, endDate, selectDate, setRange } = useCalendarStore();
+	const [store] = React.useState(() => createCalendarStore());
+	const { startDate, endDate, selectDate, setRange } = useStore(store);
 
 	const today = dayjs();
 	const scrollContainerRef = React.useRef<HTMLDivElement>(null);

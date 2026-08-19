@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import { motion } from 'motion/react';
 import * as React from 'react';
 
 import Image, { StaticImageData } from 'next/image';
@@ -22,7 +23,7 @@ function CheckboxComposeItem({ title, description, actionName, image, customNode
 			<CheckboxPrimitive.Root
 				data-slot='checkbox'
 				className={cn(
-					'border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 aria-invalid:border-destructive group relative flex w-full flex-col justify-center gap-2 rounded-3xl border-2 p-4 outline-none transition-all focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50',
+					'border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 aria-invalid:border-destructive group relative flex w-full flex-col justify-center gap-2 rounded-3xl border-2 p-4 outline-none transition-[color,box-shadow,border-color] duration-200 ease-in-out focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50',
 					'data-[state=checked]:border-primary',
 					props.className
 				)}
@@ -33,12 +34,19 @@ function CheckboxComposeItem({ title, description, actionName, image, customNode
 						<div className='flex items-center gap-2'>
 							<div
 								className={cn(
-									'border-input flex aspect-square size-6 w-max items-center justify-center rounded-[8px] border',
+									'border-input flex aspect-square size-6 w-max items-center justify-center rounded-[8px] border transition-[border-color,background-color,color] duration-200 ease-in-out',
 									'group-data-[state=checked]:border-primary group-data-[state=checked]:bg-primary group-data-[state=checked]:text-primary-foreground'
 								)}
 							>
-								<CheckboxPrimitive.Indicator data-slot='checkbox-indicator' className='grid place-content-center transition-all'>
-									<Icon icon='check' className='size-4' />
+								<CheckboxPrimitive.Indicator data-slot='checkbox-indicator' className='grid place-content-center'>
+									<motion.span
+										initial={{ scale: 0, opacity: 0, rotate: -45 }}
+										animate={{ scale: 1, opacity: 1, rotate: 0 }}
+										transition={{ duration: 0.25, ease: 'easeInOut', type: 'spring', stiffness: 300, damping: 20 }}
+										className='grid place-content-center'
+									>
+										<Icon icon='check' className='size-4' />
+									</motion.span>
 								</CheckboxPrimitive.Indicator>
 							</div>
 

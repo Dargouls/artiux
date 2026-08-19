@@ -1,7 +1,7 @@
 'use client';
 
 import dayjs from 'dayjs';
-import { create } from 'zustand';
+import { createStore } from 'zustand/vanilla';
 
 interface CalendarState {
 	range: boolean;
@@ -13,65 +13,69 @@ interface CalendarState {
 	reset: () => void;
 }
 
-export const useCalendarStore = create<CalendarState>((set, get) => ({
-	range: true,
-	startDate: null,
-	endDate: null,
+export type CalendarStore = ReturnType<typeof createCalendarStore>;
 
-	setRange: (value) =>
-		set((state) => {
-			if (!value) {
-				return {
-					range: false,
-					startDate: state.startDate ?? dayjs().startOf('day').toDate(),
+export function createCalendarStore() {
+	return createStore<CalendarState>((set, get) => ({
+		range: true,
+		startDate: null,
+		endDate: null,
+
+		setRange: (value) =>
+			set((state) => {
+				if (!value) {
+					return {
+						range: false,
+						startDate: state.startDate ?? dayjs().startOf('day').toDate(),
+						endDate: null,
+					};
+				}
+				return { range: true };
+			}),
+
+		selectDate: (date) => {
+			const { range, startDate, endDate } = get();
+
+			const selected = dayjs(date).startOf('day');
+
+			// 🔹 SINGLE
+			if (!range) {
+				set({
+					startDate: selected.toDate(),
 					endDate: null,
-				};
+				});
+				return;
 			}
-			return { range: true };
-		}),
 
-	selectDate: (date) => {
-		const { range, startDate, endDate } = get();
+			// 🔹 PRIMEIRA SELEÇÃO
+			if (!startDate || (startDate && endDate)) {
+				set({
+					startDate: selected.toDate(),
+					endDate: null,
+				});
+				return;
+			}
 
-		const selected = dayjs(date).startOf('day');
+			// 🔹 SEGUNDA SELEÇÃO
+			const start = dayjs(startDate).startOf('day');
 
-		// 🔹 SINGLE
-		if (!range) {
+			if (selected.isBefore(start)) {
+				set({
+					startDate: selected.toDate(),
+					endDate: start.toDate(),
+				});
+			} else {
+				set({
+					startDate: start.toDate(),
+					endDate: selected.toDate(),
+				});
+			}
+		},
+
+		reset: () =>
 			set({
-				startDate: selected.toDate(),
+				startDate: null,
 				endDate: null,
-			});
-			return;
-		}
-
-		// 🔹 PRIMEIRA SELEÇÃO
-		if (!startDate || (startDate && endDate)) {
-			set({
-				startDate: selected.toDate(),
-				endDate: null,
-			});
-			return;
-		}
-
-		// 🔹 SEGUNDA SELEÇÃO
-		const start = dayjs(startDate).startOf('day');
-
-		if (selected.isBefore(start)) {
-			set({
-				startDate: selected.toDate(),
-				endDate: start.toDate(),
-			});
-		} else {
-			set({
-				startDate: start.toDate(),
-				endDate: selected.toDate(),
-			});
-		}
-	},
-
-	reset: () =>
-		set({
-			startDate: null,
-			endDate: null,
-		}),
-}));
+			}),
+	}));
+}
