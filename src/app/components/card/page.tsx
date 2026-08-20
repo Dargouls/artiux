@@ -7,8 +7,8 @@ import { ControlSwitch, Customize } from '@/components/customize/customize';
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
-import { Button } from '@/artiux-components/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/artiux-components/card';
+import { Button } from '@/artiux/components/button';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/artiux/components/card';
 
 export default function CardComponent() {
 	const [ripple, setRipple] = useState(false);
@@ -17,7 +17,7 @@ export default function CardComponent() {
 	const props = [ripple ? 'ripple' : null].filter(Boolean).join(' ');
 
 	const previewCode = `
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/artiux-components/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/artiux/components/card';
 
 <Card ${props} className='max-w-sm'>
 	<CardHeader>

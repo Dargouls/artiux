@@ -5,9 +5,9 @@ import { cva, VariantProps } from 'class-variance-authority';
 import { GripVertical, PanelLeftIcon, SearchIcon } from 'lucide-react';
 import * as React from 'react';
 
-import { useIsMobile } from '@/artiux-hooks/use-mobile';
+import { useIsMobile } from '@/artiux/hooks/use-mobile';
 
-import { Button } from '@/artiux-components/button';
+import { Button } from '@/artiux/components/button';
 
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/command';
 import { Link } from '@/components/link';

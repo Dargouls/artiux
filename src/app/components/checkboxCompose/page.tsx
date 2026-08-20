@@ -7,7 +7,7 @@ import { ControlSwitch, Customize } from '@/components/customize/customize';
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
-import { CheckboxComposeItem } from '@/artiux-components/checkboxCompose';
+import { CheckboxComposeItem } from '@/artiux/components/checkboxCompose';
 
 export default function CheckboxComposeComponent() {
 	const [checked, setChecked] = useState(false);
@@ -16,8 +16,8 @@ export default function CheckboxComposeComponent() {
 	const [withAction, setWithAction] = useState(true);
 
 	const props = [
-		'title=\'Item 1\'',
-		'description=\'Descrição\'',
+		"title='Item 1'",
+		"description='Descrição'",
 		withAction ? "actionName='Visualizar'\n\taction={() => console.log(1)}" : null,
 		withImage ? "image='/image.png'" : null,
 		checked ? 'checked' : null,
@@ -27,7 +27,7 @@ export default function CheckboxComposeComponent() {
 		.join('\n\t');
 
 	const previewCode = `
-import { CheckboxComposeItem } from '@/artiux-components/checkboxCompose';
+import { CheckboxComposeItem } from '@/artiux/components/checkboxCompose';
 
 <CheckboxComposeItem
 	${props}
@@ -38,9 +38,7 @@ import { CheckboxComposeItem } from '@/artiux-components/checkboxCompose';
 		<>
 			<div>
 				<h1 className='mt-20 text-5xl font-bold'>Checkbox Compose</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>
-					Um card de checkbox com título, descrição, imagem e ação opcionais
-				</p>
+				<p className='text-muted-foreground mt-4 block text-xl'>Um card de checkbox com título, descrição, imagem e ação opcionais</p>
 			</div>
 
 			<section className='my-8'>

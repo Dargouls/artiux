@@ -1,7 +1,7 @@
 'use client';
 
-import { Sheet } from '@/artiux-components/sheet';
-import { useIsMobile } from '@/artiux-hooks/use-mobile';
+import { useIsMobile } from '@/artiux/hooks/use-mobile';
+import { Sheet } from '@/artiux/components/sheet';
 import logo from '@/assets/brand/logo.svg';
 import { Link } from '@/components/link';
 import { RainbowButton } from '@/components/ui/rainbow-button';

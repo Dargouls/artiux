@@ -7,14 +7,14 @@ import { Select as SelectPrimitive } from 'radix-ui';
 import * as React from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 
-import { Button, ButtonProps } from '@/artiux-components/button';
-import { ButtonGroup } from '@/artiux-components/buttonGroup';
-import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerProps, DrawerTitle } from '@/artiux-components/drawer';
-import { Icon, IconName } from '@/artiux-components/icons';
-import { RippleContainer } from '@/artiux-components/rippleContainer';
-import { textVariants } from '@/artiux-components/text';
-import { textFieldVariants } from '@/artiux-components/textField';
-import { useIsMobile } from '@/artiux-hooks/use-mobile';
+import { useIsMobile } from '@/artiux/hooks/use-mobile';
+import { Button, ButtonProps } from '@/artiux/components/button';
+import { ButtonGroup } from '@/artiux/components/buttonGroup';
+import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerProps, DrawerTitle } from '@/artiux/components/drawer';
+import { Icon, IconName } from '@/artiux/components/icons';
+import { RippleContainer } from '@/artiux/components/rippleContainer';
+import { textVariants } from '@/artiux/components/text';
+import { textFieldVariants } from '@/artiux/components/textField';
 
 // 1. Adicionado Generic TFieldValues para inferir as chaves do formulário
 export interface SelectProps<TFieldValues extends FieldValues> {

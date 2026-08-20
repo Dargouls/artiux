@@ -1,6 +1,6 @@
 'use client';
 
-import { pageAnimation } from '@/artiux-components/circleTransition';
+import { pageAnimation } from '@/artiux/components/circleTransition';
 import Button from '@/components/button/button';
 import CopyCode from '@/components/copyCode/copyCode';
 import PreviewCode from '@/components/previewCode/previewCode';
@@ -62,7 +62,7 @@ export default function CircleTransition() {
 }
 
 const pageAnimationCode =
-	`// @/artiux-components/circleTransition/index.tsx
+	`// @/artiux/components/circleTransition/index.tsx
 	interface PageAnimationProps {
 	type?: 'slide' | 'expansable';
 	direction?: 'vertical' | 'horizontal';
@@ -116,7 +116,7 @@ const example =
 
 import TransitionWrapper from '@/components/layout/transitionWrapper/transitionWrapper';
 import { ViewTransitions } from 'next-view-transitions-gabriel-azv';
-import { pageAnimation } from '@/artiux-components/circleTransition';
+import { pageAnimation } from '@/artiux/components/circleTransition';
 
 	export default function RootLayout({
 	children,

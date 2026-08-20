@@ -1,9 +1,9 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 
-import { Icon, IconName } from '@/artiux-components/icons';
-import { textVariants } from '@/artiux-components/text';
-import { Color, getColors } from '@/artiux-utils/getColors';
+import { Icon, IconName } from '@/artiux/components/icons';
+import { textVariants } from '@/artiux/components/text';
+import { Color, getColors } from '@/artiux/utils/getColors';
 import { cn } from '@/lib/utils';
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof badgeVariants> {

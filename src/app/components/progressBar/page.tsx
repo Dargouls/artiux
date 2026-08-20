@@ -7,7 +7,7 @@ import { ControlDropdown, ControlSlider, ControlSwitch, Customize } from '@/comp
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
-import { ProgressBar } from '@/artiux-components/progressBar';
+import { ProgressBar } from '@/artiux/components/progressBar';
 
 const labelPositions = ['right', 'top', 'bottom', 'left', 'none'] as const;
 
@@ -16,12 +16,16 @@ export default function ProgressBarComponent() {
 	const [labelPosition, setLabelPosition] = useState<(typeof labelPositions)[number]>('right');
 	const [animated, setAnimated] = useState(true);
 
-	const props = [`progress={${progress}}`, labelPosition !== 'right' ? `labelPosition='${labelPosition}'` : null, animated ? 'animated' : null]
+	const props = [
+		`progress={${progress}}`,
+		labelPosition !== 'right' ? `labelPosition='${labelPosition}'` : null,
+		animated ? 'animated' : null,
+	]
 		.filter(Boolean)
 		.join(' ');
 
 	const previewCode = `
-import { ProgressBar } from '@/artiux-components/progressBar';
+import { ProgressBar } from '@/artiux/components/progressBar';
 
 <ProgressBar ${props} />
 `;
@@ -95,7 +99,7 @@ const propRows = [
 const componentCode = `
 'use client';
 
-import { textVariants } from '@/artiux-components/text';
+import { textVariants } from '@/artiux/components/text';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 

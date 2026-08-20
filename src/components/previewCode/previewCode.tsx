@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
-import { Button } from '@/artiux-components/button';
+import { Button } from '@/artiux/components/button';
 import { motion } from 'motion/react';
 import CodeButton from '../copyCode/codebutton';
 

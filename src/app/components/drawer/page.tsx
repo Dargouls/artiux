@@ -7,7 +7,7 @@ import { ControlDropdown, ControlSwitch, Customize } from '@/components/customiz
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
-import { Button } from '@/artiux-components/button';
+import { Button } from '@/artiux/components/button';
 import {
 	Drawer,
 	DrawerClose,
@@ -17,7 +17,7 @@ import {
 	DrawerHeader,
 	DrawerTitle,
 	DrawerTrigger,
-} from '@/artiux-components/drawer';
+} from '@/artiux/components/drawer';
 
 const directions = ['bottom', 'top', 'left', 'right'] as const;
 
@@ -35,7 +35,7 @@ export default function DrawerComponent() {
 		.join(' ');
 
 	const dynamicPreviewCode = `
-import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/artiux-components/drawer';
+import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/artiux/components/drawer';
 
 <Drawer ${props}>
 	<DrawerTrigger asChild>

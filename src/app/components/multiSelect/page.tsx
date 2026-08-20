@@ -7,7 +7,7 @@ import { ControlDropdown, ControlSlider, ControlSwitch, Customize } from '@/comp
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
-import { MultiSelect } from '@/artiux-components/multiSelect';
+import { MultiSelect } from '@/artiux/components/multiSelect';
 import { useForm } from 'react-hook-form';
 
 const sizes = ['lg', 'sm'] as const;
@@ -47,16 +47,12 @@ export default function MultiSelectComponent() {
 		{ value: 'melhoria', label: 'Melhoria' },
 	];
 
-	const props = [
-		size === 'sm' ? `size='sm'` : null,
-		`maxSelections={${maxSelections}}`,
-		disabled ? 'disabled' : null,
-	]
+	const props = [size === 'sm' ? `size='sm'` : null, `maxSelections={${maxSelections}}`, disabled ? 'disabled' : null]
 		.filter(Boolean)
 		.join(' ');
 
 	const previewCode = `
-import { MultiSelect } from '@/artiux-components/multiSelect';
+import { MultiSelect } from '@/artiux/components/multiSelect';
 import { useForm } from 'react-hook-form';
 
 const { control } = useForm({ defaultValues: { frameworks: [] } });
@@ -164,13 +160,13 @@ import { AnimatePresence, motion } from 'motion/react';
 import { forwardRef, useEffect, useState } from 'react';
 import { Control, Controller, useForm } from 'react-hook-form';
 
-import { Badge } from '@/artiux-components/badge';
-import { Button, ButtonProps } from '@/artiux-components/button';
-import { ButtonGroup } from '@/artiux-components/buttonGroup';
-import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from '@/artiux-components/drawer';
-import { Icon } from '@/artiux-components/icons';
-import { RippleContainer } from '@/artiux-components/rippleContainer';
-import { TextField } from '@/artiux-components/textField';
+import { Badge } from '@/artiux/components/badge';
+import { Button, ButtonProps } from '@/artiux/components/button';
+import { ButtonGroup } from '@/artiux/components/buttonGroup';
+import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from '@/artiux/components/drawer';
+import { Icon } from '@/artiux/components/icons';
+import { RippleContainer } from '@/artiux/components/rippleContainer';
+import { TextField } from '@/artiux/components/textField';
 
 export interface MultiSelectOption {
 	value: string;

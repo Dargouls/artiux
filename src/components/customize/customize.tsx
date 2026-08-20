@@ -1,7 +1,7 @@
 'use client';
 
-import { Icon } from '@/artiux-components/icons';
-import { Switch } from '@/artiux-components/switch';
+import { Icon } from '@/artiux/components/icons';
+import { Switch } from '@/artiux/components/switch';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/dropdownMenu';
 import { cn } from '@/lib/utils';
 

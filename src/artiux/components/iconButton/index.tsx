@@ -3,7 +3,7 @@
 import { cva } from 'class-variance-authority';
 import { ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
 
-import { Color, getColors } from '@/artiux-utils/getColors';
+import { Color, getColors } from '@/artiux/utils/getColors';
 import { cn } from '@/lib/utils';
 import { motion } from 'motion/react';
 import { CircularProgress } from '../circularProgress';

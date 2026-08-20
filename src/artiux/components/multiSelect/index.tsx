@@ -7,14 +7,14 @@ import { Popover as PopoverPrimitive } from 'radix-ui';
 import { forwardRef, useEffect, useRef, useState } from 'react';
 import { Control, Controller, useForm } from 'react-hook-form';
 
-import { Badge } from '@/artiux-components/badge';
-import { Button, ButtonProps } from '@/artiux-components/button';
-import { ButtonGroup } from '@/artiux-components/buttonGroup';
-import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from '@/artiux-components/drawer';
-import { Icon } from '@/artiux-components/icons';
-import { RippleContainer } from '@/artiux-components/rippleContainer';
-import { TextField } from '@/artiux-components/textField';
-import { useIsMobile } from '@/artiux-hooks/use-mobile';
+import { useIsMobile } from '@/artiux/hooks/use-mobile';
+import { Badge } from '@/artiux/components/badge';
+import { Button, ButtonProps } from '@/artiux/components/button';
+import { ButtonGroup } from '@/artiux/components/buttonGroup';
+import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from '@/artiux/components/drawer';
+import { Icon } from '@/artiux/components/icons';
+import { RippleContainer } from '@/artiux/components/rippleContainer';
+import { TextField } from '@/artiux/components/textField';
 
 export interface MultiSelectOption {
 	value: string;

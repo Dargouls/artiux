@@ -1,7 +1,7 @@
 // components/SynthwaveSurface.tsx
 'use client';
 
-import { useIsMobile } from '@/artiux-hooks/use-mobile';
+import { useIsMobile } from '@/artiux/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { DepthOfField, EffectComposer } from '@react-three/postprocessing';

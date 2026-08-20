@@ -8,7 +8,7 @@ import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 import { cn } from '@/lib/utils';
 
-import { CircularProgress } from '@/artiux-components/circularProgress';
+import { CircularProgress } from '@/artiux/components/circularProgress';
 
 const sizes = ['size-8', 'size-12', 'size-16', 'size-24'] as const;
 const colors = ['currentColor', 'text-primary', 'text-destructive', 'text-success', 'text-warning'] as const;
@@ -20,7 +20,7 @@ export default function CircularProgressComponent() {
 	const props = [size !== 'size-8' ? size : null, color !== 'currentColor' ? color : null].filter(Boolean).join(' ');
 
 	const previewCode = `
-import { CircularProgress } from '@/artiux-components/circularProgress';
+import { CircularProgress } from '@/artiux/components/circularProgress';
 
 <CircularProgress${props ? ` className='${props}'` : ''} />
 `;
@@ -43,8 +43,8 @@ import { CircularProgress } from '@/artiux-components/circularProgress';
 				<PreviewCode code={previewCode}>
 					<div className='flex flex-wrap items-center justify-center gap-8'>
 						<CircularProgress className={cn(size, color)} />
-						<CircularProgress className='size-12 text-primary' />
-						<CircularProgress className='size-16 text-destructive' />
+						<CircularProgress className='text-primary size-12' />
+						<CircularProgress className='text-destructive size-16' />
 					</div>
 				</PreviewCode>
 			</section>

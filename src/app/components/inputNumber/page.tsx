@@ -7,7 +7,7 @@ import { ControlSlider, ControlSwitch, Customize } from '@/components/customize/
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
-import { InputNumber } from '@/artiux-components/inputNumber';
+import { InputNumber } from '@/artiux/components/inputNumber';
 import { useForm } from 'react-hook-form';
 
 export default function InputNumberComponent() {
@@ -36,7 +36,7 @@ export default function InputNumberComponent() {
 		.join(' ');
 
 	const previewCode = `
-import { InputNumber } from '@/artiux-components/inputNumber';
+import { InputNumber } from '@/artiux/components/inputNumber';
 import { useForm } from 'react-hook-form';
 
 const { control } = useForm({ defaultValues: { quantidade: 0 } });

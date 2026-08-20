@@ -7,7 +7,7 @@ import { ControlDropdown, ControlSwitch, Customize } from '@/components/customiz
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
-import { IconButton } from '@/artiux-components/iconButton';
+import { IconButton } from '@/artiux/components/iconButton';
 
 const variants = ['primary', 'secondary', 'ghost'] as const;
 const colors = ['primary', 'warning', 'destructive', 'success', 'info'] as const;
@@ -31,7 +31,7 @@ export default function IconButtonComponent() {
 		.join(' ');
 
 	const previewCode = `
-import { IconButton } from '@/artiux-components/iconButton';
+import { IconButton } from '@/artiux/components/iconButton';
 
 <IconButton ${props} icon='settings' />
 `;
@@ -52,7 +52,14 @@ import { IconButton } from '@/artiux-components/iconButton';
 
 			<section className='my-8'>
 				<PreviewCode code={previewCode}>
-					<IconButton variant={variant} color={color} size={size === 'lg' ? undefined : size} icon='settings' loading={loading} disabled={disabled} />
+					<IconButton
+						variant={variant}
+						color={color}
+						size={size === 'lg' ? undefined : size}
+						icon='settings'
+						loading={loading}
+						disabled={disabled}
+					/>
 				</PreviewCode>
 			</section>
 

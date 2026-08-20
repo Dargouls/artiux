@@ -1,7 +1,7 @@
 import { DropdownMenu as DropdownMenuPrimitive } from 'radix-ui';
 import * as React from 'react';
 
-import { Icon } from '@/artiux-components/icons';
+import { Icon } from '@/artiux/components/icons';
 import { cn } from '@/lib/utils';
 
 const DropdownMenu = DropdownMenuPrimitive.Root;

@@ -7,7 +7,7 @@ import { ControlDropdown, ControlSwitch, Customize } from '@/components/customiz
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
-import { Select } from '@/artiux-components/select';
+import { Select } from '@/artiux/components/select';
 import { useForm } from 'react-hook-form';
 
 const sizes = ['lg', 'sm'] as const;
@@ -56,7 +56,7 @@ export default function SelectComponent() {
 		.join('\n\t');
 
 	const previewCode = `
-import { Select } from '@/artiux-components/select';
+import { Select } from '@/artiux/components/select';
 import { useForm } from 'react-hook-form';
 
 const { control } = useForm({ defaultValues: { status: '' } });
@@ -169,13 +169,13 @@ import { AnimatePresence, motion } from 'motion/react';
 import * as React from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 
-import { Button, ButtonProps } from '@/artiux-components/button';
-import { ButtonGroup } from '@/artiux-components/buttonGroup';
-import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerProps, DrawerTitle } from '@/artiux-components/drawer';
-import { Icon, IconName } from '@/artiux-components/icons';
-import { RippleContainer } from '@/artiux-components/rippleContainer';
-import { textVariants } from '@/artiux-components/text';
-import { textFieldVariants } from '@/artiux-components/textField';
+import { Button, ButtonProps } from '@/artiux/components/button';
+import { ButtonGroup } from '@/artiux/components/buttonGroup';
+import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerProps, DrawerTitle } from '@/artiux/components/drawer';
+import { Icon, IconName } from '@/artiux/components/icons';
+import { RippleContainer } from '@/artiux/components/rippleContainer';
+import { textVariants } from '@/artiux/components/text';
+import { textFieldVariants } from '@/artiux/components/textField';
 
 // 1. Adicionado Generic TFieldValues para inferir as chaves do formulário
 export interface SelectProps<TFieldValues extends FieldValues> {

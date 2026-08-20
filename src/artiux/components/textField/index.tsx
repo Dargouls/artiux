@@ -4,9 +4,9 @@ import { cva, VariantProps } from 'class-variance-authority';
 import { forwardRef, InputHTMLAttributes, useState } from 'react';
 import { Control, Controller, FieldValues, Path, PathValue, useFormContext } from 'react-hook-form';
 
-import { Icon, IconName } from '@/artiux-components/icons';
-import { RippleContainer } from '@/artiux-components/rippleContainer';
-import { Text, textVariants } from '@/artiux-components/text';
+import { Icon, IconName } from '@/artiux/components/icons';
+import { RippleContainer } from '@/artiux/components/rippleContainer';
+import { Text, textVariants } from '@/artiux/components/text';
 import { cn } from '@/lib/utils';
 import InputMask from '@mona-health/react-input-mask';
 

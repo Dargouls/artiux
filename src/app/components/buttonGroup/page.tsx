@@ -7,8 +7,8 @@ import { ControlDropdown, ControlSwitch, Customize } from '@/components/customiz
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
-import { Button } from '@/artiux-components/button';
-import { ButtonGroup } from '@/artiux-components/buttonGroup';
+import { Button } from '@/artiux/components/button';
+import { ButtonGroup } from '@/artiux/components/buttonGroup';
 
 const orientations = ['horizontal', 'vertical'] as const;
 
@@ -19,8 +19,8 @@ export default function ButtonGroupComponent() {
 	const props = [`orientation='${orientation}'`, showSeparator ? 'showSeparator' : 'showSeparator={false}'].filter(Boolean).join(' ');
 
 	const previewCode = `
-import { Button } from '@/artiux-components/button';
-import { ButtonGroup } from '@/artiux-components/buttonGroup';
+import { Button } from '@/artiux/components/button';
+import { ButtonGroup } from '@/artiux/components/buttonGroup';
 
 <ButtonGroup ${props}>
 	<Button variant='secondary'>Botão 1</Button>

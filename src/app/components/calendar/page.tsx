@@ -7,7 +7,7 @@ import { ControlSlider, ControlSwitch, Customize } from '@/components/customize/
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
-import { Calendar } from '@/artiux-components/calendar';
+import { Calendar } from '@/artiux/components/calendar';
 
 const WEEKEND_DAYS = [0, 6];
 
@@ -31,7 +31,7 @@ export default function CalendarComponent() {
 		.join(' ');
 
 	const previewCode = `
-import { Calendar } from '@/artiux-components/calendar';
+import { Calendar } from '@/artiux/components/calendar';
 
 <Calendar ${props} />
 `;

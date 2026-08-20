@@ -7,7 +7,7 @@ import { ControlSwitch, Customize } from '@/components/customize/customize';
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
-import { Switch } from '@/artiux-components/switch';
+import { Switch } from '@/artiux/components/switch';
 
 export default function SwitchComponent() {
 	const [checked, setChecked] = useState(true);
@@ -16,7 +16,7 @@ export default function SwitchComponent() {
 	const props = [checked ? 'checked' : null, disabled ? 'disabled' : null].filter(Boolean).join(' ');
 
 	const previewCode = `
-import { Switch } from '@/artiux-components/switch';
+import { Switch } from '@/artiux/components/switch';
 
 <Switch ${props} />
 `;

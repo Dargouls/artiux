@@ -7,7 +7,7 @@ import { ControlDropdown, Customize } from '@/components/customize/customize';
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
-import { Tabs } from '@/artiux-components/tabs';
+import { Tabs } from '@/artiux/components/tabs';
 
 const defaultValues = ['1', '2', '3', '4'] as const;
 
@@ -56,7 +56,7 @@ export default function TabsComponent() {
 	const props = [`defaultValue='${defaultValue}'`].filter(Boolean).join(' ');
 
 	const previewCode = `
-import { Tabs } from '@/artiux-components/tabs';
+import { Tabs } from '@/artiux/components/tabs';
 
 const tabs = [
 	{ title: 'Criar', value: '1', content: <h1>Criar</h1> },
@@ -114,7 +114,7 @@ const propRows = [
 const componentCode = `
 'use client';
 
-import { Text, textVariants } from '@/artiux-components/text';
+import { Text, textVariants } from '@/artiux/components/text';
 import { cn } from '@/lib/utils';
 import { motion } from 'motion/react';
 import { useState } from 'react';

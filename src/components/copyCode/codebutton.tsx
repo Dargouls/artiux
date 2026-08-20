@@ -1,6 +1,6 @@
 'use client';
 
-import { MouseClick } from '@/artiux-components/mouseClick';
+import { MouseClick } from '@/artiux/components/mouseClick';
 import { cn } from '@/lib/utils';
 import { Check, Copy } from 'lucide-react';
 import { forwardRef, useRef, useState } from 'react';

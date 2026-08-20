@@ -1,6 +1,6 @@
 'use client';
 
-import { Text, textVariants } from '@/artiux-components/text';
+import { Text, textVariants } from '@/artiux/components/text';
 import { cn } from '@/lib/utils';
 import { motion } from 'motion/react';
 import { useState } from 'react';

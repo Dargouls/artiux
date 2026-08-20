@@ -7,7 +7,7 @@ import { ControlDropdown, ControlSwitch, Customize } from '@/components/customiz
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
-import { Button } from '@/artiux-components/button';
+import { Button } from '@/artiux/components/button';
 
 const variants = ['primary', 'secondary', 'ghost'] as const;
 const colors = ['primary', 'warning', 'destructive', 'success', 'info'] as const;
@@ -37,7 +37,7 @@ export default function ButtonComponent() {
 		.join(' ');
 
 	const previewCode = `
-import { Button } from '@/artiux-components/button';
+import { Button } from '@/artiux/components/button';
 
 <Button ${props}>
 	Button

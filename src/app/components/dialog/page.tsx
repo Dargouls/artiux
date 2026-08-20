@@ -1,7 +1,7 @@
 'use client';
 
-import { Button } from '@/artiux-components/button';
-import Dialog from '@/artiux-components/dialog';
+import { Button } from '@/artiux/components/button';
+import Dialog from '@/artiux/components/dialog';
 import CopyCode from '@/components/copyCode/copyCode';
 import { ControlSwitch, Customize } from '@/components/customize/customize';
 import { PropsTable } from '@/components/customize/propsTable';

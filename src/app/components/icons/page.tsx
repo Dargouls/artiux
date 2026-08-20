@@ -4,7 +4,7 @@ import CopyCode from '@/components/copyCode/copyCode';
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
-import { Icon, IconName } from '@/artiux-components/icons';
+import { Icon, IconName } from '@/artiux/components/icons';
 
 const iconGallery: IconName[] = [
 	'home',
@@ -47,22 +47,15 @@ export default function IconsComponent() {
 			<div>
 				<h1 className='mt-20 text-5xl font-bold'>Icons</h1>
 				<p className='text-muted-foreground mt-4 block text-xl'>
-					Um barrel com centenas de ícones SVG, acessados por nome através do componente{' '}
-					<code>Icon</code>
+					Um barrel com centenas de ícones SVG, acessados por nome através do componente <code>Icon</code>
 				</p>
 				<p className='text-muted-foreground mt-2 block text-sm'>
 					Ícones cedidos por{' '}
-					<a
-						href='https://mynaui.com/icons'
-						target='_blank'
-						rel='noreferrer'
-						className='text-primary underline'
-					>
+					<a href='https://mynaui.com/icons' target='_blank' rel='noreferrer' className='text-primary underline'>
 						MynaUI
 					</a>
-					. A ideia aqui é exemplificar que a API do <code>Icon</code> permite trocar de lib de
-					ícones (MynaUI, Lucide, ou qualquer outra) apenas alterando os SVGs no barrel — sem
-					precisar alterar a implementação nos componentes finais que consomem <code>Icon</code>.
+					. A ideia aqui é exemplificar que a API do <code>Icon</code> permite trocar de lib de ícones (MynaUI, Lucide, ou qualquer outra)
+					apenas alterando os SVGs no barrel — sem precisar alterar a implementação nos componentes finais que consomem <code>Icon</code>.
 				</p>
 			</div>
 
@@ -77,10 +70,7 @@ export default function IconsComponent() {
 				<PreviewCode code={previewCode}>
 					<div className='grid grid-cols-4 gap-4 sm:grid-cols-6 md:grid-cols-8'>
 						{iconGallery.map((name) => (
-							<div
-								key={name}
-								className='border-border bg-card flex flex-col items-center justify-center gap-2 rounded-lg border p-3'
-							>
+							<div key={name} className='border-border bg-card flex flex-col items-center justify-center gap-2 rounded-lg border p-3'>
 								<Icon icon={name} className='text-primary size-6' />
 								<span className='text-muted-foreground text-center text-[10px] leading-tight'>{name}</span>
 							</div>
@@ -106,7 +96,7 @@ const propRows = [
 ];
 
 const previewCode = `
-import { Icon } from '@/artiux-components/icons';
+import { Icon } from '@/artiux/components/icons';
 
 <Icon icon='heart' className='text-primary size-6' />
 <Icon icon='star' className='text-primary size-6' />
@@ -5427,4 +5417,3 @@ export function Icon({ icon, ...props }: IconProps) {
 }
 
 `;
-

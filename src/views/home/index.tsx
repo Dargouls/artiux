@@ -6,16 +6,16 @@ import { useForm } from 'react-hook-form';
 
 import ret from '@/assets/brand/retangle.svg';
 
-import BubbleButton from '@/artiux-components/bubbleButton';
-import { Button } from '@/artiux-components/button';
-import { ButtonGroup } from '@/artiux-components/buttonGroup';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/artiux-components/card';
-import { CheckboxComposeItem } from '@/artiux-components/checkboxCompose';
-import { InputNumber } from '@/artiux-components/inputNumber';
-import { MultiSelect } from '@/artiux-components/multiSelect';
-import { Select } from '@/artiux-components/select';
-import { Text } from '@/artiux-components/text';
-import { useIsMobile } from '@/artiux-hooks/use-mobile';
+import { useIsMobile } from '@/artiux/hooks/use-mobile';
+import BubbleButton from '@/artiux/components/bubbleButton';
+import { Button } from '@/artiux/components/button';
+import { ButtonGroup } from '@/artiux/components/buttonGroup';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/artiux/components/card';
+import { CheckboxComposeItem } from '@/artiux/components/checkboxCompose';
+import { InputNumber } from '@/artiux/components/inputNumber';
+import { MultiSelect } from '@/artiux/components/multiSelect';
+import { Select } from '@/artiux/components/select';
+import { Text } from '@/artiux/components/text';
 import CopyCode from '@/components/copyCode/copyCode';
 import Grainient from '@/components/grainient';
 import { Link } from '@/components/link';

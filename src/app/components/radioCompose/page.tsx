@@ -7,8 +7,8 @@ import { ControlSwitch, Customize } from '@/components/customize/customize';
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
-import { RadioComposeItem } from '@/artiux-components/radioCompose';
-import { RadioGroup } from '@/artiux-components/radioGroup';
+import { RadioComposeItem } from '@/artiux/components/radioCompose';
+import { RadioGroup } from '@/artiux/components/radioGroup';
 
 export default function RadioComposeComponent() {
 	const [withDescription, setWithDescription] = useState(true);
@@ -22,8 +22,8 @@ export default function RadioComposeComponent() {
 		.join(' ');
 
 	const previewCode = `
-import { RadioComposeItem } from '@/artiux-components/radioCompose';
-import { RadioGroup } from '@/artiux-components/radioGroup';
+import { RadioComposeItem } from '@/artiux/components/radioCompose';
+import { RadioGroup } from '@/artiux/components/radioGroup';
 
 <RadioGroup defaultValue='1'>
 	<RadioComposeItem title='Item 1' value='1' ${props} />

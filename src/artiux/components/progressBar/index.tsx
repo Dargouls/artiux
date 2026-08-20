@@ -1,6 +1,6 @@
 'use client';
 
-import { textVariants } from '@/artiux-components/text';
+import { textVariants } from '@/artiux/components/text';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 

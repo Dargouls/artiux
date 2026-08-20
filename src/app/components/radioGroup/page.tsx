@@ -7,7 +7,7 @@ import { ControlDropdown, ControlSwitch, Customize } from '@/components/customiz
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
-import { RadioGroup, RadioGroupItem } from '@/artiux-components/radioGroup';
+import { RadioGroup, RadioGroupItem } from '@/artiux/components/radioGroup';
 
 const orientations = ['horizontal', 'vertical'] as const;
 
@@ -15,15 +15,10 @@ export default function RadioGroupComponent() {
 	const [orientation, setOrientation] = useState<(typeof orientations)[number]>('horizontal');
 	const [disabled, setDisabled] = useState(false);
 
-	const props = [
-		orientation === 'vertical' ? `orientation='vertical'` : null,
-		disabled ? 'disabled' : null,
-	]
-		.filter(Boolean)
-		.join(' ');
+	const props = [orientation === 'vertical' ? `orientation='vertical'` : null, disabled ? 'disabled' : null].filter(Boolean).join(' ');
 
 	const previewCode = `
-import { RadioGroup, RadioGroupItem } from '@/artiux-components/radioGroup';
+import { RadioGroup, RadioGroupItem } from '@/artiux/components/radioGroup';
 
 <RadioGroup defaultValue='1' ${props}>
 	<RadioGroupItem value='1' />

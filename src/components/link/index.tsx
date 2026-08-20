@@ -1,7 +1,7 @@
 'use client';
 
-import { pageAnimation } from '@/artiux-components/circleTransition';
-import { useIsMobile } from '@/artiux-hooks/use-mobile';
+import { useIsMobile } from '@/artiux/hooks/use-mobile';
+import { pageAnimation } from '@/artiux/components/circleTransition';
 import { cn } from '@/lib/utils';
 import { cva } from 'class-variance-authority';
 import { useTransitionRouter } from 'next-view-transitions-gabriel-azv';

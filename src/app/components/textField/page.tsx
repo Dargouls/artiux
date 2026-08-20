@@ -7,7 +7,7 @@ import { ControlDropdown, ControlSwitch, Customize } from '@/components/customiz
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
-import { TextField } from '@/artiux-components/textField';
+import { TextField } from '@/artiux/components/textField';
 import { useForm } from 'react-hook-form';
 
 const sizes = ['lg', 'sm'] as const;
@@ -42,7 +42,7 @@ export default function TextFieldComponent() {
 		.join(' ');
 
 	const previewCode = `
-import { TextField } from '@/artiux-components/textField';
+import { TextField } from '@/artiux/components/textField';
 import { useForm } from 'react-hook-form';
 
 const { control } = useForm({ defaultValues: { padrao: '' } });
@@ -104,7 +104,11 @@ const { control } = useForm({ defaultValues: { padrao: '' } });
 
 const propRows = [
 	{ property: 'name', type: 'Path<TFieldValues>', description: 'Nome do campo controlado pelo react-hook-form.' },
-	{ property: 'control', type: 'Control<TFieldValues>', description: 'Objeto de controle do formulário (react-hook-form). Opcional se usado dentro de um FormProvider.' },
+	{
+		property: 'control',
+		type: 'Control<TFieldValues>',
+		description: 'Objeto de controle do formulário (react-hook-form). Opcional se usado dentro de um FormProvider.',
+	},
 	{ property: 'placeholder', type: 'string', description: 'Texto exibido quando o campo está vazio.' },
 	{ property: 'size', type: "'sm' | 'lg'", default: "'lg'", description: 'Tamanho do campo.' },
 	{ property: 'mask', type: 'string', description: 'Máscara de formatação aplicada ao valor digitado.' },
@@ -134,9 +138,9 @@ import { cva, VariantProps } from 'class-variance-authority';
 import { forwardRef, InputHTMLAttributes, useState } from 'react';
 import { Control, Controller, FieldValues, Path, PathValue, useFormContext } from 'react-hook-form';
 
-import { Icon, IconName } from '@/artiux-components/icons';
-import { RippleContainer } from '@/artiux-components/rippleContainer';
-import { Text, textVariants } from '@/artiux-components/text';
+import { Icon, IconName } from '@/artiux/components/icons';
+import { RippleContainer } from '@/artiux/components/rippleContainer';
+import { Text, textVariants } from '@/artiux/components/text';
 import { cn } from '@/lib/utils';
 import InputMask from '@mona-health/react-input-mask';
 

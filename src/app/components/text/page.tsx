@@ -7,7 +7,7 @@ import { ControlDropdown, Customize } from '@/components/customize/customize';
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
-import { Text } from '@/artiux-components/text';
+import { Text } from '@/artiux/components/text';
 
 const typographies = [
 	'h1',
@@ -30,7 +30,7 @@ export default function TextComponent() {
 	const props = [`typography='${typography}'`].filter(Boolean).join(' ');
 
 	const previewCode = `
-import { Text } from '@/artiux-components/text';
+import { Text } from '@/artiux/components/text';
 
 <Text ${props}>Text</Text>
 `;

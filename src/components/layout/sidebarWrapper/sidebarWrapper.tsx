@@ -3,7 +3,7 @@
 import logoMini from '@/assets/brand/logo-mini.svg';
 import logo from '@/assets/brand/logo.svg';
 
-import { NavItem, Sidebar } from '@/artiux-components/sidebar';
+import { NavItem, Sidebar } from '@/artiux/components/sidebar';
 
 interface SidebarWrapperProps extends React.HTMLAttributes<HTMLDivElement> {}
 

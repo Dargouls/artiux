@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import BubbleButton from '@/artiux-components/bubbleButton';
+import BubbleButton from '@/artiux/components/bubbleButton';
 import CopyCode from '@/components/copyCode/copyCode';
 import { ControlSlider, ControlSwitch, Customize } from '@/components/customize/customize';
 import { PropsTable } from '@/components/customize/propsTable';
@@ -35,9 +35,7 @@ import { Heart } from 'lucide-react';
 		<>
 			<div>
 				<h1 className='mt-20 text-5xl font-bold'>Bubble Button</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>
-					Um botão com animação de SVGs flutuantes ao clicar
-				</p>
+				<p className='text-muted-foreground mt-4 block text-xl'>Um botão com animação de SVGs flutuantes ao clicar</p>
 			</div>
 
 			<section className='my-8'>
@@ -49,7 +47,12 @@ import { Heart } from 'lucide-react';
 
 			<section className='my-8'>
 				<PreviewCode code={previewCode}>
-					<BubbleButton loading={loading} svgDuration={svgDuration} svgDelay={svgDelay} bubbleIcon={<Heart size={16} color='white' fill='white' />}>
+					<BubbleButton
+						loading={loading}
+						svgDuration={svgDuration}
+						svgDelay={svgDelay}
+						bubbleIcon={<Heart size={16} color='white' fill='white' />}
+					>
 						❤
 					</BubbleButton>
 					<BubbleButton
@@ -81,9 +84,18 @@ import { Heart } from 'lucide-react';
 
 const propRows = [
 	{ property: 'loading', type: 'boolean', description: 'Exibe indicador de carregamento e desabilita o botão.' },
-	{ property: 'bubbleIcon', type: 'React.ReactNode', description: 'Ícone/elemento exibido em cada bolha animada. Se omitido, usa uma bolha branca padrão.' },
+	{
+		property: 'bubbleIcon',
+		type: 'React.ReactNode',
+		description: 'Ícone/elemento exibido em cada bolha animada. Se omitido, usa uma bolha branca padrão.',
+	},
 	{ property: 'svgDuration', type: 'number', default: '2', description: 'Duração base (em segundos) da animação de subida das bolhas.' },
-	{ property: 'svgDelay', type: 'number', default: '0.05', description: 'Intervalo (em segundos) entre o início da animação de cada bolha.' },
+	{
+		property: 'svgDelay',
+		type: 'number',
+		default: '0.05',
+		description: 'Intervalo (em segundos) entre o início da animação de cada bolha.',
+	},
 ];
 
 const dialogCode =
