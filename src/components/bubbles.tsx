@@ -1,4 +1,3 @@
-// components/BubbleParticles.tsx
 'use client';
 
 import { Canvas, useFrame } from '@react-three/fiber';
@@ -57,16 +56,8 @@ function BubbleSystem({ count = 50 }: { count?: number }) {
 
 			// Se a bolha "morreu", reseta para nova posição
 			if (bubble.life >= 1.0) {
-				bubble.position.set(
-					(Math.random() - 0.5) * 100,
-					-10 + Math.random() * -20,
-					(Math.random() - 0.5) * 100
-				);
-				bubble.velocity.set(
-					(Math.random() - 0.5) * 0.5,
-					0.5 + Math.random() * 1.5,
-					(Math.random() - 0.5) * 0.5
-				);
+				bubble.position.set((Math.random() - 0.5) * 100, -10 + Math.random() * -20, (Math.random() - 0.5) * 100);
+				bubble.velocity.set((Math.random() - 0.5) * 0.5, 0.5 + Math.random() * 1.5, (Math.random() - 0.5) * 0.5);
 				bubble.life = 0;
 				bubble.maxLife = 8 + Math.random() * 12;
 				bubble.size = 0.3 + Math.random() * 1.2;

@@ -7,7 +7,6 @@ import { Select as SelectPrimitive } from 'radix-ui';
 import * as React from 'react';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 
-import { useIsMobile } from '@/artiux/hooks/use-mobile';
 import { Button, ButtonProps } from '@/artiux/components/button';
 import { ButtonGroup } from '@/artiux/components/buttonGroup';
 import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerProps, DrawerTitle } from '@/artiux/components/drawer';
@@ -15,11 +14,11 @@ import { Icon, IconName } from '@/artiux/components/icons';
 import { RippleContainer } from '@/artiux/components/rippleContainer';
 import { textVariants } from '@/artiux/components/text';
 import { textFieldVariants } from '@/artiux/components/textField';
+import { useIsMobile } from '@/artiux/hooks/use-mobile';
 
-// 1. Adicionado Generic TFieldValues para inferir as chaves do formulário
 export interface SelectProps<TFieldValues extends FieldValues> {
 	footerClassname?: string;
-	name: Path<TFieldValues>; // name é validado contra o schema
+	name: Path<TFieldValues>;
 	options?: SelectItemProps[];
 	control: Control<TFieldValues>;
 	placeholder?: string;
@@ -52,7 +51,6 @@ interface SelectVariantProps<TFieldValues extends FieldValues> extends SelectPro
 	setOpen: (open: boolean) => void;
 }
 
-// 2. Transformado em Generic Function — Select é apenas wrapper de lógica (controller + breakpoint)
 export function Select<TFieldValues extends FieldValues>(props: SelectProps<TFieldValues>) {
 	const { name, control } = props;
 	const isMobile = useIsMobile('768');

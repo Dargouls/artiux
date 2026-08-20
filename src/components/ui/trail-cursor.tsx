@@ -50,7 +50,7 @@ const MouseTrail: React.FC<MouseTrailProps> = ({
 
 	// Função para adicionar pontos baseada na posição do SmoothCursor
 	const addSmoothCursorPoint = useCallback(() => {
-		if (smoothCursorRef.current && svgRef.current) {
+		if (smoothCursorRef.current?.hasMoved() && svgRef.current) {
 			const svgRect = svgRef.current.getBoundingClientRect();
 			// Pega a posição do SmoothCursor (que é o centro do cursor)
 			const cursorX = smoothCursorRef.current.getX();
@@ -79,7 +79,7 @@ const MouseTrail: React.FC<MouseTrailProps> = ({
 			for (let i = 1; i < points.current.length; i++) {
 				const p2 = points.current[i];
 				const dx = p2.x - currentSegmentStart.x;
-				const dy = p2.y - currentSegmentStart.x; // ERRO AQUI: Era p2.y - currentSegmentStart.y
+				const dy = p2.y - currentSegmentStart.y;
 				const segmentDist = Math.sqrt(dx * dx + dy * dy);
 
 				distanceSinceLastSegment += segmentDist;

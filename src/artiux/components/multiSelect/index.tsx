@@ -7,7 +7,6 @@ import { Popover as PopoverPrimitive } from 'radix-ui';
 import { forwardRef, useEffect, useRef, useState } from 'react';
 import { Control, Controller, useForm } from 'react-hook-form';
 
-import { useIsMobile } from '@/artiux/hooks/use-mobile';
 import { Badge } from '@/artiux/components/badge';
 import { Button, ButtonProps } from '@/artiux/components/button';
 import { ButtonGroup } from '@/artiux/components/buttonGroup';
@@ -15,6 +14,7 @@ import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, D
 import { Icon } from '@/artiux/components/icons';
 import { RippleContainer } from '@/artiux/components/rippleContainer';
 import { TextField } from '@/artiux/components/textField';
+import { useIsMobile } from '@/artiux/hooks/use-mobile';
 
 export interface MultiSelectOption {
 	value: string;
@@ -67,7 +67,6 @@ export const chipVariants = cva(
 	}
 );
 
-// Estado/lógica compartilhados entre as variantes mobile/desktop
 interface MultiSelectVariantProps extends MultiSelectProps {
 	selectedValues: string[];
 	handleToggle: (value: string) => void;
@@ -168,9 +167,9 @@ function MultiSelectComponent(
 	);
 }
 
-// ---------------------------------------------------------------------------
-// Trigger — compartilhado entre as duas variantes
-// ---------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+// Trigger
+//
 const Trigger = forwardRef<
 	HTMLDivElement,
 	{
@@ -237,7 +236,7 @@ const Trigger = forwardRef<
 Trigger.displayName = 'MultiSelectTrigger';
 
 // ---------------------------------------------------------------------------
-// Mobile — Drawer (comportamento original)
+// Mobile — Drawer
 // ---------------------------------------------------------------------------
 function MultiSelectMobile({
 	options,
@@ -356,7 +355,7 @@ function MultiSelectMobile({
 }
 
 // ---------------------------------------------------------------------------
-// Desktop — Popover (Radix) + motion
+// Desktop — Popover (Radix)
 // ---------------------------------------------------------------------------
 function MultiSelectDesktop({
 	options,

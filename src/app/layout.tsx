@@ -17,7 +17,7 @@ const geistSans = Geist({
 const baskerfille = Libre_Baskerville({
 	variable: '--font-libre_baskerville',
 	subsets: ['latin'],
-	weight: ['400'], // Add the desired weights as needed
+	weight: ['400'],
 });
 
 const sen = Sen({

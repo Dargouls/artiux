@@ -37,8 +37,7 @@ export function RippleContainer({ color = 'rgba(56, 56, 56, 0.4)', children }: R
 		}, 850);
 	}, []);
 
-	const mergeClasses = (childClassName?: string, extraClassName?: string) =>
-		[childClassName, extraClassName].filter(Boolean).join(' ');
+	const mergeClasses = (childClassName?: string, extraClassName?: string) => [childClassName, extraClassName].filter(Boolean).join(' ');
 
 	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
 		if (children.props.onClick) {
@@ -47,7 +46,6 @@ export function RippleContainer({ color = 'rgba(56, 56, 56, 0.4)', children }: R
 		addRipple(event);
 	};
 
-	// Aqui forçamos o type do children para garantir que temos acesso a children.props
 	const child = children as React.ReactElement<any, any>;
 
 	return React.cloneElement(child, {

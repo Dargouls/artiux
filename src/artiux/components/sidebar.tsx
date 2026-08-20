@@ -28,7 +28,6 @@ const SIDEBAR_WIDTH_MOBILE = '18rem';
 const SIDEBAR_WIDTH_ICON = '3rem';
 const SIDEBAR_KEYBOARD_SHORTCUT = 'b';
 
-// Normaliza texto p/ busca: remove acentos, pontuação/espaços, lowercase.
 function normalizeSearch(value: string) {
 	return value
 		.normalize('NFD')
@@ -37,8 +36,7 @@ function normalizeSearch(value: string) {
 		.replace(/[^a-z0-9]/g, '');
 }
 
-// Match "fuzzy": todo char da query aparece em target, na mesma ordem (não precisa ser contíguo).
-// Ex: query "icobutto" casa com target "iconbutton".
+// Match "fuzzy"
 function fuzzyMatch(target: string, query: string) {
 	let queryIndex = 0;
 	for (let i = 0; i < target.length && queryIndex < query.length; i++) {
@@ -47,7 +45,6 @@ function fuzzyMatch(target: string, query: string) {
 	return queryIndex === query.length;
 }
 
-// Tipos para navItems
 interface NavItem {
 	label?: string;
 	href?: string;
@@ -105,8 +102,6 @@ function SidebarProvider({
 	const [commandOpen, setCommandOpen] = React.useState(false);
 	const [search, setSearch] = React.useState('');
 
-	// This is the internal state of the sidebar.
-	// We use openProp and setOpenProp for control from outside the component.
 	const [_open, _setOpen] = React.useState(defaultOpen);
 	const open = openProp ?? _open;
 	const setOpen = React.useCallback(
@@ -118,18 +113,15 @@ function SidebarProvider({
 				_setOpen(openState);
 			}
 
-			// This sets the cookie to keep the sidebar state.
 			document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
 		},
 		[setOpenProp, open]
 	);
 
-	// Helper to toggle the sidebar.
 	const toggleSidebar = React.useCallback(() => {
 		return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open);
 	}, [isMobile, setOpen, setOpenMobile]);
 
-	// Adds a keyboard shortcut to toggle the sidebar.
 	React.useEffect(() => {
 		const handleKeyDown = (event: KeyboardEvent) => {
 			if (event.key === SIDEBAR_KEYBOARD_SHORTCUT && (event.metaKey || event.ctrlKey)) {
@@ -147,7 +139,6 @@ function SidebarProvider({
 		return () => window.removeEventListener('keydown', handleKeyDown);
 	}, [toggleSidebar]);
 
-	// Lista achatada de páginas navegáveis, usada na busca do CommandDialog.
 	const searchItems = React.useMemo(() => {
 		if (!navItems) return [];
 
@@ -183,8 +174,6 @@ function SidebarProvider({
 		[router]
 	);
 
-	// We add a state so that we can do data-state="expanded" or "collapsed".
-	// This makes it easier to style the sidebar with Tailwind classes.
 	const state = open ? 'expanded' : 'collapsed';
 
 	const contextValue = React.useMemo<SidebarContextProps>(
@@ -200,7 +189,6 @@ function SidebarProvider({
 		[state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]
 	);
 
-	// Função para renderizar os navItems
 	const renderNavItems = (items: NavItem[], state: 'expanded' | 'collapsed') => {
 		const headerItems = items.filter((item) => item.type === 'header');
 		const footerItems = items.filter((item) => item.type === 'footer');
@@ -217,7 +205,7 @@ function SidebarProvider({
 										initial={{ x: 0 }}
 										animate={{ x: state === 'collapsed' ? -80 : 0 }}
 										transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-										className='flex w-40' // 2x logo width
+										className='flex w-40'
 									>
 										<Image priority src={headerItems[0].logo} alt={headerItems[0].label || 'Logo'} className='w-20 shrink-0' />
 										<Image
@@ -294,7 +282,6 @@ function SidebarProvider({
 							);
 						}
 
-						// Item normal
 						return (
 							<SidebarGroup key={index}>
 								<SidebarGroupContent>
@@ -448,7 +435,7 @@ function Sidebar({
 					side === 'left'
 						? 'left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]'
 						: 'right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]',
-					// Adjust the padding for floating and inset variants.
+
 					variant === 'floating' || variant === 'inset'
 						? 'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]'
 						: 'group-data-[collapsible=icon]:w-(--sidebar-width-icon) border-sidebar-border group-data-[side=left]:border-r group-data-[side=right]:border-l',
@@ -603,7 +590,6 @@ function SidebarGroupAction({ className, asChild = false, ...props }: React.Comp
 			data-sidebar='group-action'
 			className={cn(
 				'text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground outline-hidden absolute right-3 top-3.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 transition-transform focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0',
-				// Increases the hit area of the button on mobile.
 				'after:absolute after:-inset-2 md:after:hidden',
 				'group-data-[collapsible=icon]:hidden',
 				className
@@ -709,7 +695,6 @@ function SidebarMenuAction({
 			data-sidebar='menu-action'
 			className={cn(
 				'text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground peer-hover/menu-button:text-sidebar-accent-foreground outline-hidden absolute right-1 top-1.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 transition-transform focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0',
-				// Increases the hit area of the button on mobile.
 				'after:absolute after:-inset-2 md:after:hidden',
 				'peer-data-[size=sm]/menu-button:top-1',
 				'peer-data-[size=default]/menu-button:top-1.5',

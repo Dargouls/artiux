@@ -92,7 +92,7 @@ export function InputNumber<TFieldValues extends FieldValues>({
 	max = 100,
 	step = 1,
 	size = 'lg',
-	formatter, // Extraímos o formatter aqui
+	formatter,
 	...props
 }: InputNumberProps<TFieldValues>) {
 	const prevValueRef = useRef<number>(min);
@@ -123,7 +123,6 @@ export function InputNumber<TFieldValues extends FieldValues>({
 				const isMinDisabled = props.disabled || currentValue <= min;
 				const isMaxDisabled = props.disabled || currentValue >= max;
 
-				// Aplicamos o formatter se existir, caso contrário, mostramos o número puro
 				const displayedValue = formatter ? formatter(currentValue) : currentValue;
 
 				return (

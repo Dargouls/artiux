@@ -180,7 +180,6 @@ function MonthView({
 	const monthStart = monthDayjs.startOf('month');
 	const monthEnd = monthDayjs.endOf('month');
 
-	// Generate all days in the month
 	const days: Date[] = [];
 	let current = monthStart;
 	while (current.isSameOrBefore(monthEnd, 'day')) {
@@ -188,10 +187,8 @@ function MonthView({
 		current = current.add(1, 'day');
 	}
 
-	// Get the day of week for the first day (0 = Sunday)
 	const startDayOfWeek = monthStart.day();
 
-	// Create empty cells for days before the month starts
 	const emptyCells = Array(startDayOfWeek).fill(null);
 
 	const monthName = monthDayjs.format('MMMM [de] YYYY');
@@ -212,12 +209,10 @@ function MonthView({
 					const isSelected = isStart || isEnd;
 					const isDisabled = isDayDisabled(day);
 
-					// Check if this day is at the edge of a week row
-					const dayOfWeek = dayjs(day).day(); // 0 = Sunday, 6 = Saturday
+					const dayOfWeek = dayjs(day).day();
 					const isFirstColumn = dayOfWeek === 0;
 					const isLastColumn = dayOfWeek === 6;
 
-					// Determine if range background should have rounded corners
 					const shouldRoundLeft = inRange && (isFirstColumn || isStart);
 					const shouldRoundRight = inRange && (isLastColumn || isEnd);
 

@@ -15,6 +15,7 @@ export interface SmoothCursorRef {
 	getY: () => number;
 	// Opcional: para saber se o cursor está em um elemento clicável
 	isPointer: () => boolean;
+	hasMoved: () => boolean;
 }
 
 export interface SmoothCursorProps {
@@ -98,6 +99,7 @@ export const SmoothCursor = forwardRef<SmoothCursorRef, SmoothCursorProps>(
 		const [isPointer, setIsPointer] = useState(false);
 		const lastMousePos = useRef<Position>({ x: 0, y: 0 });
 		const velocity = useRef<Position>({ x: 0, y: 0 });
+		const hasMoved = useRef(false);
 		const lastUpdateTime = useRef(Date.now());
 		const previousAngle = useRef(0);
 		const accumulatedRotation = useRef(0);
@@ -122,6 +124,7 @@ export const SmoothCursor = forwardRef<SmoothCursorRef, SmoothCursorProps>(
 			getX: () => cursorX.get(),
 			getY: () => cursorY.get(),
 			isPointer: () => isPointer, // Se você precisar saber o estado do ponteiro
+			hasMoved: () => hasMoved.current,
 		}));
 		// --- FIM DA NOVIDADE ---
 
@@ -155,8 +158,15 @@ export const SmoothCursor = forwardRef<SmoothCursorRef, SmoothCursorProps>(
 				const pos = { x: e.clientX, y: e.clientY };
 				updateVelocity(pos);
 
-				cursorX.set(pos.x);
-				cursorY.set(pos.y);
+				if (!hasMoved.current) {
+					hasMoved.current = true;
+					lastMousePos.current = pos;
+					cursorX.jump(pos.x);
+					cursorY.jump(pos.y);
+				} else {
+					cursorX.set(pos.x);
+					cursorY.set(pos.y);
+				}
 
 				const speed = Math.hypot(velocity.current.x, velocity.current.y);
 				if (speed > 0.1) {

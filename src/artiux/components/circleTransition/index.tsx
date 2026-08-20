@@ -15,7 +15,6 @@ export const pageAnimation = ({ type = 'slide', direction = 'vertical', expansio
 
 		// define o ponto de origem antes da animação
 		document.documentElement.style.transformOrigin = `${slideOrigin.x}px ${slideOrigin.y}px`;
-
 		document.documentElement.animate(
 			[
 				{ opacity: 1, scale: 1, transform: `${directionMap[direction]}(0)` },

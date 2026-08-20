@@ -26,7 +26,6 @@ export interface ButtonGroupProps extends React.ComponentProps<'div'>, VariantPr
 }
 
 function ButtonGroup({ className, orientation = 'horizontal', showSeparator = true, children, ...props }: ButtonGroupProps) {
-	// Transforma os filhos em um array para manipular
 	const childrenArray = Children.toArray(children);
 
 	return (

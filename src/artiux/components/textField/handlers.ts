@@ -1,6 +1,5 @@
 import { InputHTMLAttributes } from 'react';
 
-// Adicionar novos tipos aqui conforme necessário.
 export type CustomType = 'currency';
 
 function formatCurrencyDisplay(rawDigits: string): string {
@@ -17,8 +16,6 @@ function toDecimalValue(rawDigits: string): number {
 	const digits = rawDigits.replace(/\D/g, '');
 	return digits ? parseInt(digits, 10) / 100 : 0;
 }
-
-// ─── Handlers por CustomType ─────────────────────────────────────────────────
 
 export interface CustomTypeState {
 	display: string;

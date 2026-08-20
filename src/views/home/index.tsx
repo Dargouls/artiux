@@ -1,12 +1,11 @@
 'use client';
 
 import useSnap from '@/hook/useSnap';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 
 import ret from '@/assets/brand/retangle.svg';
 
-import { useIsMobile } from '@/artiux/hooks/use-mobile';
 import BubbleButton from '@/artiux/components/bubbleButton';
 import { Button } from '@/artiux/components/button';
 import { ButtonGroup } from '@/artiux/components/buttonGroup';
@@ -16,6 +15,7 @@ import { InputNumber } from '@/artiux/components/inputNumber';
 import { MultiSelect } from '@/artiux/components/multiSelect';
 import { Select } from '@/artiux/components/select';
 import { Text } from '@/artiux/components/text';
+import { useIsMobile } from '@/artiux/hooks/use-mobile';
 import CopyCode from '@/components/copyCode/copyCode';
 import Grainient from '@/components/grainient';
 import { Link } from '@/components/link';
@@ -27,18 +27,14 @@ import { SmoothCursor } from '@/components/ui/smooth-cursor';
 import MouseTrail from '@/components/ui/trail-cursor';
 import useScrollSmoother from '@/hook/useScrollSmoother';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 
 export default function HomePage() {
-	const [loading, setLoading] = useState(true);
-	const [peaks, setPeaks] = useState(0.3);
 	const mainRef = useRef<HTMLElement>(null);
 	const cursorRef = useRef<HTMLElement>(null);
 	const sectionRef = useRef<HTMLDivElement>(null);
 	const elementRef = useRef<HTMLDivElement>(null);
 
 	const isMobile = useIsMobile();
-	const { push } = useRouter();
 
 	useSnap(mainRef as any);
 	useScrollSmoother(sectionRef as any, elementRef as any);
@@ -63,10 +59,10 @@ export default function HomePage() {
 
 	return (
 		<>
-			<PageLoader onFinish={() => setLoading(false)} />
-			<main ref={mainRef} className={`min-h-screen transition-opacity duration-700 ${loading ? 'opacity-0' : 'opacity-100'}`}>
+			<PageLoader />
+			<main ref={mainRef} className={`min-h-screen`}>
 				<section className='panel relative flex h-screen items-center justify-between overflow-hidden px-10 sm:px-20'>
-					<NoiseSurface className='absolute inset-0 -z-10' height={peaks} />
+					<NoiseSurface className='absolute inset-0 -z-10' height={0.3} />
 					<BubbleParticles className='absolute inset-0 -z-10 h-full w-full' />
 
 					<main className='flex flex-col items-center gap-4 sm:items-start'>
@@ -76,12 +72,9 @@ export default function HomePage() {
 							</PointerHighlight>
 						</h1>
 						<code className='rounded bg-black/[.05] px-1 py-0.5 font-[family-name:var(--font-geist-mono)] font-semibold dark:bg-white/[.06]'>
-							{/* Transforme suas ideias em componentes customizados */}
-							Biblioteca de componentes altamente animados
+							Biblioteca de componentes animados
 						</code>
 					</main>
-
-					{/* <Compare firstImage={ideia.src} secondImage={second.src} /> */}
 				</section>
 
 				{/* init - Ignore section */}
@@ -243,34 +236,8 @@ export default function HomePage() {
 								</BubbleButton>
 							</Link>
 						</div>
-						{/* <picture className='absolute left-0 top-0 h-1/2 w-full select-none rounded-[48px] rounded-t-none bg-black'></picture> */}
-						{/* <Image
-							src={gradient}
-							alt='logo'
-							className='absolute top-0 h-1/2 w-full select-none rounded-[48px] rounded-t-none object-cover'
-						/> */}
-						{/* <main className='z-10'>
-							<div className='col-span-3 flex items-center justify-center border-black p-4'>
-								<DraggableBox className='2 h-full w-full'>
-									<PieChart />
-									<BarChart />
-									<LineChart />
-								</DraggableBox>
-							</div>
-						</main> */}
-
-						{/* <div className='absolute -bottom-32 h-full w-full overflow-hidden'>
-					<CardSwap />
-				</div> */}
 					</section>
 				</div>
-
-				{/* <section
-				className='panel flex h-screen w-full items-center justify-center text-4xl font-bold text-white'
-				style={{ backgroundColor: '#71f8c4' }}
-			>
-				Seção 4
-			</section> */}
 
 				{!isMobile && (
 					<>

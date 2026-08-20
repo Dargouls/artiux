@@ -18,7 +18,7 @@ export default function Layers() {
 					transition={{
 						duration: 0.5,
 
-						ease: [0.42, 0, 0.58, 1], // cubic-bezier equivalente
+						ease: [0.42, 0, 0.58, 1],
 					}}
 				>
 					<span className={open ? 'opacity-0 transition-all duration-500' : ''}>Olá</span>
