@@ -5,6 +5,7 @@ export interface ComponentNavItem {
 
 export const componentsNavItems: ComponentNavItem[] = [
 	{ label: 'Badge', href: '/components/badge' },
+	{ label: 'Breadcrumb', href: '/components/breadcrumb' },
 	{ label: 'Bubble Button', href: '/components/bubble-button' },
 	{ label: 'Button', href: '/components/button' },
 	{ label: 'Button Group', href: '/components/buttonGroup' },

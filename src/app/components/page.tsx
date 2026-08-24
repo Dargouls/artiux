@@ -1,4 +1,5 @@
 import badge from '@/assets/components/badge.png';
+import breadcrumb from '@/assets/components/breadcrumb.png';
 import bubbleButton from '@/assets/components/bubble-button.png';
 import button from '@/assets/components/button.png';
 import buttonGroup from '@/assets/components/buttonGroup.png';
@@ -37,6 +38,12 @@ export default function Page() {
 						description='Uma etiqueta compacta para status, categorias e contadores'
 						image={badge}
 						href={'/components/badge'}
+					/>
+					<ComponentCard
+						title='Breadcrumb'
+						description='Trilha de navegação gerada automaticamente a partir do caminho da URL'
+						image={breadcrumb}
+						href={'/components/breadcrumb'}
 					/>
 					<ComponentCard
 						title='Bubble Button'
