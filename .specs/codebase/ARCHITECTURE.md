@@ -1,55 +1,58 @@
 # Architecture
 
-**Pattern:** Single Next.js App Router application — client-heavy component showcase/marketing site. Not a monorepo despite a `pnpm-workspace.yaml` file (it holds only a pnpm global override, no `packages:` field).
+**Pattern:** Component-library-as-website — a Next.js App Router site that both hosts marketing/landing content (`src/views/home`) AND serves as the live documentation/demo site for a copy-paste component library (`/components/*` routes). No backend; it's a static/client-only app.
 
 ## High-Level Structure
 
 ```
-src/
-├── app/                  Next.js App Router routes + demo/showcase pages
-├── artiux-components/    "ArtIux" in-house design-system library (canonical, growing)
-├── artiux-hooks/         hooks for artiux-components
-├── artiux-utils/         utils for artiux-components (e.g. getColors.ts)
-├── components/           older/parallel component set + shadcn `ui/` primitives + demo widgets
-├── hook/                 older hooks directory (duplicates artiux-hooks in places)
-├── interfaces/           shared TS interfaces
-├── lib/utils.ts          shadcn `cn()` helper
-└── views/home/           landing page view
+Root layout (src/app/layout.tsx)
+├─ Home route (src/app/page.tsx → src/views/home) — landing page, scrollytelling, live showcase
+└─ /components/* routes (src/app/components/**)
+   └─ shared docs layout (SidebarWrapper + Breadcrumb) wraps every component doc page
+      └─ per-component route folder: layout.tsx (title metadata only) + page.tsx (docs/demo page)
 ```
 
-Two component libraries coexist: `src/artiux-components/*` (newer, named-export, `index.tsx` entry files) and `src/components/*` (older, default-export, file-named-after-component). See CONVENTIONS.md and CONCERNS.md.
+Three parallel, differently-purposed "components" directories:
+
+- `src/app/components/*` — Next.js **route segments** for docs pages (one folder per library component, each just `layout.tsx` + `page.tsx`). Not components themselves — pages that document/demo components.
+- `src/artiux/components/*` — the actual **publishable component library** source. This is what a consumer copies into their own project. camelCase folders, mostly single `index.tsx` files.
+- `src/components/*` — **site-only** supporting UI used to build the docs/marketing site itself (header/footer, sidebar, code preview/copy blocks, some shadcn-scaffolded `ui/` primitives). Not part of the library, not for external consumption.
 
 ## Identified Patterns
 
-### Design-system component (ArtIux)
+### Copy-paste library distribution (shadcn/ui style)
 
-**Location:** `src/artiux-components/<component>/index.tsx`
-**Purpose:** Canonical, actively-developed component library intended to eventually ship as `@artiux/components`.
-**Implementation:** cva-based variants, props typed via `interface XProps extends DetailedHTMLProps<...>`, named exports.
-**Example:** `src/artiux-components/button/index.tsx`
+**Location:** `src/artiux/components/*`
+**Purpose:** Ship components as source to be pasted into consumer projects, not as an npm package.
+**Implementation:** Each doc page (`src/app/components/<name>/page.tsx`) embeds the raw component source as a template-literal string and renders a "copy code" block (`CopyCode`/`PreviewCode` from `src/components/*`) alongside a live-rendered instance.
+**Example:** `src/app/components/select/page.tsx` imports live `Select` from `@/artiux/components/select` for the demo AND inlines its source text for copying.
 
-### Legacy/demo component
+### Responsive variant-switching within a single component
 
-**Location:** `src/components/<component>/<component>.tsx`
-**Purpose:** Earlier component implementations and page-specific demo widgets (charts, animated form, grainient WebGL background).
-**Implementation:** default exports, different prop APIs than the artiux-components analogues of the same name.
-**Example:** `src/components/button/button.tsx`
+**Location:** e.g. `src/artiux/components/select/index.tsx`
+**Purpose:** One public component API that renders entirely different implementations for mobile vs desktop.
+**Implementation:** `useIsMobile('768')` (from `@/artiux/hooks/use-mobile`) branches between `<SelectMobile>` (uses custom `Drawer`) and `<SelectDesktop>` (Radix `Select` + `motion` animation layer).
+**Example:** `src/artiux/components/select/index.tsx:54-78`
 
-### shadcn/ui primitives
+### Compound components — two competing conventions
 
-**Location:** `src/components/ui/*`
-**Purpose:** Base primitives scaffolded via shadcn CLI (`components.json`), extended with many custom visual-effect components (spotlight-card, sparkles, wavy-background, trail-cursor, etc.)
+**Location:** `src/artiux/components/*`
+**Purpose:** Expose sub-parts of a component (e.g. Card.Header, Dialog.Title) for flexible composition.
+**Implementation:** Inconsistent across the library —
+- Flat named-export style (Card, Select, Drawer): `export function CardHeader()`, `export function CardTitle()`, composed manually by the consumer.
+- Static-property style (Dialog only): default export with subcomponents attached (`Dialog.Header = Header`, etc. — `src/artiux/components/dialog/dialog.tsx:85-88`).
 
-### Component showcase routes
+### Dynamic Tailwind color classes via safelist
 
-**Location:** `src/app/components/<name>/page.tsx`
-**Purpose:** Live demo/documentation page per component, paired with `previewCode`/`copyCode` (react-syntax-highlighter) to show usage source.
+**Location:** `src/artiux/utils/getColors.ts`, consumed across most components
+**Purpose:** Let components accept a `color` prop and produce Tailwind classes like `bg-${colors.background}/15` at runtime.
+**Implementation:** Because these class strings are built dynamically, Tailwind's static analyzer can't detect them — mitigated via an `@source inline(...)` safelist block in `src/app/globals.css` (lines 8-20).
 
 ## Data Flow
 
-No client-server data flow exists — no API routes, no fetch calls to a backend, no `process.env` usage anywhere in `src`. The only "submission" flow is `src/components/animatedForm/animatedForm.tsx`, which simulates success via `setTimeout` + toast (no real network call).
+No client-server data flow exists — this is a fully static, client-rendered app. "Data" shown in demos (select options, status lists, framework lists) is hardcoded arrays inline in view/page files. Forms (react-hook-form + zod) validate client-side only; no submission endpoint was found.
 
 ## Code Organization
 
-**Approach:** Feature/component-based folders under `src/app` (routes) and `src/artiux-components` / `src/components` (implementation), not domain-driven or layered.
-**Module boundaries:** Weak — no enforced boundary between "library" code (`artiux-components`) and "app" code (`app`, `components`); demo pages import directly from both component sets interchangeably.
+**Approach:** Feature/route-based for the Next.js app shell (`src/app`), source-copy-library-based for `src/artiux`, and a flat catch-all for site-only UI (`src/components`).
+**Module boundaries:** Enforced only by folder convention and import path (`@/artiux/...` vs `@/components/...`), not by package boundaries — everything lives in one `src/` tree with a single `@/*` path alias.

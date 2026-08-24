@@ -1,92 +1,65 @@
 # Codebase Concerns
 
-**Analysis Date:** 2026-08-18
+**Analysis Date:** 2026-08-24
 
 ## Tech Debt
 
-**Duplicated component libraries:**
+**No ESLint config despite `lint` script:**
 
-- Issue: `src/components/button/button.tsx` and `src/artiux-components/button/index.tsx` are two separate, drifted implementations of "Button" with different prop APIs (`variant?: 'contained'|'text'|'outlined'|'icon'` vs `variant?: 'primary'|'secondary'|'ghost'`). Same overlap pattern likely repeats for circularProgress, textField, label, radio.
-- Files: `src/components/*`, `src/artiux-components/*`
-- Why: `artiux-components` appears to be a newer canonical rewrite that hasn't fully replaced the legacy `src/components` set yet.
-- Impact: Unclear which is canonical; both are actively used elsewhere in the app, raising risk of inconsistent UI and doubled maintenance.
-- Fix approach: Decide canonical library (likely `artiux-components`), migrate remaining usages, delete legacy duplicates.
+- Issue: `package.json` defines `"lint": "next lint"` but no `.eslintrc*` or `eslint.config.*` exists at project root.
+- Files: project root (missing file), `package.json:8`
+- Why: Likely removed or never scaffolded; Next.js normally ships one by default.
+- Impact: `pnpm lint` either no-ops or prompts interactive setup — no enforced lint gate currently runs in this workflow (CI or local).
+- Fix approach: Add `eslint.config.mjs` (flat config, Next.js 15 default) and wire into a pre-commit/CI check.
 
-**Duplicated hook files:**
+**Inconsistent component file naming (index.tsx vs `<name>.tsx`):**
 
-- Issue: `src/hook/useOutsideClick.ts` and `src/artiux-hooks/useOutsideClick.ts` are byte-for-byte identical.
-- Files: `src/hook/useOutsideClick.ts`, `src/artiux-hooks/useOutsideClick.ts`
-- Why: Two parallel hook directories exist with no documented separation rule.
-- Impact: Future edits to one copy silently diverge from the other.
-- Fix approach: Consolidate into `src/artiux-hooks/` (the canonical-library-aligned location) and update imports.
+- Issue: Most `src/artiux/components/<name>/` folders use `index.tsx`, but Dialog (`dialog/dialog.tsx`) and RippleContainer (`rippleContainer/rippleContainer.tsx`) deviate.
+- Files: `src/artiux/components/dialog/dialog.tsx`, `src/artiux/components/rippleContainer/rippleContainer.tsx`
+- Why: Unclear — likely organic drift, no enforced convention.
+- Impact: Minor DX inconsistency; import paths differ (`@/artiux/components/dialog/dialog` vs `@/artiux/components/select`), easy to get wrong when copy-pasting for new components.
+- Fix approach: Standardize on `index.tsx` for all component folders, or document the exception explicitly.
 
-**Broken/unportable dependency:**
+**Two competing compound-component conventions:**
 
-- Issue: `"@artiux/components": "link:C:/Users/Usuario/Documents/Trabalhos/ArtIux/artiux"` in `package.json` is an absolute Windows path to a sibling repo on one developer's machine, and is not imported anywhere in `src` (0 matches).
-- Files: `package.json`
-- Why: Likely leftover from local experimentation linking a sibling package repo.
-- Impact: Breaks `pnpm install` on any other machine or CI.
-- Fix approach: Remove the dependency entry if truly unused, or replace with a published/workspace-relative reference.
+- Issue: Most components use flat named exports (`CardHeader`, `CardTitle` composed manually); Dialog alone uses static-property attachment (`Dialog.Header`, `Dialog.Title`).
+- Files: `src/artiux/components/dialog/dialog.tsx:85-88` vs `src/artiux/components/card/index.tsx`
+- Why: No documented rationale found.
+- Impact: Consumers must learn two different composition patterns depending on component; increases API surface inconsistency for a library whose whole pitch is copy-paste consistency.
+- Fix approach: Pick one convention (README's shadcn/React-Bits inspiration suggests flat exports is more idiomatic) and migrate Dialog, or document why Dialog is the intentional exception.
 
-**Mixed package manager lockfiles:**
+**Mixed camelCase/kebab-case route folder naming:**
 
-- Issue: both `pnpm-lock.yaml` and `yarn.lock` committed at root.
-- Files: `pnpm-lock.yaml`, `yarn.lock`
-- Why: Inconsistent package-manager usage over project history.
-- Impact: Risk of phantom-dependency bugs depending on which lockfile/tool is used to install.
-- Fix approach: Pick one package manager (pnpm, matching `pnpm-workspace.yaml`), delete the other lockfile, document in README.
+- Issue: `src/app/components/*` folders mix camelCase (`buttonGroup`, `circularProgress`) and kebab-case (`bubble-button`, `circle-transition`, `ripple-container`, `to-left`, `step-form`).
+- Files: `src/app/components/*` (28 folders)
+- Why: No enforced convention; likely different contributors/sessions.
+- Impact: URL inconsistency (`/components/buttonGroup` vs `/components/bubble-button`) — confusing for both maintainers and any future automated route generation.
+- Fix approach: Standardize on kebab-case for URL segments (more conventional for web routes) in a dedicated rename pass; would require updating any internal links/sidebar nav referencing these paths.
 
-**No ESLint/Prettier config committed:**
+**Stray local machine artifact in `pnpm-workspace.yaml`:**
 
-- Issue: `next lint` script and `prettier`/`prettier-plugin-tailwindcss` are devDependencies, but no `.eslintrc*`/`eslint.config.*`/`.prettierrc*` file exists.
-- Files: repo root
-- Why: Likely relies on an uncommitted local/IDE config.
-- Impact: No enforced style — explains mixed tabs/2-space indentation and mixed `export default`/named export styles across near-identical components.
-- Fix approach: Add and commit an ESLint flat config + Prettier config; run once to normalize existing files.
-
-**shadcn hooks alias mismatch:**
-
-- Issue: `components.json` declares `"hooks": "@/hooks"` but no `src/hooks` directory exists; real hooks live in `src/hook` and `src/artiux-hooks`.
-- Files: `components.json`
-- Why: Alias likely left at shadcn CLI default, not adjusted to this repo's actual structure.
-- Impact: Any future `shadcn add` scaffolding of a hook-consuming component will generate an incorrect import path.
-- Fix approach: Update `components.json` `hooks` alias to match the real hook directory (or consolidate hooks first per above).
-
-## Security Considerations
-
-**Dynamic Tailwind class interpolation:**
-
-- Risk: Components in `src/artiux-components` build class names by interpolating variables, e.g. `` `bg-${getColors(color).background} text-${getColors(color).foreground} shadow-xl shadow-${getColors(color).background}/15` `` (`src/artiux-components/button/index.tsx`). Tailwind's content scanner statically greps source for class strings and may not detect these dynamically-built names, silently dropping the generated CSS in production builds.
-- Files: `src/artiux-components/button/index.tsx` and likely other `artiux-components/*` files using `getColors()`
-- Current mitigation: none observed
-- Recommendations: Use a static lookup map (`{ red: 'bg-red-500', blue: 'bg-blue-500' }`) or a Tailwind safelist in the CSS `@theme`/config instead of string interpolation.
-
-## Fragile Areas
-
-**Large monolithic files:**
-
-- Files: `src/artiux-components/icons/index.tsx` (5311 lines), `src/app/components/icons/page.tsx` (5416 lines), `src/artiux-components/sidebar.tsx` (707 lines), `src/components/ui/sparkles.tsx` (424 lines)
-- Why fragile: Single enormous files are hard to review/diff; icon files are mostly SVG data but still add IDE/build load.
-- Safe modification: For icon files, changes are typically additive (new icon entries) so risk is low; `sidebar.tsx` and `sparkles.tsx` are behavioral components and should be reviewed carefully before edits given size.
-- Test coverage: none (see Test Coverage Gaps below).
-
-**Dead/experimental files left in tree:**
-
-- Files: `src/app/snap-old.tsx` (superseded, still present), `src/app/test/page.tsx`, `src/app/three/page.tsx`, `src/app/layers/page.tsx` (demo/scratch routes mixed with production routes, no route grouping to separate them)
-- Why fragile: Unclear which routes are meant to ship vs. scratch work; risk of shipping unfinished/demo pages.
-- Safe modification: Before adding new routes, confirm with project owner which existing routes are production vs. demo; consider a `(dev)` route group to separate them.
+- Issue: An `overrides.list`-style path appears to reference a local pnpm store path specific to the developer's machine.
+- Files: `pnpm-workspace.yaml`
+- Why: Likely accidental commit of a machine-local config.
+- Impact: Could break `pnpm install` for other contributors/CI if the path is genuinely machine-specific and required.
+- Fix approach: Verify the file's actual necessity; remove or generalize if it only works on the original author's machine.
 
 ## Test Coverage Gaps
 
-**Entire codebase:**
+**No automated tests anywhere:**
 
-- What's not tested: Everything — no unit, integration, or e2e tests exist.
-- Risk: Any refactor (e.g. consolidating the duplicated component libraries above) has no safety net.
-- Priority: High if planning to touch `artiux-components`, form logic, or shared hooks; Medium for purely visual/demo routes.
+- What's not tested: Every component in `src/artiux/components/*`, all doc routes, all site UI. Zero test files repo-wide.
+- Risk: Any refactor (e.g. the naming/convention cleanups above) has no safety net — regressions surface only via manual browsing.
+- Priority: Medium — acceptable for a copy-paste component showcase (consumers test in their own projects), but risky if `src/artiux` logic (e.g. `getColors.ts`, `use-mobile.tsx`) grows more complex. Already called out in README's own roadmap.
 
 ## Dependencies at Risk
 
-**next-view-transitions-gabriel-azv:**
+**Personal-fork dependency:**
 
-- Risk: Package name suggests a personal/single-maintainer fork of the View Transitions API wrapper; unclear long-term maintenance.
-- Migration plan: If issues arise, evaluate the upstream `next-view-transitions` package or a first-party View Transitions API implementation.
+- Risk: `next-view-transitions-gabriel-azv` is a personally-scoped npm fork, not the upstream/official package — unclear maintenance guarantee, single point of failure if the author's npm account/package is ever removed.
+- Migration plan: Confirm whether this fork is still needed vs. upstream `next-view-transitions`, or vendor the small wrapper directly into the repo to remove the external dependency risk.
+
+**No config file for Prettier despite dependency:**
+
+- Risk: `prettier` + `prettier-plugin-tailwindcss` are installed but unconfigured — running `prettier` project-wide would use defaults only, and the Tailwind class-sorting plugin has no effect without being registered in a config.
+- Migration plan: Add `.prettierrc.json` with `plugins: ["prettier-plugin-tailwindcss"]` to actually realize the intended tooling benefit.
