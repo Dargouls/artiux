@@ -7,8 +7,15 @@ import { ControlSwitch, Customize } from '@/components/customize/customize';
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
+import { Aside } from '@/artiux/components/aside';
 import { Button } from '@/artiux/components/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/artiux/components/card';
+
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'props', label: 'Props' },
+	{ id: 'code', label: 'Instalação' },
+];
 
 export default function CardComponent() {
 	const [ripple, setRipple] = useState(false);
@@ -36,50 +43,54 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 `;
 
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Card</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>Um container para agrupar conteúdo relacionado</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Card</h1>
+					<p className='text-muted-foreground mt-4 block text-xl'>Um container para agrupar conteúdo relacionado</p>
+				</div>
+
+				<section id='preview' className='my-8 scroll-mt-24'>
+					<PreviewCode code={previewCode}>
+						<Card ripple={ripple} className='max-w-sm'>
+							<CardHeader>
+								<CardTitle srOnly={srOnlyTitle}>Título</CardTitle>
+								<CardDescription>Subtítulo</CardDescription>
+							</CardHeader>
+
+							<CardContent>
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ultricies mi vitae est. Pellentesque habitant morbi tristique
+								senectus et netus et malesuada fames ac turpis egestas.
+							</CardContent>
+
+							<CardFooter>
+								<Button>Continuar</Button>
+							</CardFooter>
+						</Card>
+					</PreviewCode>
+				</section>
+
+				<section id='customize' className='my-8 scroll-mt-24'>
+					<Customize>
+						<ControlSwitch label='Ripple' checked={ripple} onChange={setRipple} />
+						<ControlSwitch label='Título sr-only' checked={srOnlyTitle} onChange={setSrOnlyTitle} />
+					</Customize>
+				</section>
+
+				<section id='props' className='my-8 scroll-mt-24'>
+					<PropsTable rows={propRows} />
+				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='mt-4 place-content-start'>
+						<CopyCode installs='yarn add class-variance-authority' code={componentCode} fileName='artiux/components/card/index.tsx' />
+					</div>
+				</section>
 			</div>
 
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Código:</h3>
-				<div className='mt-4 h-52 place-content-start'>
-					<CopyCode installs='yarn add class-variance-authority' code={componentCode} />
-				</div>
-			</section>
-
-			<section className='my-8'>
-				<PreviewCode code={previewCode}>
-					<Card ripple={ripple} className='max-w-sm'>
-						<CardHeader>
-							<CardTitle srOnly={srOnlyTitle}>Título</CardTitle>
-							<CardDescription>Subtítulo</CardDescription>
-						</CardHeader>
-
-						<CardContent>
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ultricies mi vitae est. Pellentesque habitant morbi tristique
-							senectus et netus et malesuada fames ac turpis egestas.
-						</CardContent>
-
-						<CardFooter>
-							<Button>Continuar</Button>
-						</CardFooter>
-					</Card>
-				</PreviewCode>
-			</section>
-
-			<section className='my-8'>
-				<Customize>
-					<ControlSwitch label='Ripple' checked={ripple} onChange={setRipple} />
-					<ControlSwitch label='Título sr-only' checked={srOnlyTitle} onChange={setSrOnlyTitle} />
-				</Customize>
-			</section>
-
-			<section className='my-8'>
-				<PropsTable rows={propRows} />
-			</section>
-		</>
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

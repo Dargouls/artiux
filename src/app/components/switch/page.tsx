@@ -7,7 +7,14 @@ import { ControlSwitch, Customize } from '@/components/customize/customize';
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
+import { Aside } from '@/artiux/components/aside';
 import { Switch } from '@/artiux/components/switch';
+
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'props', label: 'Props' },
+	{ id: 'code', label: 'Instalação' },
+];
 
 export default function SwitchComponent() {
 	const [checked, setChecked] = useState(true);
@@ -22,51 +29,55 @@ import { Switch } from '@/artiux/components/switch';
 `;
 
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Switch</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>Um alternador para ligar/desligar uma opção</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Switch</h1>
+					<p className='text-muted-foreground mt-4 block text-xl'>Um alternador para ligar/desligar uma opção</p>
+				</div>
+
+				<section id='preview' className='my-8 scroll-mt-24'>
+					<PreviewCode code={previewCode}>
+						<div className='flex items-center gap-3'>
+							<Switch checked={checked} onCheckedChange={setChecked} disabled={disabled} />
+							<span className='text-sm'>{checked ? 'Ativado' : 'Desativado'}</span>
+						</div>
+						<div className='flex items-center gap-3'>
+							<Switch defaultChecked />
+							<span className='text-sm'>Ativado</span>
+						</div>
+						<div className='flex items-center gap-3'>
+							<Switch />
+							<span className='text-sm'>Desativado</span>
+						</div>
+						<div className='flex items-center gap-3'>
+							<Switch disabled defaultChecked />
+							<span className='text-sm'>Desabilitado</span>
+						</div>
+					</PreviewCode>
+				</section>
+
+				<section id='customize' className='my-8 scroll-mt-24'>
+					<Customize>
+						<ControlSwitch label='Checked' checked={checked} onChange={setChecked} />
+						<ControlSwitch label='Disabled' checked={disabled} onChange={setDisabled} />
+					</Customize>
+				</section>
+
+				<section id='props' className='my-8 scroll-mt-24'>
+					<PropsTable rows={propRows} />
+				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='mt-4 place-content-start'>
+						<CopyCode installs='yarn add radix-ui' code={componentCode} fileName='artiux/components/switch/index.tsx' />
+					</div>
+				</section>
 			</div>
 
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Código:</h3>
-				<div className='mt-4 h-52 place-content-start'>
-					<CopyCode installs='yarn add radix-ui' code={componentCode} />
-				</div>
-			</section>
-
-			<section className='my-8'>
-				<PreviewCode code={previewCode}>
-					<div className='flex items-center gap-3'>
-						<Switch checked={checked} onCheckedChange={setChecked} disabled={disabled} />
-						<span className='text-sm'>{checked ? 'Ativado' : 'Desativado'}</span>
-					</div>
-					<div className='flex items-center gap-3'>
-						<Switch defaultChecked />
-						<span className='text-sm'>Ativado</span>
-					</div>
-					<div className='flex items-center gap-3'>
-						<Switch />
-						<span className='text-sm'>Desativado</span>
-					</div>
-					<div className='flex items-center gap-3'>
-						<Switch disabled defaultChecked />
-						<span className='text-sm'>Desabilitado</span>
-					</div>
-				</PreviewCode>
-			</section>
-
-			<section className='my-8'>
-				<Customize>
-					<ControlSwitch label='Checked' checked={checked} onChange={setChecked} />
-					<ControlSwitch label='Disabled' checked={disabled} onChange={setDisabled} />
-				</Customize>
-			</section>
-
-			<section className='my-8'>
-				<PropsTable rows={propRows} />
-			</section>
-		</>
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

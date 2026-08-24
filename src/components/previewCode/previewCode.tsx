@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 
 import { Button } from '@/artiux/components/button';
 import { motion } from 'motion/react';
@@ -54,7 +54,7 @@ export default function PreviewCode({ children, code, ...props }: PreviewCodePro
 						<CodeButton code={code} className='sticky top-4 z-10 flex place-self-end pr-4' />
 						<SyntaxHighlighter
 							language='tsx'
-							style={oneDark}
+							style={vscDarkPlus}
 							customStyle={{
 								margin: 0,
 								marginTop: -16,

@@ -1,48 +1,41 @@
 'use client';
 
+import { Aside } from '@/artiux/components/aside';
 import Button from '@/components/button/button';
 import CopyCode from '@/components/copyCode/copyCode';
 import { pageAnimation } from '@/components/layout/transitionWrapper/pageAnimation';
 import PreviewCode from '@/components/previewCode/previewCode';
 import { useTransitionRouter } from 'next-view-transitions-gabriel-azv';
 
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'code', label: 'Instalação' },
+];
+
 export default function ToLeft() {
 	const { push } = useTransitionRouter();
 
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Animação de página à esquerda</h1>
-				<p className='text-muted-foreground mt-2 block text-xl'>
-					Uma animação de transição imersiva de uma página para outra
-				</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Animação de página à esquerda</h1>
+					<p className='text-muted-foreground mt-2 block text-xl'>
+						Uma animação de transição imersiva de uma página para outra
+					</p>
 
-				<p className='mt-8'>
-					Animações de transições no Next ainda são um tópico delicado nas versões mais recentes. Apesar do
-					next-view-transitions ser uma mão na roda, para as versões do Next 15, foi necessário fazer um fork
-					alternativo para consertar um bug de build que provavelmente vão consertar nas próximas versões.
-				</p>
+					<p className='mt-8'>
+						Animações de transições no Next ainda são um tópico delicado nas versões mais recentes. Apesar do
+						next-view-transitions ser uma mão na roda, para as versões do Next 15, foi necessário fazer um fork
+						alternativo para consertar um bug de build que provavelmente vão consertar nas próximas versões.
+					</p>
 
-				<p>
-					Também se fez necessário adicionar algumas linhas de <code>CSS</code> no <code>globals.css</code>
-				</p>
+					<p>
+						Também se fez necessário adicionar algumas linhas de <code>CSS</code> no <code>globals.css</code>
+					</p>
+				</div>
 
-				<section className='my-8'>
-					<h3 className='text-2xl font-bold'>Código:</h3>
-					<div className='flex flex-wrap'>
-						<div className='mt-4 h-52 place-content-start'>
-							<CopyCode installs='yarn add motion clsx tailwind-merge' code={pageAnimationCode} />
-						</div>
-						<div className='mt-4 h-52 place-content-start'>
-							<CopyCode installs='yarn add next-view-transitions-gabriel-azv' code={transitionWrapper} />
-						</div>
-						<div className='mt-4 h-52 place-content-start'>
-							<CopyCode installs='Inclua no globals.css' code={globals} />
-						</div>
-					</div>
-				</section>
-
-				<section className='my-8'>
+				<section id='preview' className='my-8 scroll-mt-24'>
 					<PreviewCode code={example}>
 						<Button
 							className='w-max'
@@ -56,8 +49,25 @@ export default function ToLeft() {
 						</Button>
 					</PreviewCode>
 				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='flex flex-wrap'>
+						<div className='mt-4 place-content-start'>
+							<CopyCode installs='yarn add motion clsx tailwind-merge' code={pageAnimationCode} />
+						</div>
+						<div className='mt-4 place-content-start'>
+							<CopyCode installs='yarn add next-view-transitions-gabriel-azv' code={transitionWrapper} />
+						</div>
+						<div className='mt-4 place-content-start'>
+							<CopyCode installs='Inclua no globals.css' code={globals} />
+						</div>
+					</div>
+				</section>
 			</div>
-		</>
+
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

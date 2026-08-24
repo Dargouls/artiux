@@ -7,8 +7,15 @@ import { ControlDropdown, ControlSwitch, Customize } from '@/components/customiz
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
+import { Aside } from '@/artiux/components/aside';
 import { Button } from '@/artiux/components/button';
 import { ButtonGroup } from '@/artiux/components/buttonGroup';
+
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'props', label: 'Props' },
+	{ id: 'code', label: 'Instalação' },
+];
 
 const orientations = ['horizontal', 'vertical'] as const;
 
@@ -30,40 +37,48 @@ import { ButtonGroup } from '@/artiux/components/buttonGroup';
 `;
 
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Button Group</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>Agrupa botões lado a lado, com separadores opcionais</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Button Group</h1>
+					<p className='text-muted-foreground mt-4 block text-xl'>Agrupa botões lado a lado, com separadores opcionais</p>
+				</div>
+
+				<section id='preview' className='my-8 scroll-mt-24'>
+					<PreviewCode code={previewCode}>
+						<ButtonGroup orientation={orientation} showSeparator={showSeparator} className={orientation === 'vertical' ? 'w-max' : undefined}>
+							<Button variant='primary'>Topo</Button>
+							<Button variant='primary'>Meio</Button>
+							<Button variant='primary'>Baixo</Button>
+						</ButtonGroup>
+					</PreviewCode>
+				</section>
+
+				<section id='customize' className='my-8 scroll-mt-24'>
+					<Customize>
+						<ControlDropdown label='Orientation' value={orientation} options={orientations} onChange={setOrientation} />
+						<ControlSwitch label='Show separator' checked={showSeparator} onChange={setShowSeparator} />
+					</Customize>
+				</section>
+
+				<section id='props' className='my-8 scroll-mt-24'>
+					<PropsTable rows={propRows} />
+				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='mt-4 place-content-start'>
+						<CopyCode
+							installs='yarn add class-variance-authority radix-ui'
+							code={componentCode}
+							fileName='artiux/components/buttonGroup/index.tsx'
+						/>
+					</div>
+				</section>
 			</div>
 
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Código:</h3>
-				<div className='mt-4 h-52 place-content-start'>
-					<CopyCode installs='yarn add class-variance-authority radix-ui' code={componentCode} />
-				</div>
-			</section>
-
-			<section className='my-8'>
-				<PreviewCode code={previewCode}>
-					<ButtonGroup orientation={orientation} showSeparator={showSeparator} className={orientation === 'vertical' ? 'w-max' : undefined}>
-						<Button variant='primary'>Topo</Button>
-						<Button variant='primary'>Meio</Button>
-						<Button variant='primary'>Baixo</Button>
-					</ButtonGroup>
-				</PreviewCode>
-			</section>
-
-			<section className='my-8'>
-				<Customize>
-					<ControlDropdown label='Orientation' value={orientation} options={orientations} onChange={setOrientation} />
-					<ControlSwitch label='Show separator' checked={showSeparator} onChange={setShowSeparator} />
-				</Customize>
-			</section>
-
-			<section className='my-8'>
-				<PropsTable rows={propRows} />
-			</section>
-		</>
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

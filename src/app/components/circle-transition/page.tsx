@@ -1,44 +1,37 @@
 'use client';
 
+import { Aside } from '@/artiux/components/aside';
 import { pageAnimation } from '@/artiux/components/circleTransition';
 import Button from '@/components/button/button';
 import CopyCode from '@/components/copyCode/copyCode';
 import PreviewCode from '@/components/previewCode/previewCode';
 import { useTransitionRouter } from 'next-view-transitions-gabriel-azv';
 
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'code', label: 'Instalação' },
+];
+
 export default function CircleTransition() {
 	const { push } = useTransitionRouter();
 
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Animação de transição circular</h1>
-				<p className='text-muted-foreground mt-2 block text-xl'>
-					Uma animação de transição que expande um círculo a partir do ponto do clique
-				</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Animação de transição circular</h1>
+					<p className='text-muted-foreground mt-2 block text-xl'>
+						Uma animação de transição que expande um círculo a partir do ponto do clique
+					</p>
 
-				<p className='mt-8'>
-					Usa o <code>clip-path</code> animado via Web Animations API, aplicado na pseudo-elemento
-					<code> ::view-transition-new(root)</code>. O raio máximo é calculado a partir da distância do ponto de clique até o canto mais
-					distante da tela, garantindo que o círculo cubra toda a viewport.
-				</p>
+					<p className='mt-8'>
+						Usa o <code>clip-path</code> animado via Web Animations API, aplicado na pseudo-elemento
+						<code> ::view-transition-new(root)</code>. O raio máximo é calculado a partir da distância do ponto de clique até o canto mais
+						distante da tela, garantindo que o círculo cubra toda a viewport.
+					</p>
+				</div>
 
-				<section className='my-8'>
-					<h3 className='text-2xl font-bold'>Código:</h3>
-					<div className='flex flex-wrap'>
-						<div className='mt-4 h-52 place-content-start'>
-							<CopyCode installs='yarn add motion clsx tailwind-merge' code={pageAnimationCode} />
-						</div>
-						<div className='mt-4 h-52 place-content-start'>
-							<CopyCode installs='yarn add next-view-transitions-gabriel-azv' code={transitionWrapper} />
-						</div>
-						<div className='mt-4 h-52 place-content-start'>
-							<CopyCode installs='Inclua no globals.css' code={globals} />
-						</div>
-					</div>
-				</section>
-
-				<section className='my-8'>
+				<section id='preview' className='my-8 scroll-mt-24'>
 					<PreviewCode code={example}>
 						<Button
 							className='w-max'
@@ -56,8 +49,25 @@ export default function CircleTransition() {
 						</Button>
 					</PreviewCode>
 				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='flex flex-wrap'>
+						<div className='mt-4 place-content-start'>
+							<CopyCode installs='yarn add motion clsx tailwind-merge' code={pageAnimationCode} fileName='artiux/components/circleTransition/index.tsx' />
+						</div>
+						<div className='mt-4 place-content-start'>
+							<CopyCode installs='yarn add next-view-transitions-gabriel-azv' code={transitionWrapper} />
+						</div>
+						<div className='mt-4 place-content-start'>
+							<CopyCode installs='Inclua no globals.css' code={globals} />
+						</div>
+					</div>
+				</section>
 			</div>
-		</>
+
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

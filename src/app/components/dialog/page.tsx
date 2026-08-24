@@ -1,5 +1,6 @@
 'use client';
 
+import { Aside } from '@/artiux/components/aside';
 import { Button } from '@/artiux/components/button';
 import Dialog from '@/artiux/components/dialog';
 import CopyCode from '@/components/copyCode/copyCode';
@@ -7,6 +8,12 @@ import { ControlSwitch, Customize } from '@/components/customize/customize';
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 import { useState } from 'react';
+
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'props', label: 'Props' },
+	{ id: 'code', label: 'Instalação' },
+];
 
 export default function DialogComponent() {
 	const [open, setOpen] = useState(false);
@@ -34,49 +41,53 @@ const [open, setOpen] = useState(false);
 					`;
 
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Dialog</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>Um Dialog com animação de expansão</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Dialog</h1>
+					<p className='text-muted-foreground mt-4 block text-xl'>Um Dialog com animação de expansão</p>
+				</div>
+
+				<section id='preview' className='my-8 scroll-mt-24'>
+					<PreviewCode code={codePreview}>
+						<Button className='w-max' onClick={() => setOpen(true)}>
+							Mostrar Dialog
+						</Button>
+						<Dialog open={open} onClose={() => setOpen(false)} closeButton={closeButton}>
+							<Dialog.Header>
+								<Dialog.Title>Titulo</Dialog.Title>
+							</Dialog.Header>
+							<Dialog.Body>
+								<p>Corpo do Dialog</p>
+							</Dialog.Body>
+							<Dialog.Footer>
+								<Button onClick={() => setOpen(false)}>Fechar</Button>
+							</Dialog.Footer>
+						</Dialog>
+					</PreviewCode>
+				</section>
+
+				<section id='customize' className='my-8 scroll-mt-24'>
+					<Customize>
+						<ControlSwitch label='Aberto' checked={open} onChange={setOpen} />
+						<ControlSwitch label='Botão fechar' checked={closeButton} onChange={setCloseButton} />
+					</Customize>
+				</section>
+
+				<section id='props' className='my-8 scroll-mt-24'>
+					<PropsTable rows={propRows} />
+				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='mt-4 place-content-start'>
+						<CopyCode installs='yarn add motion lucide-react' code={dialogCode} fileName='artiux/components/dialog.tsx' />
+					</div>
+				</section>
 			</div>
 
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Código:</h3>
-				<div className='mt-4 h-52 place-content-start'>
-					<CopyCode installs='yarn add motion lucide-react' code={dialogCode} />
-				</div>
-			</section>
-
-			<section className='my-8'>
-				<PreviewCode code={codePreview}>
-					<Button className='w-max' onClick={() => setOpen(true)}>
-						Mostrar Dialog
-					</Button>
-					<Dialog open={open} onClose={() => setOpen(false)} closeButton={closeButton}>
-						<Dialog.Header>
-							<Dialog.Title>Titulo</Dialog.Title>
-						</Dialog.Header>
-						<Dialog.Body>
-							<p>Corpo do Dialog</p>
-						</Dialog.Body>
-						<Dialog.Footer>
-							<Button onClick={() => setOpen(false)}>Fechar</Button>
-						</Dialog.Footer>
-					</Dialog>
-				</PreviewCode>
-			</section>
-
-			<section className='my-8'>
-				<Customize>
-					<ControlSwitch label='Aberto' checked={open} onChange={setOpen} />
-					<ControlSwitch label='Botão fechar' checked={closeButton} onChange={setCloseButton} />
-				</Customize>
-			</section>
-
-			<section className='my-8'>
-				<PropsTable rows={propRows} />
-			</section>
-		</>
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

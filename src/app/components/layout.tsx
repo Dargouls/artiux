@@ -14,7 +14,9 @@ export default function ComponentsLayout({
 	return (
 		<main>
 			<SidebarWrapper>
-				{children}
+				{/* <Breadcrumb /> */}
+				<div className='px-4 md:px-6 lg:px-40'>{children}</div>
+
 				<div className='mt-20'></div>
 			</SidebarWrapper>
 		</main>

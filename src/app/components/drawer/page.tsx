@@ -7,6 +7,7 @@ import { ControlDropdown, ControlSwitch, Customize } from '@/components/customiz
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
+import { Aside } from '@/artiux/components/aside';
 import { Button } from '@/artiux/components/button';
 import {
 	Drawer,
@@ -18,6 +19,12 @@ import {
 	DrawerTitle,
 	DrawerTrigger,
 } from '@/artiux/components/drawer';
+
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'props', label: 'Props' },
+	{ id: 'code', label: 'Instalação' },
+];
 
 const directions = ['bottom', 'top', 'left', 'right'] as const;
 
@@ -60,21 +67,15 @@ import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, Dr
 `;
 
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Drawer</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>Um painel deslizante para conteúdo ou ações contextuais</p>
-			</div>
-
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Código:</h3>
-				<div className='mt-4 h-52 place-content-start'>
-					<CopyCode installs='yarn add vaul' code={componentCode} />
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Drawer</h1>
+					<p className='text-muted-foreground mt-4 block text-xl'>Um painel deslizante para conteúdo ou ações contextuais</p>
 				</div>
-			</section>
 
-			<section className='my-8'>
-				<PreviewCode code={dynamicPreviewCode}>
+				<section id='preview' className='my-8 scroll-mt-24'>
+					<PreviewCode code={dynamicPreviewCode}>
 					<Drawer direction={direction} fullScreen={fullScreen} dismissible={dismissible}>
 						<DrawerTrigger asChild>
 							<Button size='sm'>Abrir Drawer</Button>
@@ -117,21 +118,31 @@ import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, Dr
 							</DrawerFooter>
 						</DrawerContent>
 					</Drawer>
-				</PreviewCode>
-			</section>
+					</PreviewCode>
+				</section>
 
-			<section className='my-8'>
-				<Customize>
-					<ControlDropdown label='Direction' value={direction} options={directions} onChange={setDirection} />
-					<ControlSwitch label='Full screen' checked={fullScreen} onChange={setFullScreen} />
-					<ControlSwitch label='Dismissible' checked={dismissible} onChange={setDismissible} />
-				</Customize>
-			</section>
+				<section id='customize' className='my-8 scroll-mt-24'>
+					<Customize>
+						<ControlDropdown label='Direction' value={direction} options={directions} onChange={setDirection} />
+						<ControlSwitch label='Full screen' checked={fullScreen} onChange={setFullScreen} />
+						<ControlSwitch label='Dismissible' checked={dismissible} onChange={setDismissible} />
+					</Customize>
+				</section>
 
-			<section className='my-8'>
-				<PropsTable rows={propRows} />
-			</section>
-		</>
+				<section id='props' className='my-8 scroll-mt-24'>
+					<PropsTable rows={propRows} />
+				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='mt-4 place-content-start'>
+						<CopyCode installs='yarn add vaul' code={componentCode} fileName='artiux/components/drawer/index.tsx' />
+					</div>
+				</section>
+			</div>
+
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

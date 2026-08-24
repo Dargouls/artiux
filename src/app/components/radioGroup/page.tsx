@@ -7,9 +7,16 @@ import { ControlDropdown, ControlSwitch, Customize } from '@/components/customiz
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
+import { Aside } from '@/artiux/components/aside';
 import { RadioGroup, RadioGroupItem } from '@/artiux/components/radioGroup';
 
 const orientations = ['horizontal', 'vertical'] as const;
+
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'props', label: 'Props' },
+	{ id: 'code', label: 'Instalação' },
+];
 
 export default function RadioGroupComponent() {
 	const [orientation, setOrientation] = useState<(typeof orientations)[number]>('horizontal');
@@ -27,45 +34,49 @@ import { RadioGroup, RadioGroupItem } from '@/artiux/components/radioGroup';
 `;
 
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Radio Group</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>Um grupo de opções de rádio simples e acessível</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Radio Group</h1>
+					<p className='text-muted-foreground mt-4 block text-xl'>Um grupo de opções de rádio simples e acessível</p>
+				</div>
+
+				<section id='preview' className='my-8 scroll-mt-24'>
+					<PreviewCode code={previewCode}>
+						<RadioGroup
+							defaultValue='1'
+							orientation={orientation}
+							disabled={disabled}
+							className={`flex gap-4 ${orientation === 'vertical' ? 'flex-col' : 'flex-row'}`}
+						>
+							<RadioGroupItem value='1' />
+							<RadioGroupItem value='2' />
+							<RadioGroupItem value='3' />
+						</RadioGroup>
+					</PreviewCode>
+				</section>
+
+				<section id='customize' className='my-8 scroll-mt-24'>
+					<Customize>
+						<ControlDropdown label='Orientation' value={orientation} options={orientations} onChange={setOrientation} />
+						<ControlSwitch label='Disabled' checked={disabled} onChange={setDisabled} />
+					</Customize>
+				</section>
+
+				<section id='props' className='my-8 scroll-mt-24'>
+					<PropsTable rows={propRows} />
+				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='mt-4 place-content-start'>
+						<CopyCode installs='yarn add radix-ui lucide-react' code={componentCode} fileName='artiux/components/radioGroup/index.tsx' />
+					</div>
+				</section>
 			</div>
 
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Código:</h3>
-				<div className='mt-4 h-52 place-content-start'>
-					<CopyCode installs='yarn add radix-ui lucide-react' code={componentCode} />
-				</div>
-			</section>
-
-			<section className='my-8'>
-				<PreviewCode code={previewCode}>
-					<RadioGroup
-						defaultValue='1'
-						orientation={orientation}
-						disabled={disabled}
-						className={`flex gap-4 ${orientation === 'vertical' ? 'flex-col' : 'flex-row'}`}
-					>
-						<RadioGroupItem value='1' />
-						<RadioGroupItem value='2' />
-						<RadioGroupItem value='3' />
-					</RadioGroup>
-				</PreviewCode>
-			</section>
-
-			<section className='my-8'>
-				<Customize>
-					<ControlDropdown label='Orientation' value={orientation} options={orientations} onChange={setOrientation} />
-					<ControlSwitch label='Disabled' checked={disabled} onChange={setDisabled} />
-				</Customize>
-			</section>
-
-			<section className='my-8'>
-				<PropsTable rows={propRows} />
-			</section>
-		</>
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

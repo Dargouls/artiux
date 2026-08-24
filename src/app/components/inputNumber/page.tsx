@@ -7,8 +7,15 @@ import { ControlSlider, ControlSwitch, Customize } from '@/components/customize/
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
+import { Aside } from '@/artiux/components/aside';
 import { InputNumber } from '@/artiux/components/inputNumber';
 import { useForm } from 'react-hook-form';
+
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'props', label: 'Props' },
+	{ id: 'code', label: 'Instalação' },
+];
 
 export default function InputNumberComponent() {
 	const { control } = useForm({
@@ -45,52 +52,60 @@ const { control } = useForm({ defaultValues: { quantidade: 0 } });
 `;
 
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Input Number</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>Um input numérico com controles de incremento e decremento</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Input Number</h1>
+					<p className='text-muted-foreground mt-4 block text-xl'>Um input numérico com controles de incremento e decremento</p>
+				</div>
+
+				<section id='preview' className='my-8 scroll-mt-24'>
+					<PreviewCode code={previewCode}>
+						<div className='flex flex-wrap items-center gap-6'>
+							<InputNumber
+								name='quantidade'
+								control={control}
+								min={min}
+								max={max}
+								step={step}
+								disabled={disabled}
+								formatter={currency ? (v) => `R$ ${v}` : undefined}
+							/>
+							<InputNumber name='preco' control={control} min={0} max={1000} step={5} formatter={(v) => `R$ ${v}`} />
+							<InputNumber name='desabilitado' control={control} min={0} max={10} disabled />
+							<InputNumber name='quantidade' control={control} min={0} max={15} step={1} size='sm' />
+						</div>
+					</PreviewCode>
+				</section>
+
+				<section id='customize' className='my-8 scroll-mt-24'>
+					<Customize>
+						<ControlSlider label='Min' value={min} min={-50} max={50} onChange={setMin} />
+						<ControlSlider label='Max' value={max} min={0} max={200} onChange={setMax} />
+						<ControlSlider label='Step' value={step} min={1} max={20} onChange={setStep} />
+						<ControlSwitch label='Disabled' checked={disabled} onChange={setDisabled} />
+						<ControlSwitch label='Formatter (R$)' checked={currency} onChange={setCurrency} />
+					</Customize>
+				</section>
+
+				<section id='props' className='my-8 scroll-mt-24'>
+					<PropsTable rows={propRows} />
+				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='mt-4 place-content-start'>
+						<CopyCode
+							installs='yarn add react-hook-form lucide-react class-variance-authority'
+							code={componentCode}
+							fileName='artiux/components/inputNumber/index.tsx'
+						/>
+					</div>
+				</section>
 			</div>
 
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Código:</h3>
-				<div className='mt-4 h-52 place-content-start'>
-					<CopyCode installs='yarn add react-hook-form lucide-react class-variance-authority' code={componentCode} />
-				</div>
-			</section>
-
-			<section className='my-8'>
-				<PreviewCode code={previewCode}>
-					<div className='flex flex-wrap items-center gap-6'>
-						<InputNumber
-							name='quantidade'
-							control={control}
-							min={min}
-							max={max}
-							step={step}
-							disabled={disabled}
-							formatter={currency ? (v) => `R$ ${v}` : undefined}
-						/>
-						<InputNumber name='preco' control={control} min={0} max={1000} step={5} formatter={(v) => `R$ ${v}`} />
-						<InputNumber name='desabilitado' control={control} min={0} max={10} disabled />
-						<InputNumber name='quantidade' control={control} min={0} max={15} step={1} size='sm' />
-					</div>
-				</PreviewCode>
-			</section>
-
-			<section className='my-8'>
-				<Customize>
-					<ControlSlider label='Min' value={min} min={-50} max={50} onChange={setMin} />
-					<ControlSlider label='Max' value={max} min={0} max={200} onChange={setMax} />
-					<ControlSlider label='Step' value={step} min={1} max={20} onChange={setStep} />
-					<ControlSwitch label='Disabled' checked={disabled} onChange={setDisabled} />
-					<ControlSwitch label='Formatter (R$)' checked={currency} onChange={setCurrency} />
-				</Customize>
-			</section>
-
-			<section className='my-8'>
-				<PropsTable rows={propRows} />
-			</section>
-		</>
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

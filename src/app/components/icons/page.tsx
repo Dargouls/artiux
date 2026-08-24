@@ -4,7 +4,14 @@ import CopyCode from '@/components/copyCode/copyCode';
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
+import { Aside } from '@/artiux/components/aside';
 import { Icon, IconName } from '@/artiux/components/icons';
+
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'props', label: 'Props' },
+	{ id: 'code', label: 'Instalação' },
+];
 
 const iconGallery: IconName[] = [
 	'home',
@@ -43,46 +50,54 @@ const iconGallery: IconName[] = [
 
 export default function IconsComponent() {
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Icons</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>
-					Um barrel com centenas de ícones SVG, acessados por nome através do componente <code>Icon</code>
-				</p>
-				<p className='text-muted-foreground mt-2 block text-sm'>
-					Ícones cedidos por{' '}
-					<a href='https://mynaui.com/icons' target='_blank' rel='noreferrer' className='text-primary underline'>
-						MynaUI
-					</a>
-					. A ideia aqui é exemplificar que a API do <code>Icon</code> permite trocar de lib de ícones (MynaUI, Lucide, ou qualquer outra)
-					apenas alterando os SVGs no barrel — sem precisar alterar a implementação nos componentes finais que consomem <code>Icon</code>.
-				</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Icons</h1>
+					<p className='text-muted-foreground mt-4 block text-xl'>
+						Um barrel com centenas de ícones SVG, acessados por nome através do componente <code>Icon</code>
+					</p>
+					<p className='text-muted-foreground mt-2 block text-sm'>
+						Ícones cedidos por{' '}
+						<a href='https://mynaui.com/icons' target='_blank' rel='noreferrer' className='text-primary underline'>
+							MynaUI
+						</a>
+						. A ideia aqui é exemplificar que a API do <code>Icon</code> permite trocar de lib de ícones (MynaUI, Lucide, ou qualquer outra)
+						apenas alterando os SVGs no barrel — sem precisar alterar a implementação nos componentes finais que consomem <code>Icon</code>.
+					</p>
+				</div>
+
+				<section id='preview' className='my-8 scroll-mt-24'>
+					<PreviewCode code={previewCode}>
+						<div className='grid grid-cols-4 gap-4 sm:grid-cols-6 md:grid-cols-8'>
+							{iconGallery.map((name) => (
+								<div key={name} className='border-border bg-card flex flex-col items-center justify-center gap-2 rounded-lg border p-3'>
+									<Icon icon={name} className='text-primary size-6' />
+									<span className='text-muted-foreground text-center text-[10px] leading-tight'>{name}</span>
+								</div>
+							))}
+						</div>
+					</PreviewCode>
+				</section>
+
+				<section id='props' className='my-8 scroll-mt-24'>
+					<PropsTable rows={propRows} />
+				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='mt-4 place-content-start'>
+						<CopyCode
+							installs='yarn add @mynaui/icons-react lucide-react'
+							code={componentCode}
+							fileName='artiux/components/icons/index.tsx'
+						/>
+					</div>
+				</section>
 			</div>
 
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Código:</h3>
-				<div className='mt-4 h-52 place-content-start'>
-					<CopyCode installs='yarn add @mynaui/icons-react lucide-react' code={componentCode} />
-				</div>
-			</section>
-
-			<section className='my-8'>
-				<PreviewCode code={previewCode}>
-					<div className='grid grid-cols-4 gap-4 sm:grid-cols-6 md:grid-cols-8'>
-						{iconGallery.map((name) => (
-							<div key={name} className='border-border bg-card flex flex-col items-center justify-center gap-2 rounded-lg border p-3'>
-								<Icon icon={name} className='text-primary size-6' />
-								<span className='text-muted-foreground text-center text-[10px] leading-tight'>{name}</span>
-							</div>
-						))}
-					</div>
-				</PreviewCode>
-			</section>
-
-			<section className='my-8'>
-				<PropsTable rows={propRows} />
-			</section>
-		</>
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

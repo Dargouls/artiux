@@ -8,7 +8,14 @@ import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 import { cn } from '@/lib/utils';
 
+import { Aside } from '@/artiux/components/aside';
 import { CircularProgress } from '@/artiux/components/circularProgress';
+
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'props', label: 'Props' },
+	{ id: 'code', label: 'Instalação' },
+];
 
 const sizes = ['size-8', 'size-12', 'size-16', 'size-24'] as const;
 const colors = ['currentColor', 'text-primary', 'text-destructive', 'text-success', 'text-warning'] as const;
@@ -26,40 +33,44 @@ import { CircularProgress } from '@/artiux/components/circularProgress';
 `;
 
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Circular Progress</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>Um indicador de carregamento circular animado</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Circular Progress</h1>
+					<p className='text-muted-foreground mt-4 block text-xl'>Um indicador de carregamento circular animado</p>
+				</div>
+
+				<section id='preview' className='my-8 scroll-mt-24'>
+					<PreviewCode code={previewCode}>
+						<div className='flex flex-wrap items-center justify-center gap-8'>
+							<CircularProgress className={cn(size, color)} />
+							<CircularProgress className='text-primary size-12' />
+							<CircularProgress className='text-destructive size-16' />
+						</div>
+					</PreviewCode>
+				</section>
+
+				<section id='customize' className='my-8 scroll-mt-24'>
+					<Customize>
+						<ControlDropdown label='Tamanho' value={size} options={sizes} onChange={setSize} />
+						<ControlDropdown label='Cor' value={color} options={colors} onChange={setColor} />
+					</Customize>
+				</section>
+
+				<section id='props' className='my-8 scroll-mt-24'>
+					<PropsTable rows={propRows} />
+				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='mt-4 place-content-start'>
+						<CopyCode installs='' code={componentCode} fileName='artiux/components/circularProgress/index.tsx' />
+					</div>
+				</section>
 			</div>
 
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Código:</h3>
-				<div className='mt-4 h-52 place-content-start'>
-					<CopyCode installs='' code={componentCode} />
-				</div>
-			</section>
-
-			<section className='my-8'>
-				<PreviewCode code={previewCode}>
-					<div className='flex flex-wrap items-center justify-center gap-8'>
-						<CircularProgress className={cn(size, color)} />
-						<CircularProgress className='text-primary size-12' />
-						<CircularProgress className='text-destructive size-16' />
-					</div>
-				</PreviewCode>
-			</section>
-
-			<section className='my-8'>
-				<Customize>
-					<ControlDropdown label='Tamanho' value={size} options={sizes} onChange={setSize} />
-					<ControlDropdown label='Cor' value={color} options={colors} onChange={setColor} />
-				</Customize>
-			</section>
-
-			<section className='my-8'>
-				<PropsTable rows={propRows} />
-			</section>
-		</>
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

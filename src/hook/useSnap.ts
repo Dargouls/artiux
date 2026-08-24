@@ -51,14 +51,26 @@ const useSnap = (containerRef: RefObject<HTMLElement>) => {
 				snapScroll = ScrollTrigger.snapDirectional(scrollStarts);
 			});
 
-			// Criar observer para controlar o scroll
-			const observer = ScrollTrigger.observe({
+			const nearestIndex = (scroll: number) => {
+				let closest = 0;
+				let closestDiff = Infinity;
+				scrollStarts.forEach((start, i) => {
+					const diff = Math.abs(start - scroll);
+					if (diff < closestDiff) {
+						closestDiff = diff;
+						closest = i;
+					}
+				});
+				return closest;
+			};
+
+			// Observer do wheel: cada "tique" já representa um passo de painel
+			const wheelObserver = ScrollTrigger.observe({
 				type: 'wheel',
 				preventDefault: true,
 				tolerance: 10,
 				wheelSpeed: 5,
 				onChangeY(self) {
-					// Prevenir o scroll padrão para evitar conflitos
 					if (self.event) {
 						self.event.preventDefault();
 						self.event.stopPropagation();
@@ -73,11 +85,33 @@ const useSnap = (containerRef: RefObject<HTMLElement>) => {
 				},
 			});
 
+			// Observer de touch: usa o total do gesto (swipe) em vez de cada micro-evento
+			const touchObserver = ScrollTrigger.observe({
+				type: 'touch',
+				preventDefault: true,
+				tolerance: 10,
+				dragMinimum: 20,
+				onDragEnd(self) {
+					if (scrollTween.current) return;
+
+					// startY - y: positivo quando o dedo arrasta para cima (equivale a "scroll para frente")
+					const totalDelta = (self.startY ?? 0) - (self.y ?? 0);
+					if (Math.abs(totalDelta) < 20) return;
+
+					const direction = totalDelta > 0 ? 1 : -1;
+					const current = nearestIndex(window.scrollY);
+					const next = current + direction;
+
+					goToSection(Math.max(0, Math.min(next, scrollStarts.length - 1)));
+				},
+			});
+
 			ScrollTrigger.refresh();
 
 			// Cleanup function
 			return () => {
-				observer.kill();
+				wheelObserver.kill();
+				touchObserver.kill();
 				snapTriggers.current.forEach((trigger) => trigger.kill());
 				ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
 			};

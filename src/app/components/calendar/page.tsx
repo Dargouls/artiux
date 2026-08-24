@@ -7,7 +7,14 @@ import { ControlSlider, ControlSwitch, Customize } from '@/components/customize/
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
+import { Aside } from '@/artiux/components/aside';
 import { Calendar } from '@/artiux/components/calendar';
+
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'props', label: 'Props' },
+	{ id: 'code', label: 'Instalação' },
+];
 
 const WEEKEND_DAYS = [0, 6];
 
@@ -37,53 +44,57 @@ import { Calendar } from '@/artiux/components/calendar';
 `;
 
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Calendar</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>Um calendário para seleção de datas</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Calendar</h1>
+					<p className='text-muted-foreground mt-4 block text-xl'>Um calendário para seleção de datas</p>
+				</div>
+
+				<section id='preview' className='my-8 scroll-mt-24'>
+					<PreviewCode code={previewCode}>
+						<div className='flex flex-wrap items-start gap-8'>
+							<div className='flex flex-col gap-2'>
+								<span className='text-muted-foreground text-sm'>Preview interativo ({range ? 'intervalo' : 'data unica'})</span>
+								<Calendar
+									key={range ? 'range' : 'single'}
+									range={range}
+									disablePastDates={disablePastDates}
+									allowClickOnDisabled={allowClickOnDisabled}
+									disabledWeekdays={disableWeekends ? WEEKEND_DAYS : []}
+									monthsBefore={monthsBefore}
+									monthsAfter={monthsAfter}
+								/>
+							</div>
+						</div>
+					</PreviewCode>
+				</section>
+
+				<section id='customize' className='my-8 scroll-mt-24'>
+					<Customize>
+						<ControlSwitch label='Range' checked={range} onChange={setRange} />
+						<ControlSwitch label='Disable past dates' checked={disablePastDates} onChange={setDisablePastDates} />
+						<ControlSwitch label='Allow click on disabled' checked={allowClickOnDisabled} onChange={setAllowClickOnDisabled} />
+						<ControlSwitch label='Disable weekends' checked={disableWeekends} onChange={setDisableWeekends} />
+						<ControlSlider label='Months before' value={monthsBefore} min={0} max={24} onChange={setMonthsBefore} />
+						<ControlSlider label='Months after' value={monthsAfter} min={0} max={24} onChange={setMonthsAfter} />
+					</Customize>
+				</section>
+
+				<section id='props' className='my-8 scroll-mt-24'>
+					<PropsTable rows={propRows} />
+				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='mt-4 place-content-start'>
+						<CopyCode installs='yarn add dayjs zustand' code={componentCode} fileName='artiux/components/calendar/index.tsx' />
+					</div>
+				</section>
 			</div>
 
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Código:</h3>
-				<div className='mt-4 h-52 place-content-start'>
-					<CopyCode installs='yarn add dayjs zustand' code={componentCode} />
-				</div>
-			</section>
-
-			<section className='my-8'>
-				<PreviewCode code={previewCode}>
-					<div className='flex flex-wrap items-start gap-8'>
-						<div className='flex flex-col gap-2'>
-							<span className='text-muted-foreground text-sm'>Preview interativo ({range ? 'intervalo' : 'data unica'})</span>
-							<Calendar
-								key={range ? 'range' : 'single'}
-								range={range}
-								disablePastDates={disablePastDates}
-								allowClickOnDisabled={allowClickOnDisabled}
-								disabledWeekdays={disableWeekends ? WEEKEND_DAYS : []}
-								monthsBefore={monthsBefore}
-								monthsAfter={monthsAfter}
-							/>
-						</div>
-					</div>
-				</PreviewCode>
-			</section>
-
-			<section className='my-8'>
-				<Customize>
-					<ControlSwitch label='Range' checked={range} onChange={setRange} />
-					<ControlSwitch label='Disable past dates' checked={disablePastDates} onChange={setDisablePastDates} />
-					<ControlSwitch label='Allow click on disabled' checked={allowClickOnDisabled} onChange={setAllowClickOnDisabled} />
-					<ControlSwitch label='Disable weekends' checked={disableWeekends} onChange={setDisableWeekends} />
-					<ControlSlider label='Months before' value={monthsBefore} min={0} max={24} onChange={setMonthsBefore} />
-					<ControlSlider label='Months after' value={monthsAfter} min={0} max={24} onChange={setMonthsAfter} />
-				</Customize>
-			</section>
-
-			<section className='my-8'>
-				<PropsTable rows={propRows} />
-			</section>
-		</>
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

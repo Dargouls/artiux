@@ -7,7 +7,14 @@ import { ControlDropdown, Customize } from '@/components/customize/customize';
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
+import { Aside } from '@/artiux/components/aside';
 import { Text } from '@/artiux/components/text';
+
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'props', label: 'Props' },
+	{ id: 'code', label: 'Instalação' },
+];
 
 const typographies = [
 	'h1',
@@ -36,59 +43,63 @@ import { Text } from '@/artiux/components/text';
 `;
 
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Text</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>Um componente de texto com variantes tipográficas</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Text</h1>
+					<p className='text-muted-foreground mt-4 block text-xl'>Um componente de texto com variantes tipográficas</p>
+				</div>
+
+				<section id='preview' className='my-8 scroll-mt-24'>
+					<PreviewCode code={previewCode}>
+						<div className='flex flex-col items-start gap-2'>
+							{typographies.map((t) => (
+								<Text key={t} typography={t}>
+									Text
+								</Text>
+							))}
+						</div>
+					</PreviewCode>
+				</section>
+
+				<section id='customize' className='my-8 scroll-mt-24'>
+					<Customize>
+						<ControlDropdown label='Typography' value={typography} options={typographies} onChange={setTypography} />
+					</Customize>
+				</section>
+
+				<section id='props' className='my-8 scroll-mt-24'>
+					<PropsTable rows={propRows} />
+				</section>
+
+				<section className='my-8'>
+					<h3 className='text-2xl font-bold'>Variantes:</h3>
+					<div className='mt-4 flex flex-col items-start gap-2'>
+						<Text typography='h1'>Headline 1</Text>
+						<Text typography='h2'>Headline 2</Text>
+						<Text typography='h3'>Headline 3</Text>
+						<Text typography='h4'>Headline 4</Text>
+						<Text typography='h5'>Headline 5</Text>
+						<Text typography='subtitle-1'>Subtitle 1</Text>
+						<Text typography='subtitle-2'>Subtitle 2</Text>
+						<Text typography='body'>Body</Text>
+						<Text typography='description-1'>Description 1</Text>
+						<Text typography='description-2'>Description 2</Text>
+						<Text typography='action'>Action</Text>
+						<Text typography='caption'>Caption</Text>
+					</div>
+				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='mt-4 place-content-start'>
+						<CopyCode installs='yarn add class-variance-authority' code={componentCode} fileName='artiux/components/text/index.tsx' />
+					</div>
+				</section>
 			</div>
 
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Código:</h3>
-				<div className='mt-4 h-52 place-content-start'>
-					<CopyCode installs='yarn add class-variance-authority' code={componentCode} />
-				</div>
-			</section>
-
-			<section className='my-8'>
-				<PreviewCode code={previewCode}>
-					<div className='flex flex-col items-start gap-2'>
-						{typographies.map((t) => (
-							<Text key={t} typography={t}>
-								Text
-							</Text>
-						))}
-					</div>
-				</PreviewCode>
-			</section>
-
-			<section className='my-8'>
-				<Customize>
-					<ControlDropdown label='Typography' value={typography} options={typographies} onChange={setTypography} />
-				</Customize>
-			</section>
-
-			<section className='my-8'>
-				<PropsTable rows={propRows} />
-			</section>
-
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Variantes:</h3>
-				<div className='mt-4 flex flex-col items-start gap-2'>
-					<Text typography='h1'>Headline 1</Text>
-					<Text typography='h2'>Headline 2</Text>
-					<Text typography='h3'>Headline 3</Text>
-					<Text typography='h4'>Headline 4</Text>
-					<Text typography='h5'>Headline 5</Text>
-					<Text typography='subtitle-1'>Subtitle 1</Text>
-					<Text typography='subtitle-2'>Subtitle 2</Text>
-					<Text typography='body'>Body</Text>
-					<Text typography='description-1'>Description 1</Text>
-					<Text typography='description-2'>Description 2</Text>
-					<Text typography='action'>Action</Text>
-					<Text typography='caption'>Caption</Text>
-				</div>
-			</section>
-		</>
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

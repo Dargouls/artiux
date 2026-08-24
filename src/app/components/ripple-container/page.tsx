@@ -6,8 +6,15 @@ import CopyCode from '@/components/copyCode/copyCode';
 import { ControlColor, Customize } from '@/components/customize/customize';
 import { PropsTable } from '@/components/customize/propsTable';
 
+import { Aside } from '@/artiux/components/aside';
 import { RippleContainer } from '@/artiux/components/rippleContainer';
 import PreviewCode from '@/components/previewCode/previewCode';
+
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'props', label: 'Props' },
+	{ id: 'code', label: 'Instalação' },
+];
 
 export default function RippleContainerComponent() {
 	const [color, setColor] = useState('#919191');
@@ -25,40 +32,44 @@ import { RippleContainer } from '@/artiux/components/rippleContainer';
 `;
 
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Ripple Container</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>Container flexível com animação de ripple (útil também para botões)</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Ripple Container</h1>
+					<p className='text-muted-foreground mt-4 block text-xl'>Container flexível com animação de ripple (útil também para botões)</p>
+				</div>
+
+				<section id='preview' className='my-8 scroll-mt-24'>
+					<PreviewCode code={previewCode}>
+						<RippleContainer color={color}>
+							<div className='bg-secondary text-primary-foreground flex h-12 w-32 items-center justify-center rounded-md'>Eu sou uma div</div>
+						</RippleContainer>
+						<RippleContainer color={color}>
+							<button className='bg-primary text-primary-foreground ml-4 rounded-md px-4 py-2 hover:brightness-95'>Eu sou um botão</button>
+						</RippleContainer>
+					</PreviewCode>
+				</section>
+
+				<section id='customize' className='my-8 scroll-mt-24'>
+					<Customize>
+						<ControlColor label='Color' value={color} onChange={setColor} />
+					</Customize>
+				</section>
+
+				<section id='props' className='my-8 scroll-mt-24'>
+					<PropsTable rows={propRows} />
+				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='mt-4 place-content-start'>
+						<CopyCode installs='yarn add motion' code={componentCode} fileName='artiux/components/rippleContainer.tsx' />
+					</div>
+				</section>
 			</div>
 
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Código:</h3>
-				<div className='mt-4 h-52 place-content-start'>
-					<CopyCode installs='yarn add motion' code={componentCode} />
-				</div>
-			</section>
-
-			<section className='my-8'>
-				<PreviewCode code={previewCode}>
-					<RippleContainer color={color}>
-						<div className='bg-secondary text-primary-foreground flex h-12 w-32 items-center justify-center rounded-md'>Eu sou uma div</div>
-					</RippleContainer>
-					<RippleContainer color={color}>
-						<button className='bg-primary text-primary-foreground ml-4 rounded-md px-4 py-2 hover:brightness-95'>Eu sou um botão</button>
-					</RippleContainer>
-				</PreviewCode>
-			</section>
-
-			<section className='my-8'>
-				<Customize>
-					<ControlColor label='Color' value={color} onChange={setColor} />
-				</Customize>
-			</section>
-
-			<section className='my-8'>
-				<PropsTable rows={propRows} />
-			</section>
-		</>
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

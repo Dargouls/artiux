@@ -7,7 +7,14 @@ import { ControlDropdown, ControlSwitch, Customize } from '@/components/customiz
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
+import { Aside } from '@/artiux/components/aside';
 import { Badge } from '@/artiux/components/badge';
+
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'props', label: 'Props' },
+	{ id: 'code', label: 'Instalação' },
+];
 
 const colors = ['primary', 'warning', 'destructive', 'success', 'info'] as const;
 const sizes = ['lg', 'sm'] as const;
@@ -40,56 +47,65 @@ import { Badge } from '@/artiux/components/badge';
 `;
 
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Badge</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>Uma etiqueta compacta para status, categorias e contadores</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Badge</h1>
+					<p className='text-muted-foreground mt-4 block text-xl'>Uma etiqueta compacta para status, categorias e contadores</p>
+				</div>
+
+				<section id='preview' className='my-8 scroll-mt-24'>
+					<PreviewCode code={previewCode}>
+						<Badge
+							color={color}
+							size={size === 'lg' ? undefined : size}
+							ornament={ornament === 'none' ? undefined : ornament}
+							ornamentPosition={ornamentPosition}
+							active={active}
+						>
+							Badge
+						</Badge>
+						<Badge color='info' ornament='settings'>
+							Com ícone
+						</Badge>
+						<Badge color='destructive' active={false}>
+							Inativo
+						</Badge>
+						<Badge color='success' size='sm'>
+							Pequeno
+						</Badge>
+					</PreviewCode>
+				</section>
+
+				<section id='customize' className='my-8 scroll-mt-24'>
+					<Customize>
+						<ControlDropdown label='Color' value={color} options={colors} onChange={setColor} />
+						<ControlDropdown label='Size' value={size} options={sizes} onChange={setSize} />
+						<ControlDropdown label='Ornament' value={ornament} options={ornaments} onChange={setOrnament} />
+						<ControlDropdown
+							label='Ornament position'
+							value={ornamentPosition}
+							options={ornamentPositions}
+							onChange={setOrnamentPosition}
+						/>
+						<ControlSwitch label='Active' checked={active} onChange={setActive} />
+					</Customize>
+				</section>
+
+				<section id='props' className='my-8 scroll-mt-24'>
+					<PropsTable rows={propRows} />
+				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='mt-4 place-content-start'>
+						<CopyCode installs='yarn add class-variance-authority' code={componentCode} fileName='artiux/components/badge/index.tsx' />
+					</div>
+				</section>
 			</div>
 
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Código:</h3>
-				<div className='mt-4 h-52 place-content-start'>
-					<CopyCode installs='yarn add class-variance-authority' code={componentCode} />
-				</div>
-			</section>
-
-			<section className='my-8'>
-				<PreviewCode code={previewCode}>
-					<Badge
-						color={color}
-						size={size === 'lg' ? undefined : size}
-						ornament={ornament === 'none' ? undefined : ornament}
-						ornamentPosition={ornamentPosition}
-						active={active}
-					>
-						Badge
-					</Badge>
-					<Badge color='info' ornament='settings'>
-						Com ícone
-					</Badge>
-					<Badge color='destructive' active={false}>
-						Inativo
-					</Badge>
-					<Badge color='success' size='sm'>
-						Pequeno
-					</Badge>
-				</PreviewCode>
-			</section>
-
-			<section className='my-8'>
-				<Customize>
-					<ControlDropdown label='Color' value={color} options={colors} onChange={setColor} />
-					<ControlDropdown label='Size' value={size} options={sizes} onChange={setSize} />
-					<ControlDropdown label='Ornament' value={ornament} options={ornaments} onChange={setOrnament} />
-					<ControlDropdown label='Ornament position' value={ornamentPosition} options={ornamentPositions} onChange={setOrnamentPosition} />
-					<ControlSwitch label='Active' checked={active} onChange={setActive} />
-				</Customize>
-			</section>
-
-			<section className='my-8'>
-				<PropsTable rows={propRows} />
-			</section>
-		</>
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import { Aside } from '@/artiux/components/aside';
 import BubbleButton from '@/artiux/components/bubbleButton';
 import CopyCode from '@/components/copyCode/copyCode';
 import { ControlSlider, ControlSwitch, Customize } from '@/components/customize/customize';
@@ -9,6 +10,12 @@ import { PropsTable } from '@/components/customize/propsTable';
 import { Heart } from 'lucide-react';
 
 import PreviewCode from '@/components/previewCode/previewCode';
+
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'props', label: 'Props' },
+	{ id: 'code', label: 'Instalação' },
+];
 
 export default function BubbleButtonComponent() {
 	const [loading, setLoading] = useState(false);
@@ -32,53 +39,57 @@ import { Heart } from 'lucide-react';
 `;
 
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Bubble Button</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>Um botão com animação de SVGs flutuantes ao clicar</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Bubble Button</h1>
+					<p className='text-muted-foreground mt-4 block text-xl'>Um botão com animação de SVGs flutuantes ao clicar</p>
+				</div>
+
+				<section id='preview' className='my-8 scroll-mt-24'>
+					<PreviewCode code={previewCode}>
+						<BubbleButton
+							loading={loading}
+							svgDuration={svgDuration}
+							svgDelay={svgDelay}
+							bubbleIcon={<Heart size={16} color='white' fill='white' />}
+						>
+							❤
+						</BubbleButton>
+						<BubbleButton
+							className='ml-2'
+							loading={loading}
+							svgDuration={svgDuration}
+							svgDelay={svgDelay}
+							bubbleIcon={<Heart size={16} color='white' fill='white' />}
+						>
+							Componentes
+						</BubbleButton>
+					</PreviewCode>
+				</section>
+
+				<section id='customize' className='my-8 scroll-mt-24'>
+					<Customize>
+						<ControlSwitch label='Loading' checked={loading} onChange={setLoading} />
+						<ControlSlider label='SVG duration' value={svgDuration} min={0.5} max={5} step={0.5} unit='s' onChange={setSvgDuration} />
+						<ControlSlider label='SVG delay' value={svgDelay} min={0} max={0.5} step={0.05} unit='s' onChange={setSvgDelay} />
+					</Customize>
+				</section>
+
+				<section id='props' className='my-8 scroll-mt-24'>
+					<PropsTable rows={propRows} />
+				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='mt-4 place-content-start'>
+						<CopyCode installs='yarn add motion' code={dialogCode} fileName='artiux/components/bubbleButton.tsx' />
+					</div>
+				</section>
 			</div>
 
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Código:</h3>
-				<div className='mt-4 h-52 place-content-start'>
-					<CopyCode installs='yarn add motion' code={dialogCode} />
-				</div>
-			</section>
-
-			<section className='my-8'>
-				<PreviewCode code={previewCode}>
-					<BubbleButton
-						loading={loading}
-						svgDuration={svgDuration}
-						svgDelay={svgDelay}
-						bubbleIcon={<Heart size={16} color='white' fill='white' />}
-					>
-						❤
-					</BubbleButton>
-					<BubbleButton
-						className='ml-2'
-						loading={loading}
-						svgDuration={svgDuration}
-						svgDelay={svgDelay}
-						bubbleIcon={<Heart size={16} color='white' fill='white' />}
-					>
-						Componentes
-					</BubbleButton>
-				</PreviewCode>
-			</section>
-
-			<section className='my-8'>
-				<Customize>
-					<ControlSwitch label='Loading' checked={loading} onChange={setLoading} />
-					<ControlSlider label='SVG duration' value={svgDuration} min={0.5} max={5} step={0.5} unit='s' onChange={setSvgDuration} />
-					<ControlSlider label='SVG delay' value={svgDelay} min={0} max={0.5} step={0.05} unit='s' onChange={setSvgDelay} />
-				</Customize>
-			</section>
-
-			<section className='my-8'>
-				<PropsTable rows={propRows} />
-			</section>
-		</>
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

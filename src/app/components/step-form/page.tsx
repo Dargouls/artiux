@@ -1,35 +1,45 @@
 'use client';
 
+import { Aside } from '@/artiux/components/aside';
 import CopyCode from '@/components/copyCode/copyCode';
 
 import AnimatedForm from '@/components/animatedForm/animatedForm';
 import PreviewCode from '@/components/previewCode/previewCode';
 
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'code', label: 'Instalação' },
+];
+
 export default function StepFormComponent() {
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Step Form</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>
-					Um provider de formulário com animação passo-a-passo
-				</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Step Form</h1>
+					<p className='text-muted-foreground mt-4 block text-xl'>
+						Um provider de formulário com animação passo-a-passo
+					</p>
+				</div>
+
+				<section id='preview' className='my-8 scroll-mt-24'>
+					<PreviewCode code={previewCode}>
+						<div className='w-max'>
+							<AnimatedForm />
+						</div>
+					</PreviewCode>
+				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='mt-4 place-content-start'>
+						<CopyCode installs='yarn add motion' code={componentCode} fileName='components/stepFormProvider/stepFormProvider.tsx' />
+					</div>
+				</section>
 			</div>
 
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Código:</h3>
-				<div className='mt-4 h-52 place-content-start'>
-					<CopyCode installs='yarn add motion' code={componentCode} />
-				</div>
-			</section>
-
-			<section className='my-8'>
-				<PreviewCode code={previewCode}>
-					<div className='w-max'>
-						<AnimatedForm />
-					</div>
-				</PreviewCode>
-			</section>
-		</>
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

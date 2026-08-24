@@ -7,7 +7,14 @@ import { ControlSwitch, Customize } from '@/components/customize/customize';
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
+import { Aside } from '@/artiux/components/aside';
 import { CheckboxComposeItem } from '@/artiux/components/checkboxCompose';
+
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'props', label: 'Props' },
+	{ id: 'code', label: 'Instalação' },
+];
 
 export default function CheckboxComposeComponent() {
 	const [checked, setChecked] = useState(false);
@@ -35,51 +42,55 @@ import { CheckboxComposeItem } from '@/artiux/components/checkboxCompose';
 `;
 
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Checkbox Compose</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>Um card de checkbox com título, descrição, imagem e ação opcionais</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Checkbox Compose</h1>
+					<p className='text-muted-foreground mt-4 block text-xl'>Um card de checkbox com título, descrição, imagem e ação opcionais</p>
+				</div>
+
+				<section id='preview' className='my-8 scroll-mt-24'>
+					<PreviewCode code={previewCode}>
+						<div className='flex w-full max-w-md flex-col gap-4'>
+							<CheckboxComposeItem
+								title='Item 1'
+								description='Descrição'
+								actionName={withAction ? 'Visualizar' : undefined}
+								action={() => console.log(1)}
+								image={withImage ? '/image.png' : undefined}
+								checked={checked}
+								onCheckedChange={(value) => setChecked(value === true)}
+								disabled={disabled}
+							/>
+							<CheckboxComposeItem title='Item 2' description='Sem imagem e sem ação' />
+							<CheckboxComposeItem title='Item 3' description='Desabilitado' disabled />
+						</div>
+					</PreviewCode>
+				</section>
+
+				<section id='customize' className='my-8 scroll-mt-24'>
+					<Customize>
+						<ControlSwitch label='Checked' checked={checked} onChange={setChecked} />
+						<ControlSwitch label='Disabled' checked={disabled} onChange={setDisabled} />
+						<ControlSwitch label='Com imagem' checked={withImage} onChange={setWithImage} />
+						<ControlSwitch label='Com ação' checked={withAction} onChange={setWithAction} />
+					</Customize>
+				</section>
+
+				<section id='props' className='my-8 scroll-mt-24'>
+					<PropsTable rows={propRows} />
+				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='mt-4 place-content-start'>
+						<CopyCode installs='yarn add radix-ui' code={componentCode} fileName='artiux/components/checkboxCompose/index.tsx' />
+					</div>
+				</section>
 			</div>
 
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Código:</h3>
-				<div className='mt-4 h-52 place-content-start'>
-					<CopyCode installs='yarn add radix-ui' code={componentCode} />
-				</div>
-			</section>
-
-			<section className='my-8'>
-				<PreviewCode code={previewCode}>
-					<div className='flex w-full max-w-md flex-col gap-4'>
-						<CheckboxComposeItem
-							title='Item 1'
-							description='Descrição'
-							actionName={withAction ? 'Visualizar' : undefined}
-							action={() => console.log(1)}
-							image={withImage ? '/image.png' : undefined}
-							checked={checked}
-							onCheckedChange={(value) => setChecked(value === true)}
-							disabled={disabled}
-						/>
-						<CheckboxComposeItem title='Item 2' description='Sem imagem e sem ação' />
-						<CheckboxComposeItem title='Item 3' description='Desabilitado' disabled />
-					</div>
-				</PreviewCode>
-			</section>
-
-			<section className='my-8'>
-				<Customize>
-					<ControlSwitch label='Checked' checked={checked} onChange={setChecked} />
-					<ControlSwitch label='Disabled' checked={disabled} onChange={setDisabled} />
-					<ControlSwitch label='Com imagem' checked={withImage} onChange={setWithImage} />
-					<ControlSwitch label='Com ação' checked={withAction} onChange={setWithAction} />
-				</Customize>
-			</section>
-
-			<section className='my-8'>
-				<PropsTable rows={propRows} />
-			</section>
-		</>
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

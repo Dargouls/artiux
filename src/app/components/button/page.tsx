@@ -7,7 +7,14 @@ import { ControlDropdown, ControlSwitch, Customize } from '@/components/customiz
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
+import { Aside } from '@/artiux/components/aside';
 import { Button } from '@/artiux/components/button';
+
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'props', label: 'Props' },
+	{ id: 'code', label: 'Instalação' },
+];
 
 const variants = ['primary', 'secondary', 'ghost'] as const;
 const colors = ['primary', 'warning', 'destructive', 'success', 'info'] as const;
@@ -45,51 +52,59 @@ import { Button } from '@/artiux/components/button';
 `;
 
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Button</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>Um botão com efeito ripple, estado de loading e ornamentos</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Button</h1>
+					<p className='text-muted-foreground mt-4 block text-xl'>Um botão com efeito ripple, estado de loading e ornamentos</p>
+				</div>
+
+				<section id='preview' className='my-8 scroll-mt-24'>
+					<PreviewCode code={previewCode}>
+						<Button
+							variant={variant}
+							color={color}
+							size={size === 'lg' ? undefined : size}
+							ornament={ornament === 'none' ? undefined : ornament}
+							ornamentPosition={ornamentPosition}
+							loading={loading}
+							disabled={disabled}
+						>
+							Button
+						</Button>
+					</PreviewCode>
+				</section>
+
+				<section id='customize' className='my-8 scroll-mt-24'>
+					<Customize>
+						<ControlDropdown label='Variant' value={variant} options={variants} onChange={setVariant} />
+						<ControlDropdown label='Color' value={color} options={colors} onChange={setColor} />
+						<ControlDropdown label='Size' value={size} options={sizes} onChange={setSize} />
+						<ControlDropdown label='Ornament' value={ornament} options={ornaments} onChange={setOrnament} />
+						<ControlDropdown label='Ornament position' value={ornamentPosition} options={ornamentPositions} onChange={setOrnamentPosition} />
+						<ControlSwitch label='Loading' checked={loading} onChange={setLoading} />
+						<ControlSwitch label='Disabled' checked={disabled} onChange={setDisabled} />
+					</Customize>
+				</section>
+
+				<section id='props' className='my-8 scroll-mt-24'>
+					<PropsTable rows={propRows} />
+				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='mt-4 place-content-start'>
+						<CopyCode
+							installs='yarn add class-variance-authority motion lucide-react'
+							code={componentCode}
+							fileName='artiux/components/button/index.tsx'
+						/>
+					</div>
+				</section>
 			</div>
 
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Código:</h3>
-				<div className='mt-4 h-52 place-content-start'>
-					<CopyCode installs='yarn add class-variance-authority motion lucide-react' code={componentCode} />
-				</div>
-			</section>
-
-			<section className='my-8'>
-				<PreviewCode code={previewCode}>
-					<Button
-						variant={variant}
-						color={color}
-						size={size === 'lg' ? undefined : size}
-						ornament={ornament === 'none' ? undefined : ornament}
-						ornamentPosition={ornamentPosition}
-						loading={loading}
-						disabled={disabled}
-					>
-						Button
-					</Button>
-				</PreviewCode>
-			</section>
-
-			<section className='my-8'>
-				<Customize>
-					<ControlDropdown label='Variant' value={variant} options={variants} onChange={setVariant} />
-					<ControlDropdown label='Color' value={color} options={colors} onChange={setColor} />
-					<ControlDropdown label='Size' value={size} options={sizes} onChange={setSize} />
-					<ControlDropdown label='Ornament' value={ornament} options={ornaments} onChange={setOrnament} />
-					<ControlDropdown label='Ornament position' value={ornamentPosition} options={ornamentPositions} onChange={setOrnamentPosition} />
-					<ControlSwitch label='Loading' checked={loading} onChange={setLoading} />
-					<ControlSwitch label='Disabled' checked={disabled} onChange={setDisabled} />
-				</Customize>
-			</section>
-
-			<section className='my-8'>
-				<PropsTable rows={propRows} />
-			</section>
-		</>
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

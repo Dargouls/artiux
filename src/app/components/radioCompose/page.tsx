@@ -7,8 +7,15 @@ import { ControlSwitch, Customize } from '@/components/customize/customize';
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
+import { Aside } from '@/artiux/components/aside';
 import { RadioComposeItem } from '@/artiux/components/radioCompose';
 import { RadioGroup } from '@/artiux/components/radioGroup';
+
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'props', label: 'Props' },
+	{ id: 'code', label: 'Instalação' },
+];
 
 export default function RadioComposeComponent() {
 	const [withDescription, setWithDescription] = useState(true);
@@ -32,54 +39,58 @@ import { RadioGroup } from '@/artiux/components/radioGroup';
 `;
 
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Radio Compose</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>
-					Um card de opção de rádio com título, descrição e ação opcionais, para usar dentro de um RadioGroup
-				</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Radio Compose</h1>
+					<p className='text-muted-foreground mt-4 block text-xl'>
+						Um card de opção de rádio com título, descrição e ação opcionais, para usar dentro de um RadioGroup
+					</p>
+				</div>
+
+				<section id='preview' className='my-8 scroll-mt-24'>
+					<PreviewCode code={previewCode}>
+						<RadioGroup defaultValue='1' className='flex w-full max-w-md flex-col gap-4'>
+							<RadioComposeItem
+								title='Item 1'
+								value='1'
+								description={withDescription ? 'Descrição' : undefined}
+								actionName={withAction ? 'Visualizar' : undefined}
+								action={withAction ? () => console.log(1) : undefined}
+							/>
+							<RadioComposeItem
+								title='Item 2'
+								value='2'
+								description={withDescription ? 'Descrição' : undefined}
+								actionName={withAction ? 'Visualizar' : undefined}
+								action={withAction ? () => console.log(2) : undefined}
+							/>
+							<RadioComposeItem title='Item 3' description='Sem ação' value='3' />
+						</RadioGroup>
+					</PreviewCode>
+				</section>
+
+				<section id='customize' className='my-8 scroll-mt-24'>
+					<Customize>
+						<ControlSwitch label='Com descrição' checked={withDescription} onChange={setWithDescription} />
+						<ControlSwitch label='Com ação' checked={withAction} onChange={setWithAction} />
+					</Customize>
+				</section>
+
+				<section id='props' className='my-8 scroll-mt-24'>
+					<PropsTable rows={propRows} />
+				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='mt-4 place-content-start'>
+						<CopyCode installs='yarn add radix-ui' code={componentCode} fileName='artiux/components/radioCompose/index.tsx' />
+					</div>
+				</section>
 			</div>
 
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Código:</h3>
-				<div className='mt-4 h-52 place-content-start'>
-					<CopyCode installs='yarn add radix-ui' code={componentCode} />
-				</div>
-			</section>
-
-			<section className='my-8'>
-				<PreviewCode code={previewCode}>
-					<RadioGroup defaultValue='1' className='flex w-full max-w-md flex-col gap-4'>
-						<RadioComposeItem
-							title='Item 1'
-							value='1'
-							description={withDescription ? 'Descrição' : undefined}
-							actionName={withAction ? 'Visualizar' : undefined}
-							action={withAction ? () => console.log(1) : undefined}
-						/>
-						<RadioComposeItem
-							title='Item 2'
-							value='2'
-							description={withDescription ? 'Descrição' : undefined}
-							actionName={withAction ? 'Visualizar' : undefined}
-							action={withAction ? () => console.log(2) : undefined}
-						/>
-						<RadioComposeItem title='Item 3' description='Sem ação' value='3' />
-					</RadioGroup>
-				</PreviewCode>
-			</section>
-
-			<section className='my-8'>
-				<Customize>
-					<ControlSwitch label='Com descrição' checked={withDescription} onChange={setWithDescription} />
-					<ControlSwitch label='Com ação' checked={withAction} onChange={setWithAction} />
-				</Customize>
-			</section>
-
-			<section className='my-8'>
-				<PropsTable rows={propRows} />
-			</section>
-		</>
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

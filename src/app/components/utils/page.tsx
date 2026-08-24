@@ -1,24 +1,29 @@
+import { Aside } from '@/artiux/components/aside';
 import CopyCode from '@/components/copyCode/copyCode';
+
+const asideItems = [{ id: 'code', label: 'Instalação' }];
 
 export default function Utils() {
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Adicione os utilitários</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>
-					São as dependências básicas para copiar qualquer componente para o seu projeto
-				</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Adicione os utilitários</h1>
+					<p className='text-muted-foreground mt-4 block text-xl'>
+						São as dependências básicas para copiar qualquer componente para o seu projeto
+					</p>
+				</div>
 
-				<section>
-					<section className='my-8'>
-						<h3 className='text-2xl font-bold'>Código:</h3>
-						<div className='mt-4 h-52 place-content-start'>
-							<CopyCode installs='yarn add motion clsx tailwind-merge' code={code} />
-						</div>
-					</section>
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='mt-4 place-content-start'>
+						<CopyCode installs='yarn add motion clsx tailwind-merge' code={code} fileName='lib/utils.ts' />
+					</div>
 				</section>
 			</div>
-		</>
+
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

@@ -7,10 +7,17 @@ import { ControlDropdown, ControlSlider, ControlSwitch, Customize } from '@/comp
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
+import { Aside } from '@/artiux/components/aside';
 import { MultiSelect } from '@/artiux/components/multiSelect';
 import { useForm } from 'react-hook-form';
 
 const sizes = ['lg', 'sm'] as const;
+
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'props', label: 'Props' },
+	{ id: 'code', label: 'Instalação' },
+];
 
 export default function MultiSelectComponent() {
 	const { control } = useForm({
@@ -74,65 +81,73 @@ const options = [
 `;
 
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Multi Select</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>Um seletor de múltiplas opções em drawer, com busca e limite de seleção</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Multi Select</h1>
+					<p className='text-muted-foreground mt-4 block text-xl'>Um seletor de múltiplas opções em drawer, com busca e limite de seleção</p>
+				</div>
+
+				<section id='preview' className='my-8 scroll-mt-24'>
+					<PreviewCode code={previewCode}>
+						<div className='flex w-full max-w-xs flex-col gap-6'>
+							<div>
+								<span className='text-muted-foreground mb-1 block text-sm'>Com limite de seleção</span>
+								<MultiSelect
+									name='frameworks'
+									control={control as any}
+									options={frameworkOptions}
+									title='Frameworks'
+									description={`Escolha até ${maxSelections} frameworks`}
+									placeholder='Selecione...'
+									maxSelections={maxSelections}
+									searchPlaceholder='Buscar...'
+									size={size}
+									disabled={disabled}
+								/>
+							</div>
+
+							<div>
+								<span className='text-muted-foreground mb-1 block text-sm'>Tamanho pequeno</span>
+								<MultiSelect
+									name='tags'
+									control={tagsControl as any}
+									options={tagOptions}
+									title='Tags'
+									placeholder='Selecione as tags'
+									size='sm'
+								/>
+							</div>
+						</div>
+					</PreviewCode>
+				</section>
+
+				<section id='customize' className='my-8 scroll-mt-24'>
+					<Customize>
+						<ControlDropdown label='Size' value={size} options={sizes} onChange={setSize} />
+						<ControlSlider label='Max selections' value={maxSelections} min={1} max={9} step={1} onChange={setMaxSelections} />
+						<ControlSwitch label='Disabled' checked={disabled} onChange={setDisabled} />
+					</Customize>
+				</section>
+
+				<section id='props' className='my-8 scroll-mt-24'>
+					<PropsTable rows={propRows} />
+				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='mt-4 place-content-start'>
+						<CopyCode
+							installs='yarn add class-variance-authority motion react-hook-form'
+							code={componentCode}
+							fileName='artiux/components/multiSelect/index.tsx'
+						/>
+					</div>
+				</section>
 			</div>
 
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Código:</h3>
-				<div className='mt-4 h-52 place-content-start'>
-					<CopyCode installs='yarn add class-variance-authority motion react-hook-form' code={componentCode} />
-				</div>
-			</section>
-
-			<section className='my-8'>
-				<PreviewCode code={previewCode}>
-					<div className='flex w-full max-w-xs flex-col gap-6'>
-						<div>
-							<span className='text-muted-foreground mb-1 block text-sm'>Com limite de seleção</span>
-							<MultiSelect
-								name='frameworks'
-								control={control as any}
-								options={frameworkOptions}
-								title='Frameworks'
-								description={`Escolha até ${maxSelections} frameworks`}
-								placeholder='Selecione...'
-								maxSelections={maxSelections}
-								searchPlaceholder='Buscar...'
-								size={size}
-								disabled={disabled}
-							/>
-						</div>
-
-						<div>
-							<span className='text-muted-foreground mb-1 block text-sm'>Tamanho pequeno</span>
-							<MultiSelect
-								name='tags'
-								control={tagsControl as any}
-								options={tagOptions}
-								title='Tags'
-								placeholder='Selecione as tags'
-								size='sm'
-							/>
-						</div>
-					</div>
-				</PreviewCode>
-			</section>
-
-			<section className='my-8'>
-				<Customize>
-					<ControlDropdown label='Size' value={size} options={sizes} onChange={setSize} />
-					<ControlSlider label='Max selections' value={maxSelections} min={1} max={9} step={1} onChange={setMaxSelections} />
-					<ControlSwitch label='Disabled' checked={disabled} onChange={setDisabled} />
-				</Customize>
-			</section>
-
-			<section className='my-8'>
-				<PropsTable rows={propRows} />
-			</section>
-		</>
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

@@ -7,8 +7,15 @@ import { ControlDropdown, ControlSwitch, Customize } from '@/components/customiz
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
+import { Aside } from '@/artiux/components/aside';
 import { TextField } from '@/artiux/components/textField';
 import { useForm } from 'react-hook-form';
+
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'props', label: 'Props' },
+	{ id: 'code', label: 'Instalação' },
+];
 
 const sizes = ['lg', 'sm'] as const;
 const ornaments = ['none', 'settings', 'search'] as const;
@@ -51,54 +58,62 @@ const { control } = useForm({ defaultValues: { padrao: '' } });
 `;
 
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Text Field</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>
-					Um input de texto com máscara, ornamentos, tipos customizados (moeda) e mensagens de ajuda/erro
-				</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Text Field</h1>
+					<p className='text-muted-foreground mt-4 block text-xl'>
+						Um input de texto com máscara, ornamentos, tipos customizados (moeda) e mensagens de ajuda/erro
+					</p>
+				</div>
+
+				<section id='preview' className='my-8 scroll-mt-24'>
+					<PreviewCode code={previewCode}>
+						<div className='flex w-full max-w-sm flex-col gap-4'>
+							<TextField
+								name='padrao'
+								control={control}
+								placeholder='Placeholder'
+								size={size}
+								ornament={ornament === 'none' ? undefined : ornament}
+								ornamentPosition={ornamentPosition}
+								error={error}
+								helperText={error ? 'Campo obrigatório' : undefined}
+							/>
+							<TextField name='cpf' control={control} placeholder='CPF' ornament='search' ornamentPosition='left' mask='999.999.999-99' />
+							<TextField name='valor' control={control} placeholder='Valor' customType='currency' />
+							<TextField name='comErro' control={control} placeholder='Com erro' error helperText='Campo obrigatório' />
+						</div>
+					</PreviewCode>
+				</section>
+
+				<section id='customize' className='my-8 scroll-mt-24'>
+					<Customize>
+						<ControlDropdown label='Size' value={size} options={sizes} onChange={setSize} />
+						<ControlDropdown label='Ornament' value={ornament} options={ornaments} onChange={setOrnament} />
+						<ControlDropdown label='Ornament position' value={ornamentPosition} options={ornamentPositions} onChange={setOrnamentPosition} />
+						<ControlSwitch label='Error' checked={error} onChange={setError} />
+					</Customize>
+				</section>
+
+				<section id='props' className='my-8 scroll-mt-24'>
+					<PropsTable rows={propRows} />
+				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='mt-4 place-content-start'>
+						<CopyCode
+							installs='yarn add react-hook-form class-variance-authority @mona-health/react-input-mask'
+							code={componentCode}
+							fileName='artiux/components/textField/index.tsx'
+						/>
+					</div>
+				</section>
 			</div>
 
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Código:</h3>
-				<div className='mt-4 h-52 place-content-start'>
-					<CopyCode installs='yarn add react-hook-form class-variance-authority @mona-health/react-input-mask' code={componentCode} />
-				</div>
-			</section>
-
-			<section className='my-8'>
-				<PreviewCode code={previewCode}>
-					<div className='flex w-full max-w-sm flex-col gap-4'>
-						<TextField
-							name='padrao'
-							control={control}
-							placeholder='Placeholder'
-							size={size}
-							ornament={ornament === 'none' ? undefined : ornament}
-							ornamentPosition={ornamentPosition}
-							error={error}
-							helperText={error ? 'Campo obrigatório' : undefined}
-						/>
-						<TextField name='cpf' control={control} placeholder='CPF' ornament='search' ornamentPosition='left' mask='999.999.999-99' />
-						<TextField name='valor' control={control} placeholder='Valor' customType='currency' />
-						<TextField name='comErro' control={control} placeholder='Com erro' error helperText='Campo obrigatório' />
-					</div>
-				</PreviewCode>
-			</section>
-
-			<section className='my-8'>
-				<Customize>
-					<ControlDropdown label='Size' value={size} options={sizes} onChange={setSize} />
-					<ControlDropdown label='Ornament' value={ornament} options={ornaments} onChange={setOrnament} />
-					<ControlDropdown label='Ornament position' value={ornamentPosition} options={ornamentPositions} onChange={setOrnamentPosition} />
-					<ControlSwitch label='Error' checked={error} onChange={setError} />
-				</Customize>
-			</section>
-
-			<section className='my-8'>
-				<PropsTable rows={propRows} />
-			</section>
-		</>
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

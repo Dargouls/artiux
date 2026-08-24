@@ -7,15 +7,17 @@ import { cn } from '@/lib/utils';
 import { RippleContainer } from '../rippleContainer';
 import { textVariants } from '../text';
 
-const DrawerContext = React.createContext<{ fullScreen?: boolean }>({});
+const DrawerContext = React.createContext<{ fullScreen?: boolean; handle?: boolean }>({});
 
 export type DrawerProps = React.ComponentProps<typeof DrawerPrimitive.Root> & {
 	fullScreen?: boolean;
+	/** Exibe a barra de arrastar (handle). Padrão: true. */
+	handle?: boolean;
 };
 
-function Drawer({ fullScreen, ...props }: DrawerProps) {
+function Drawer({ fullScreen, handle = true, ...props }: DrawerProps) {
 	return (
-		<DrawerContext.Provider value={{ fullScreen }}>
+		<DrawerContext.Provider value={{ fullScreen, handle }}>
 			<DrawerPrimitive.Root data-slot='drawer' {...props} />
 		</DrawerContext.Provider>
 	);
@@ -50,7 +52,7 @@ function DrawerOverlay({ className, ...props }: React.ComponentProps<typeof Draw
 }
 
 function DrawerContent({ className, children, ...props }: React.ComponentProps<typeof DrawerPrimitive.Content>) {
-	const { fullScreen } = React.useContext(DrawerContext);
+	const { fullScreen, handle = true } = React.useContext(DrawerContext);
 
 	return (
 		<DrawerPortal data-slot='drawer-portal'>
@@ -71,7 +73,7 @@ function DrawerContent({ className, children, ...props }: React.ComponentProps<t
 				)}
 				{...props}
 			>
-				<DrawerHandle />
+				{handle && <DrawerHandle />}
 
 				{/* A MUDANÇA ESTÁ AQUI: overflow-y-auto e flex-1 */}
 				<div data-slot='drawer-scroll' className='w-full max-w-prose flex-1 overflow-y-auto overflow-x-hidden px-2'>

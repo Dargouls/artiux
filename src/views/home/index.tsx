@@ -78,19 +78,14 @@ export default function HomePage() {
 				</section>
 
 				{/* init - Ignore section */}
-				<section className='hidden h-screen bg-gradient-to-b from-black to-black md:block'>
+				<section className='block h-screen bg-gradient-to-b from-black to-black'>
 					<div className='relative flex h-full w-full flex-col'>
 						<Image src={ret} alt='logo' height={50} className='w-full' />
 						<div className='flex-1 bg-white' />
 					</div>
 				</section>
 
-				<section className='block md:hidden'>
-					<Image src={ret} alt='logo' height={50} className='w-full' />
-					<Image src={ret} alt='logo' height={50} className='w-full -translate-y-1 -rotate-180' />
-				</section>
-
-				<section className='hidden h-screen bg-gradient-to-b from-black to-black md:block'>
+				<section className='block h-screen bg-gradient-to-b from-black to-black'>
 					<div className='relative flex h-full w-full flex-col'>
 						<div className='flex-1 bg-white' />
 						<Image src={ret} alt='logo' height={50} className='w-full -translate-y-1 -rotate-180' />
@@ -101,7 +96,7 @@ export default function HomePage() {
 				<div ref={sectionRef} className='relative'>
 					<div className='absolute left-0 right-0 px-10'>
 						<Grainient
-							className='absolute !bottom-0 !left-0 !right-0 !top-20 !h-[calc(150vh)] rounded-[48]'
+							className='absolute !bottom-0 !left-0 !right-0 !top-20 !h-[120vh] rounded-[48] md:!h-[150vh]'
 							color1='#3e193e'
 							color2='#fefefe'
 							color3='#47484d'
@@ -129,7 +124,7 @@ export default function HomePage() {
 
 					<section className='panel @container flex h-screen w-full items-center justify-center pt-20 font-bold'>
 						<div className='relative z-10 flex h-full w-full flex-col items-center justify-center gap-8 overflow-hidden rounded-b-none text-center'>
-							<p className='max-w-xl text-3xl text-black'>
+							<p className='max-w-xl text-xl text-black sm:text-3xl'>
 								Desenhado para funcionar com <b>Next.js</b>, <b>Tailwindcss</b>, <b>React</b> e <b>Typescript</b>
 							</p>
 
@@ -160,7 +155,7 @@ export default function HomePage() {
 									</CardContent>
 								</Card>
 
-								<Card className='items-start'>
+								<Card className='hidden items-start md:flex'>
 									<CardHeader>
 										<CardTitle>Button Group</CardTitle>
 										<CardDescription>Botões agrupados</CardDescription>
@@ -180,7 +175,7 @@ export default function HomePage() {
 									</CardContent>
 								</Card>
 
-								<Card ripple className='items-start space-y-2'>
+								<Card ripple className='hidden items-start space-y-2 md:flex'>
 									<CardHeader>
 										<CardTitle>Card</CardTitle>
 										<CardDescription>Subtítulo</CardDescription>
@@ -197,7 +192,7 @@ export default function HomePage() {
 									</CardFooter>
 								</Card>
 
-								<Card className='items-start'>
+								<Card className='hidden items-start md:flex'>
 									<CardHeader>
 										<CardTitle>Input Number</CardTitle>
 										<CardDescription>Incremento e decremento</CardDescription>
@@ -207,7 +202,7 @@ export default function HomePage() {
 									</CardContent>
 								</Card>
 
-								<Card className='items-start'>
+								<Card className='hidden items-start md:flex'>
 									<CardHeader>
 										<CardTitle>Checkbox Compose</CardTitle>
 										<CardDescription>Checkbox com mais elementos</CardDescription>
@@ -220,11 +215,11 @@ export default function HomePage() {
 						</div>
 					</section>
 
-					<section className='panel relative flex h-screen flex-col justify-between text-center'>
-						<nav className='flex flex-1 items-end justify-center gap-4 px-4 pb-7'>
+					<section className='panel relative flex h-screen flex-col justify-start pt-40 text-center md:justify-between md:pt-0'>
+						<nav className='flex flex-none items-start justify-center gap-4 px-4 pb-7 md:flex-1 md:items-end'>
 							<CopyCode />
 						</nav>
-						<div className='flex h-56 flex-col items-center gap-4 pt-6'>
+						<div className='flex h-56 flex-col items-center gap-4 md:pt-6'>
 							<h1 className='font-poppins text-4xl font-light'>
 								Apenas copie e cole os componentes
 								<p>e use</p>

@@ -7,9 +7,16 @@ import { ControlDropdown, ControlSlider, ControlSwitch, Customize } from '@/comp
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
+import { Aside } from '@/artiux/components/aside';
 import { ProgressBar } from '@/artiux/components/progressBar';
 
 const labelPositions = ['right', 'top', 'bottom', 'left', 'none'] as const;
+
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'props', label: 'Props' },
+	{ id: 'code', label: 'Instalação' },
+];
 
 export default function ProgressBarComponent() {
 	const [progress, setProgress] = useState(50);
@@ -31,50 +38,54 @@ import { ProgressBar } from '@/artiux/components/progressBar';
 `;
 
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Progress Bar</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>Uma barra de progresso animada</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Progress Bar</h1>
+					<p className='text-muted-foreground mt-4 block text-xl'>Uma barra de progresso animada</p>
+				</div>
+
+				<section id='preview' className='my-8 scroll-mt-24'>
+					<PreviewCode code={previewCode}>
+						<div className='w-full max-w-md'>
+							<ProgressBar progress={progress} labelPosition={labelPosition} animated={animated} />
+						</div>
+					</PreviewCode>
+				</section>
+
+				<section id='customize' className='my-8 scroll-mt-24'>
+					<Customize>
+						<ControlSlider label='Progress' value={progress} min={0} max={100} step={1} unit='%' onChange={setProgress} />
+						<ControlDropdown label='Label position' value={labelPosition} options={labelPositions} onChange={setLabelPosition} />
+						<ControlSwitch label='Animated' checked={animated} onChange={setAnimated} />
+					</Customize>
+				</section>
+
+				<section id='props' className='my-8 scroll-mt-24'>
+					<PropsTable rows={propRows} />
+
+					<div className='mt-8'>
+						<h3 className='text-2xl font-bold'>Exemplos:</h3>
+						<div className='mt-4 flex w-full max-w-md flex-col gap-6'>
+							<ProgressBar progress={50} labelPosition='right' animated />
+							<ProgressBar progress={80} labelPosition='top' animated />
+							<ProgressBar progress={30} labelPosition='bottom' animated />
+							<ProgressBar progress={65} labelPosition='left' animated />
+							<ProgressBar progress={100} labelPosition='none' animated={false} />
+						</div>
+					</div>
+				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='mt-4 place-content-start'>
+						<CopyCode installs='yarn add class-variance-authority' code={componentCode} fileName='artiux/components/progressBar/index.tsx' />
+					</div>
+				</section>
 			</div>
 
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Código:</h3>
-				<div className='mt-4 h-52 place-content-start'>
-					<CopyCode installs='yarn add class-variance-authority' code={componentCode} />
-				</div>
-			</section>
-
-			<section className='my-8'>
-				<PreviewCode code={previewCode}>
-					<div className='w-full max-w-md'>
-						<ProgressBar progress={progress} labelPosition={labelPosition} animated={animated} />
-					</div>
-				</PreviewCode>
-			</section>
-
-			<section className='my-8'>
-				<Customize>
-					<ControlSlider label='Progress' value={progress} min={0} max={100} step={1} unit='%' onChange={setProgress} />
-					<ControlDropdown label='Label position' value={labelPosition} options={labelPositions} onChange={setLabelPosition} />
-					<ControlSwitch label='Animated' checked={animated} onChange={setAnimated} />
-				</Customize>
-			</section>
-
-			<section className='my-8'>
-				<PropsTable rows={propRows} />
-			</section>
-
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Exemplos:</h3>
-				<div className='mt-4 flex w-full max-w-md flex-col gap-6'>
-					<ProgressBar progress={50} labelPosition='right' animated />
-					<ProgressBar progress={80} labelPosition='top' animated />
-					<ProgressBar progress={30} labelPosition='bottom' animated />
-					<ProgressBar progress={65} labelPosition='left' animated />
-					<ProgressBar progress={100} labelPosition='none' animated={false} />
-				</div>
-			</section>
-		</>
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

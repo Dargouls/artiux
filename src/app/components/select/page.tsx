@@ -7,11 +7,18 @@ import { ControlDropdown, ControlSwitch, Customize } from '@/components/customiz
 import { PropsTable } from '@/components/customize/propsTable';
 import PreviewCode from '@/components/previewCode/previewCode';
 
+import { Aside } from '@/artiux/components/aside';
 import { Select } from '@/artiux/components/select';
 import { useForm } from 'react-hook-form';
 
 const sizes = ['lg', 'sm'] as const;
 const ornaments = ['none', 'globe', 'search', 'settings'] as const;
+
+const asideItems = [
+	{ id: 'preview', label: 'Prévia' },
+	{ id: 'props', label: 'Props' },
+	{ id: 'code', label: 'Instalação' },
+];
 
 export default function SelectComponent() {
 	const { control: statusControl } = useForm({
@@ -75,67 +82,75 @@ const options = [
 `;
 
 	return (
-		<>
-			<div>
-				<h1 className='mt-20 text-5xl font-bold'>Select</h1>
-				<p className='text-muted-foreground mt-4 block text-xl'>
-					Um seletor de opções responsivo: drawer no mobile e dropdown (Radix Select) no desktop, com suporte a ícone e descrição
-				</p>
+		<div className='flex items-start gap-10'>
+			<div className='min-w-0 flex-1'>
+				<div>
+					<h1 className='mt-20 text-5xl font-bold'>Select</h1>
+					<p className='text-muted-foreground mt-4 block text-xl'>
+						Um seletor de opções responsivo: drawer no mobile e dropdown (Radix Select) no desktop, com suporte a ícone e descrição
+					</p>
+				</div>
+
+				<section id='preview' className='my-8 scroll-mt-24'>
+					<PreviewCode code={previewCode}>
+						<div className='flex w-full max-w-xs flex-col gap-6'>
+							<div>
+								<span className='text-muted-foreground mb-1 block text-sm'>Padrão</span>
+								<Select
+									name='status'
+									control={statusControl}
+									options={statusOptions}
+									title='Status'
+									description={showDescription ? 'Selecione o status' : undefined}
+									placeholder='Selecionar'
+									size={size}
+									ornament={ornament === 'none' ? undefined : ornament}
+									content={() => <p className='text-muted-foreground text-sm'>O status define a situação do registro</p>}
+								/>
+							</div>
+
+							<div>
+								<span className='text-muted-foreground mb-1 block text-sm'>Com ícone (ornament)</span>
+								<Select
+									name='city'
+									control={cityControl}
+									options={cityOptions}
+									title='Cidade'
+									placeholder='Selecionar cidade'
+									ornament='globe'
+									size='sm'
+								/>
+							</div>
+						</div>
+					</PreviewCode>
+				</section>
+
+				<section id='customize' className='my-8 scroll-mt-24'>
+					<Customize>
+						<ControlDropdown label='Size' value={size} options={sizes} onChange={setSize} />
+						<ControlDropdown label='Ornament' value={ornament} options={ornaments} onChange={setOrnament} />
+						<ControlSwitch label='Description' checked={showDescription} onChange={setShowDescription} />
+					</Customize>
+				</section>
+
+				<section id='props' className='my-8 scroll-mt-24'>
+					<PropsTable rows={propRows} />
+				</section>
+
+				<section id='code' className='my-8 scroll-mt-24'>
+					<h3 className='text-2xl font-bold'>Instalação:</h3>
+					<div className='mt-4 place-content-start'>
+						<CopyCode
+							installs='yarn add class-variance-authority motion react-hook-form'
+							code={componentCode}
+							fileName='artiux/components/select/index.tsx'
+						/>
+					</div>
+				</section>
 			</div>
 
-			<section className='my-8'>
-				<h3 className='text-2xl font-bold'>Código:</h3>
-				<div className='mt-4 h-52 place-content-start'>
-					<CopyCode installs='yarn add class-variance-authority motion react-hook-form' code={componentCode} />
-				</div>
-			</section>
-
-			<section className='my-8'>
-				<PreviewCode code={previewCode}>
-					<div className='flex w-full max-w-xs flex-col gap-6'>
-						<div>
-							<span className='text-muted-foreground mb-1 block text-sm'>Padrão</span>
-							<Select
-								name='status'
-								control={statusControl}
-								options={statusOptions}
-								title='Status'
-								description={showDescription ? 'Selecione o status' : undefined}
-								placeholder='Selecionar'
-								size={size}
-								ornament={ornament === 'none' ? undefined : ornament}
-								content={() => <p className='text-muted-foreground text-sm'>O status define a situação do registro</p>}
-							/>
-						</div>
-
-						<div>
-							<span className='text-muted-foreground mb-1 block text-sm'>Com ícone (ornament)</span>
-							<Select
-								name='city'
-								control={cityControl}
-								options={cityOptions}
-								title='Cidade'
-								placeholder='Selecionar cidade'
-								ornament='globe'
-								size='sm'
-							/>
-						</div>
-					</div>
-				</PreviewCode>
-			</section>
-
-			<section className='my-8'>
-				<Customize>
-					<ControlDropdown label='Size' value={size} options={sizes} onChange={setSize} />
-					<ControlDropdown label='Ornament' value={ornament} options={ornaments} onChange={setOrnament} />
-					<ControlSwitch label='Description' checked={showDescription} onChange={setShowDescription} />
-				</Customize>
-			</section>
-
-			<section className='my-8'>
-				<PropsTable rows={propRows} />
-			</section>
-		</>
+			<Aside items={asideItems} />
+		</div>
 	);
 }
 

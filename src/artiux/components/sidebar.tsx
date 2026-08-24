@@ -4,6 +4,7 @@ import { Slot } from '@radix-ui/react-slot';
 import { cva, VariantProps } from 'class-variance-authority';
 import { GripVertical, PanelLeftIcon, SearchIcon } from 'lucide-react';
 import * as React from 'react';
+import { Drawer as DrawerPrimitive } from 'vaul';
 
 import { useIsMobile } from '@/artiux/hooks/use-mobile';
 
@@ -17,7 +18,7 @@ import { Icon } from '@iconify/react';
 import { motion } from 'motion/react';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import { Sheet } from './sheet';
+import { Accordion, useAccordionItem } from './accordion';
 import { textFieldVariants } from './textField';
 import Tooltip from './tooltip';
 
@@ -53,6 +54,24 @@ interface NavItem {
 	type?: 'header' | 'group' | 'separator' | 'footer';
 	logo?: string;
 	logoMini?: string;
+}
+
+const sidebarGroupLabelClass =
+	'text-sidebar-foreground/70 ring-sidebar-ring outline-hidden flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0';
+
+function AccordionGroupLinkLabel({ href, label }: { href: string; label?: string }) {
+	const { open, toggle } = useAccordionItem();
+
+	return (
+		<div className={cn(sidebarGroupLabelClass, 'justify-between')}>
+			<Link href={href} className='flex-1 truncate'>
+				{label}
+			</Link>
+			<button type='button' onClick={toggle} aria-expanded={open} aria-label='Toggle group' className='shrink-0 p-1'>
+				<Accordion.Chevron />
+			</button>
+		</div>
+	);
 }
 
 type SidebarContextProps = {
@@ -189,10 +208,15 @@ function SidebarProvider({
 		[state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]
 	);
 
+	const closeOnMobile = React.useCallback(() => {
+		if (isMobile) setOpenMobile(false);
+	}, [isMobile, setOpenMobile]);
+
 	const renderNavItems = (items: NavItem[], state: 'expanded' | 'collapsed') => {
 		const headerItems = items.filter((item) => item.type === 'header');
 		const footerItems = items.filter((item) => item.type === 'footer');
 		const mainItems = items.filter((item) => item.type !== 'header' && item.type !== 'footer');
+		const groupValues = mainItems.filter((item) => item.type === 'group').map((item, index) => item.label || `group-${index}`);
 
 		return (
 			<>
@@ -255,50 +279,65 @@ function SidebarProvider({
 				)}
 
 				<SidebarContent>
-					{mainItems.map((item, index) => {
-						if (item.type === 'separator') {
-							return <SidebarSeparator key={index} />;
-						}
+					<Accordion type='multiple' defaultValue={groupValues}>
+						{mainItems.map((item, index) => {
+							if (item.type === 'separator') {
+								return <SidebarSeparator key={index} />;
+							}
 
-						if (item.type === 'group') {
+							if (item.type === 'group') {
+								const value = item.label || `group-${index}`;
+
+								return (
+									<Accordion.Item key={index} value={value}>
+										<SidebarGroup>
+											{item.href ? (
+												<AccordionGroupLinkLabel href={item.href} label={item.label} />
+											) : (
+												<Accordion.Trigger className={sidebarGroupLabelClass}>
+													{item.label}
+													<Accordion.Chevron />
+												</Accordion.Trigger>
+											)}
+											<Accordion.Content>
+												<SidebarGroupContent>
+													<SidebarMenu>
+														{item.items?.map((subItem, subIndex) => (
+															<SidebarMenuItem key={subIndex}>
+																<SidebarMenuButton asChild isActive={pathname === subItem.href} onClick={closeOnMobile}>
+																	<Link href={subItem.href || '/'}>
+																		{subItem.icon && <Icon icon={subItem.icon} />}
+																		<span>{subItem.label}</span>
+																	</Link>
+																</SidebarMenuButton>
+															</SidebarMenuItem>
+														))}
+													</SidebarMenu>
+												</SidebarGroupContent>
+											</Accordion.Content>
+										</SidebarGroup>
+									</Accordion.Item>
+								);
+							}
+
 							return (
 								<SidebarGroup key={index}>
-									<SidebarGroupLabel>{item.label}</SidebarGroupLabel>
 									<SidebarGroupContent>
 										<SidebarMenu>
-											{item.items?.map((subItem, subIndex) => (
-												<SidebarMenuItem key={subIndex}>
-													<SidebarMenuButton asChild isActive={pathname === subItem.href}>
-														<Link href={subItem.href || '/'}>
-															{subItem.icon && <Icon icon={subItem.icon} />}
-															<span>{subItem.label}</span>
-														</Link>
-													</SidebarMenuButton>
-												</SidebarMenuItem>
-											))}
+											<SidebarMenuItem>
+												<SidebarMenuButton asChild isActive={pathname === item.href} onClick={closeOnMobile}>
+													<Link href={item.href || '/'}>
+														{item.icon && <Icon icon={item.icon} />}
+														<span>{item.label}</span>
+													</Link>
+												</SidebarMenuButton>
+											</SidebarMenuItem>
 										</SidebarMenu>
 									</SidebarGroupContent>
 								</SidebarGroup>
 							);
-						}
-
-						return (
-							<SidebarGroup key={index}>
-								<SidebarGroupContent>
-									<SidebarMenu>
-										<SidebarMenuItem>
-											<SidebarMenuButton asChild isActive={pathname === item.href}>
-												<Link href={item.href || '/'}>
-													{item.icon && <Icon icon={item.icon} />}
-													<span>{item.label}</span>
-												</Link>
-											</SidebarMenuButton>
-										</SidebarMenuItem>
-									</SidebarMenu>
-								</SidebarGroupContent>
-							</SidebarGroup>
-						);
-					})}
+						})}
+					</Accordion>
 				</SidebarContent>
 
 				{footerItems.length > 0 && (
@@ -384,26 +423,29 @@ function Sidebar({
 
 	if (isMobile) {
 		return (
-			<Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
-				<Sheet.Content
-					data-sidebar='sidebar'
-					data-slot='sidebar'
-					data-mobile='true'
-					className='bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden'
-					style={
-						{
-							'--sidebar-width': SIDEBAR_WIDTH_MOBILE,
-						} as React.CSSProperties
-					}
-					side={side}
-				>
-					<Sheet.Header className='sr-only'>
-						<Sheet.Title>Sidebar</Sheet.Title>
-						<Sheet.Description>Displays the mobile sidebar.</Sheet.Description>
-					</Sheet.Header>
-					<div className='flex h-full w-full flex-col'>{children}</div>
-				</Sheet.Content>
-			</Sheet>
+			<DrawerPrimitive.Root open={openMobile} onOpenChange={setOpenMobile} direction={side}>
+				<DrawerPrimitive.Portal>
+					<DrawerPrimitive.Overlay className='fixed inset-0 z-[9998] bg-black/50' />
+					<DrawerPrimitive.Content
+						data-sidebar='sidebar'
+						data-slot='sidebar'
+						data-mobile='true'
+						className={cn(
+							'bg-sidebar text-sidebar-foreground w-(--sidebar-width) fixed inset-y-0 z-[9999] flex h-full flex-col p-0 outline-none',
+							side === 'left' ? 'left-0' : 'right-0'
+						)}
+						style={
+							{
+								'--sidebar-width': SIDEBAR_WIDTH_MOBILE,
+							} as React.CSSProperties
+						}
+					>
+						<DrawerPrimitive.Title className='sr-only'>Sidebar</DrawerPrimitive.Title>
+						<DrawerPrimitive.Description className='sr-only'>Displays the mobile sidebar.</DrawerPrimitive.Description>
+						<div className='flex h-full w-full flex-col'>{children}</div>
+					</DrawerPrimitive.Content>
+				</DrawerPrimitive.Portal>
+			</DrawerPrimitive.Root>
 		);
 	}
 
@@ -511,7 +553,7 @@ function SidebarInset({ className, ...props }: React.ComponentProps<'main'>) {
 			data-slot='sidebar-inset'
 			className={cn(
 				'md:scrollbar-thin md:scrollbar-thumb-zinc-400 md:scrollbar-track-zinc-100/0',
-				'bg-background relative h-screen w-full flex-1 flex-col overflow-auto p-4',
+				'bg-background relative h-screen w-full flex-1 flex-col overflow-auto px-4 py-4',
 				'border-sidebar md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-tl-xl md:peer-data-[variant=inset]:border-t-2 md:peer-data-[variant=inset]:shadow-sm',
 				className
 			)}
