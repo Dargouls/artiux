@@ -219,7 +219,20 @@ function SelectDesktop<TFieldValues extends FieldValues>({
 								<Icon icon={ornament} className={cn('text-emphasis-mid', size === 'sm' ? 'size-4' : 'size-5')} />
 							</span>
 						)}
-						<SelectPrimitive.Value placeholder={placeholder}>{selected?.label || placeholder}</SelectPrimitive.Value>
+						<SelectPrimitive.Value placeholder={placeholder}>
+							<AnimatePresence mode='wait'>
+								<motion.span
+									key={value || 'placeholder'}
+									initial={{ translateY: '150%', opacity: 0 }}
+									animate={{ translateY: 0, opacity: 1 }}
+									exit={{ translateY: '-150%', opacity: 0 }}
+									transition={{ duration: 0.2, ease: 'easeInOut', type: 'spring' }}
+									className='inline-block'
+								>
+									{selected?.label || placeholder}
+								</motion.span>
+							</AnimatePresence>
+						</SelectPrimitive.Value>
 					</span>
 
 					<SelectPrimitive.Icon asChild>
