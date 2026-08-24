@@ -8,7 +8,7 @@ import { Color, getColors } from '@/artiux/utils/getColors';
 import { motion } from 'motion/react';
 import { CircularProgress } from '../circularProgress';
 import { Icon, IconName } from '../icons';
-import { RippleContainer } from '../rippleContainer';
+import { RippleContainer } from '../rippleContainer/rippleContainer';
 import { textVariants } from '../text';
 
 export interface ButtonProps extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {

@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { motion } from 'motion/react';
 import { CircularProgress } from '../circularProgress';
 import { Icon, IconName } from '../icons';
-import { RippleContainer } from '../rippleContainer';
+import { RippleContainer } from '../rippleContainer/rippleContainer';
 
 export interface IconButtonProps extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
 	iconClassname?: string;

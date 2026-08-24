@@ -7,7 +7,7 @@ import { ControlColor, Customize } from '@/components/customize/customize';
 import { PropsTable } from '@/components/customize/propsTable';
 
 import { Aside } from '@/artiux/components/aside';
-import { RippleContainer } from '@/artiux/components/rippleContainer';
+import { RippleContainer } from '@/artiux/components/rippleContainer/rippleContainer';
 import PreviewCode from '@/components/previewCode/previewCode';
 
 const asideItems = [
@@ -42,7 +42,9 @@ import { RippleContainer } from '@/artiux/components/rippleContainer';
 				<section id='preview' className='my-8 scroll-mt-24'>
 					<PreviewCode code={previewCode}>
 						<RippleContainer color={color}>
-							<div className='bg-secondary text-primary-foreground flex h-12 w-32 items-center justify-center rounded-md'>Eu sou uma div</div>
+							<div className='bg-secondary text-primary-foreground flex h-12 w-32 items-center justify-center rounded-md'>
+								Eu sou uma div
+							</div>
 						</RippleContainer>
 						<RippleContainer color={color}>
 							<button className='bg-primary text-primary-foreground ml-4 rounded-md px-4 py-2 hover:brightness-95'>Eu sou um botão</button>

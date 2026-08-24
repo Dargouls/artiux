@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { VariantProps } from 'class-variance-authority';
-import { RippleContainer } from '../rippleContainer';
+import { RippleContainer } from '../rippleContainer/rippleContainer';
 import { textVariants } from '../text';
 
 export interface CardProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {

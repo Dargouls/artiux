@@ -2,7 +2,7 @@
 
 import { Aside } from '@/artiux/components/aside';
 import { Button } from '@/artiux/components/button';
-import Dialog from '@/artiux/components/dialog';
+import Dialog from '@/artiux/components/dialog/dialog';
 import CopyCode from '@/components/copyCode/copyCode';
 import { ControlSwitch, Customize } from '@/components/customize/customize';
 import { PropsTable } from '@/components/customize/propsTable';

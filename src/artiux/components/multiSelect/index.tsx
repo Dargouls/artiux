@@ -12,7 +12,7 @@ import { Button, ButtonProps } from '@/artiux/components/button';
 import { ButtonGroup } from '@/artiux/components/buttonGroup';
 import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from '@/artiux/components/drawer';
 import { Icon } from '@/artiux/components/icons';
-import { RippleContainer } from '@/artiux/components/rippleContainer';
+import { RippleContainer } from '@/artiux/components/rippleContainer/rippleContainer';
 import { TextField } from '@/artiux/components/textField';
 import { useIsMobile } from '@/artiux/hooks/use-mobile';
 

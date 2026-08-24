@@ -11,7 +11,7 @@ import { Button, ButtonProps } from '@/artiux/components/button';
 import { ButtonGroup } from '@/artiux/components/buttonGroup';
 import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerProps, DrawerTitle } from '@/artiux/components/drawer';
 import { Icon, IconName } from '@/artiux/components/icons';
-import { RippleContainer } from '@/artiux/components/rippleContainer';
+import { RippleContainer } from '@/artiux/components/rippleContainer/rippleContainer';
 import { textVariants } from '@/artiux/components/text';
 import { textFieldVariants } from '@/artiux/components/textField';
 import { useIsMobile } from '@/artiux/hooks/use-mobile';

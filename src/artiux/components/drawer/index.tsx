@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Drawer as DrawerPrimitive } from 'vaul';
 
 import { cn } from '@/lib/utils';
-import { RippleContainer } from '../rippleContainer';
+import { RippleContainer } from '../rippleContainer/rippleContainer';
 import { textVariants } from '../text';
 
 const DrawerContext = React.createContext<{ fullScreen?: boolean; handle?: boolean }>({});

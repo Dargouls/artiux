@@ -1,4 +1,4 @@
-import { RippleContainer } from '@/artiux/components/rippleContainer';
+import { RippleContainer } from '@/artiux/components/rippleContainer/rippleContainer';
 import { Link } from '@/components/link';
 import Image, { StaticImageData } from 'next/image';
 import { LinkProps } from 'next/link';

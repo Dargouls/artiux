@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 
 import ret from '@/assets/brand/retangle.svg';
 
-import BubbleButton from '@/artiux/components/bubbleButton';
+import BubbleButton from '@/artiux/components/bubbleButton/bubbleButton';
 import { Button } from '@/artiux/components/button';
 import { ButtonGroup } from '@/artiux/components/buttonGroup';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/artiux/components/card';

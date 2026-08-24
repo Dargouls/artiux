@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import { Aside } from '@/artiux/components/aside';
-import BubbleButton from '@/artiux/components/bubbleButton';
+import BubbleButton from '@/artiux/components/bubbleButton/bubbleButton';
 import CopyCode from '@/components/copyCode/copyCode';
 import { ControlSlider, ControlSwitch, Customize } from '@/components/customize/customize';
 import { PropsTable } from '@/components/customize/propsTable';
