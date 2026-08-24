@@ -16,7 +16,7 @@ function humanizeSegment(segment: string) {
 		.join(' ');
 }
 
-export default function Breadcrumb() {
+export function Breadcrumb() {
 	const pathname = usePathname();
 	const segments = pathname.split('/').filter(Boolean);
 
@@ -28,7 +28,7 @@ export default function Breadcrumb() {
 	}));
 
 	return (
-		<nav className='mt-20 flex items-center gap-2 text-sm text-muted-foreground' aria-label='Breadcrumb'>
+		<nav className='text-muted-foreground mt-20 flex items-center gap-2 text-sm' aria-label='Breadcrumb'>
 			{items.map((item, index) => {
 				const isLast = index === items.length - 1;
 
@@ -36,7 +36,7 @@ export default function Breadcrumb() {
 					<Fragment key={item.href}>
 						{index > 0 && <Icon icon='chevron-right' className='size-3.5' />}
 						{isLast ? (
-							<span className='font-medium text-foreground'>{item.label}</span>
+							<span className='text-foreground font-medium'>{item.label}</span>
 						) : (
 							<Link href={item.href} variant='ghost' className='hover:text-foreground'>
 								{item.label}

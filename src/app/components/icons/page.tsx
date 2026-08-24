@@ -43,7 +43,6 @@ const iconGallery: IconName[] = [
 	'alert',
 	'success',
 	'error',
-	'trophy',
 	'premium',
 	'cloud',
 ];

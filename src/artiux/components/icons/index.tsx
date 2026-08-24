@@ -1205,7 +1205,6 @@ import {
 	IndifferentSquareSolid,
 	Infinity,
 	InfinitySolid,
-	Info,
 	InfoCircle,
 	InfoCircleSolid,
 	InfoDiamond,
@@ -2620,7 +2619,6 @@ import {
 	ZeroWaves,
 	ZeroWavesSolid,
 } from '@mynaui/icons-react';
-import { Cloud as CloudCheck, Settings, Trophy } from 'lucide-react';
 
 export const iconMap = {
 	// aliases semânticos do app (compatibilidade)
@@ -2628,10 +2626,8 @@ export const iconMap = {
 	alert: DangerWaves,
 	error: XWaves,
 	info: InfoWaves,
-	'cloud-check': CloudCheck,
-	trophy: Trophy,
 	premium: Diamond,
-	settings: Settings,
+	settings: CogTwo,
 	'sidebar-toggler': PanelLeft,
 	eye: Eye,
 	search: Search,
@@ -4764,7 +4760,6 @@ export const iconMap = {
 	'cog-one/solid': CogOneSolid,
 	'cog-three': CogThree,
 	'cog-three/solid': CogThreeSolid,
-	'cog-two': CogTwo,
 	'cog-two/solid': CogTwoSolid,
 	'cog/solid': CogSolid,
 	command: Command,

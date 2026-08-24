@@ -46,6 +46,8 @@ export function RippleContainer({ color = 'rgba(56, 56, 56, 0.4)', children }: R
 		addRipple(event);
 	};
 
+	if (!React.isValidElement(children)) return children;
+
 	const child = children as React.ReactElement<any, any>;
 
 	return React.cloneElement(child, {
