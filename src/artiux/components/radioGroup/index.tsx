@@ -2,7 +2,6 @@
 
 import { cn } from '@/lib/utils';
 import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform, useVelocity, type MotionValue } from 'motion/react';
-import { RadioGroup as RadioGroupPrimitive } from 'radix-ui';
 import * as React from 'react';
 
 type DotPosition = { x: number; y: number };
@@ -24,18 +23,75 @@ function LiquidBlob({ x, y }: { x: MotionValue<number>; y: MotionValue<number> }
 	);
 }
 
-const RadioGroupContext = React.createContext<{
+type RadioGroupContextValue = {
+	value?: string;
+	setValue: (value: string) => void;
+	disabled?: boolean;
+	orientation: 'horizontal' | 'vertical';
 	registerItem: (value: string, node: HTMLButtonElement | null) => void;
-} | null>(null);
+	registerAnchor: (value: string, node: HTMLElement | null) => void;
+};
 
-export type RadioGroupProps = React.ComponentProps<typeof RadioGroupPrimitive.Root>;
-function RadioGroup({ className, value, defaultValue, onValueChange, children, ...props }: RadioGroupProps) {
+const RadioGroupContext = React.createContext<RadioGroupContextValue | null>(null);
+
+function useRadioGroupContext(component: string) {
+	const context = React.useContext(RadioGroupContext);
+	if (!context) throw new Error(`${component} must be used within a RadioGroup`);
+	return context;
+}
+
+function useRadioGroupItemRef(value: string) {
+	const context = useRadioGroupContext('useRadioGroupItemRef');
+
+	return React.useCallback(
+		(node: HTMLButtonElement | null) => {
+			context.registerItem(value, node);
+		},
+		[context, value]
+	);
+}
+
+function useRadioGroupAnchorRef(value: string) {
+	const context = useRadioGroupContext('useRadioGroupAnchorRef');
+
+	return React.useCallback(
+		(node: HTMLElement | null) => {
+			context.registerAnchor(value, node);
+		},
+		[context, value]
+	);
+}
+
+export type RadioGroupProps = Omit<React.ComponentProps<'div'>, 'onChange'> & {
+	value?: string;
+	defaultValue?: string;
+	onValueChange?: (value: string) => void;
+	orientation?: 'horizontal' | 'vertical';
+	disabled?: boolean;
+	name?: string;
+	required?: boolean;
+};
+
+function RadioGroup({
+	className,
+	value,
+	defaultValue,
+	onValueChange,
+	orientation = 'vertical',
+	disabled,
+	name,
+	required,
+	children,
+	onKeyDown,
+	...props
+}: RadioGroupProps) {
 	const [internalValue, setInternalValue] = React.useState(value ?? defaultValue);
 	const currentValue = value !== undefined ? value : internalValue;
 
 	const gooId = React.useId();
 	const containerRef = React.useRef<HTMLDivElement>(null);
 	const itemsRef = React.useRef(new Map<string, HTMLButtonElement>());
+	const anchorsRef = React.useRef(new Map<string, HTMLElement>());
 	const [dot, setDot] = React.useState<DotPosition | null>(null);
 
 	const targetX = useMotionValue(0);
@@ -47,16 +103,16 @@ function RadioGroup({ className, value, defaultValue, onValueChange, children, .
 
 	const updateDot = React.useCallback(() => {
 		const container = containerRef.current;
-		const item = currentValue ? itemsRef.current.get(currentValue) : null;
-		if (!container || !item) {
+		const anchor = currentValue ? (anchorsRef.current.get(currentValue) ?? itemsRef.current.get(currentValue)) : null;
+		if (!container || !anchor) {
 			setDot(null);
 			return;
 		}
 		const containerRect = container.getBoundingClientRect();
-		const itemRect = item.getBoundingClientRect();
+		const anchorRect = anchor.getBoundingClientRect();
 		setDot({
-			x: itemRect.left - containerRect.left + itemRect.width / 2,
-			y: itemRect.top - containerRect.top + itemRect.height / 2,
+			x: anchorRect.left - containerRect.left + anchorRect.width / 2,
+			y: anchorRect.top - containerRect.top + anchorRect.height / 2,
 		});
 	}, [currentValue]);
 
@@ -76,25 +132,65 @@ function RadioGroup({ className, value, defaultValue, onValueChange, children, .
 		return () => window.removeEventListener('resize', onResize);
 	}, [updateDot]);
 
+	const setValue = React.useCallback(
+		(next: string) => {
+			setInternalValue(next);
+			onValueChange?.(next);
+		},
+		[onValueChange]
+	);
+
 	const registerItem = React.useCallback((itemValue: string, node: HTMLButtonElement | null) => {
 		if (node) itemsRef.current.set(itemValue, node);
 		else itemsRef.current.delete(itemValue);
 	}, []);
 
-	const contextValue = React.useMemo(() => ({ registerItem }), [registerItem]);
+	const registerAnchor = React.useCallback((itemValue: string, node: HTMLElement | null) => {
+		if (node) anchorsRef.current.set(itemValue, node);
+		else anchorsRef.current.delete(itemValue);
+	}, []);
+
+	const contextValue = React.useMemo<RadioGroupContextValue>(
+		() => ({ value: currentValue, setValue, disabled, orientation, registerItem, registerAnchor }),
+		[currentValue, setValue, disabled, orientation, registerItem, registerAnchor]
+	);
+
+	const handleKeyDown = React.useCallback(
+		(event: React.KeyboardEvent<HTMLDivElement>) => {
+			onKeyDown?.(event);
+			if (event.defaultPrevented || disabled) return;
+
+			const nextKey = orientation === 'vertical' ? 'ArrowDown' : 'ArrowRight';
+			const prevKey = orientation === 'vertical' ? 'ArrowUp' : 'ArrowLeft';
+			if (![nextKey, prevKey].includes(event.key)) return;
+
+			const values = Array.from(itemsRef.current.keys());
+			if (values.length === 0) return;
+
+			const currentIndex = currentValue ? values.indexOf(currentValue) : -1;
+			const delta = event.key === nextKey ? 1 : -1;
+			const nextIndex = (currentIndex + delta + values.length) % values.length;
+			const nextValue = values[nextIndex];
+
+			event.preventDefault();
+			setValue(nextValue);
+			itemsRef.current.get(nextValue)?.focus();
+		},
+		[currentValue, disabled, onKeyDown, orientation, setValue]
+	);
 
 	return (
 		<RadioGroupContext.Provider value={contextValue}>
-			<RadioGroupPrimitive.Root
+			<div
 				ref={containerRef}
+				role='radiogroup'
+				aria-orientation={orientation}
+				aria-disabled={disabled}
+				aria-required={required}
 				data-slot='radio-group'
-				value={value}
-				defaultValue={defaultValue}
-				onValueChange={(v) => {
-					setInternalValue(v);
-					onValueChange?.(v);
-				}}
+				data-name={name}
 				className={cn('relative grid gap-3', className)}
+				onKeyDown={handleKeyDown}
 				{...props}
 			>
 				{children}
@@ -112,27 +208,35 @@ function RadioGroup({ className, value, defaultValue, onValueChange, children, .
 						<LiquidBlob x={leadX} y={leadY} />
 					</div>
 				)}
-			</RadioGroupPrimitive.Root>
+			</div>
 		</RadioGroupContext.Provider>
 	);
 }
 
-export type RadioGroupItemProps = React.ComponentProps<typeof RadioGroupPrimitive.Item>;
-function RadioGroupItem({ className, value, ...props }: RadioGroupItemProps) {
-	const context = React.useContext(RadioGroupContext);
+export type RadioGroupItemProps = Omit<React.ComponentProps<'button'>, 'value' | 'onChange'> & {
+	value: string;
+};
 
-	const refCallback = React.useCallback(
-		(node: HTMLButtonElement | null) => {
-			context?.registerItem(value, node);
-		},
-		[context, value]
-	);
+function RadioGroupItem({ className, value, disabled, onClick, ...props }: RadioGroupItemProps) {
+	const context = useRadioGroupContext('RadioGroupItem');
+	const refCallback = useRadioGroupItemRef(value);
+	const checked = context.value === value;
+	const itemDisabled = disabled ?? context.disabled;
 
 	return (
-		<RadioGroupPrimitive.Item
+		<button
 			ref={refCallback}
-			value={value}
+			type='button'
+			role='radio'
+			aria-checked={checked}
+			data-state={checked ? 'checked' : 'unchecked'}
 			data-slot='radio-group-item'
+			disabled={itemDisabled}
+			tabIndex={checked || context.value === undefined ? 0 : -1}
+			onClick={(event) => {
+				onClick?.(event);
+				if (!event.defaultPrevented && !itemDisabled) context.setValue(value);
+			}}
 			className={cn(
 				'border-input text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 shadow-xs aspect-square size-6 shrink-0 rounded-full border outline-none transition-[color,box-shadow,border-color] duration-200 ease-in-out focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50',
 				'data-[state=checked]:border-primary',
@@ -143,4 +247,4 @@ function RadioGroupItem({ className, value, ...props }: RadioGroupItemProps) {
 	);
 }
 
-export { RadioGroup, RadioGroupItem };
+export { RadioGroup, RadioGroupItem, useRadioGroupAnchorRef, useRadioGroupContext, useRadioGroupItemRef };

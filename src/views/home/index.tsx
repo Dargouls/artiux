@@ -10,9 +10,10 @@ import BubbleButton from '@/artiux/components/bubbleButton/bubbleButton';
 import { Button } from '@/artiux/components/button';
 import { ButtonGroup } from '@/artiux/components/buttonGroup';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/artiux/components/card';
-import { CheckboxComposeItem } from '@/artiux/components/checkboxCompose';
+import { IconButton } from '@/artiux/components/iconButton';
 import { InputNumber } from '@/artiux/components/inputNumber';
 import { MultiSelect } from '@/artiux/components/multiSelect';
+import { RadioGroup, RadioGroupItem } from '@/artiux/components/radioGroup';
 import { Select } from '@/artiux/components/select';
 import { Text } from '@/artiux/components/text';
 import { useIsMobile } from '@/artiux/hooks/use-mobile';
@@ -48,6 +49,12 @@ export default function HomePage() {
 		{ label: 'Inativo', value: 'inativo' },
 		{ label: 'Pendente', value: 'pendente' },
 	];
+
+	const CardArrowLink = ({ href }: { href: string }) => (
+		<Link href={href} asChild className='absolute right-3 top-3 z-10'>
+			<IconButton icon='arrow-up-right' variant='ghost' size='sm' aria-label='Ver componente' />
+		</Link>
+	);
 
 	const frameworkOptions = [
 		{ value: 'react', label: 'React' },
@@ -129,7 +136,8 @@ export default function HomePage() {
 							</p>
 
 							<div className='grid w-full max-w-5xl grid-cols-1 gap-4 px-4 text-left sm:grid-cols-2 lg:grid-cols-3'>
-								<Card className='items-start'>
+								<Card className='relative items-start'>
+									<CardArrowLink href='/components/select' />
 									<CardHeader>
 										<CardTitle>Select</CardTitle>
 										<CardDescription>Seletor em drawer</CardDescription>
@@ -139,7 +147,8 @@ export default function HomePage() {
 									</CardContent>
 								</Card>
 
-								<Card className='items-start'>
+								<Card className='relative items-start'>
+									<CardArrowLink href='/components/multiSelect' />
 									<CardHeader>
 										<CardTitle>Multi Select</CardTitle>
 										<CardDescription>Múltipla escolha com busca</CardDescription>
@@ -155,7 +164,8 @@ export default function HomePage() {
 									</CardContent>
 								</Card>
 
-								<Card className='hidden items-start md:flex'>
+								<Card className='relative hidden items-start md:flex'>
+									<CardArrowLink href='/components/buttonGroup' />
 									<CardHeader>
 										<CardTitle>Button Group</CardTitle>
 										<CardDescription>Botões agrupados</CardDescription>
@@ -175,7 +185,8 @@ export default function HomePage() {
 									</CardContent>
 								</Card>
 
-								<Card ripple className='hidden items-start space-y-2 md:flex'>
+								<Card ripple className='relative hidden items-start space-y-2 md:flex'>
+									<CardArrowLink href='/components/card' />
 									<CardHeader>
 										<CardTitle>Card</CardTitle>
 										<CardDescription>Subtítulo</CardDescription>
@@ -192,7 +203,8 @@ export default function HomePage() {
 									</CardFooter>
 								</Card>
 
-								<Card className='hidden items-start md:flex'>
+								<Card className='relative hidden items-start md:flex'>
+									<CardArrowLink href='/components/inputNumber' />
 									<CardHeader>
 										<CardTitle>Input Number</CardTitle>
 										<CardDescription>Incremento e decremento</CardDescription>
@@ -202,13 +214,18 @@ export default function HomePage() {
 									</CardContent>
 								</Card>
 
-								<Card className='hidden items-start md:flex'>
+								<Card className='relative hidden items-start md:flex'>
+									<CardArrowLink href='/components/radioGroup' />
 									<CardHeader>
-										<CardTitle>Checkbox Compose</CardTitle>
-										<CardDescription>Checkbox com mais elementos</CardDescription>
+										<CardTitle>Radio Group</CardTitle>
+										<CardDescription>Grupo de opções de rádio</CardDescription>
 									</CardHeader>
 									<CardContent>
-										<CheckboxComposeItem title='Checkbox Compose' description='Card de checkbox com título e descrição' />
+										<RadioGroup defaultValue='1' className='flex flex-row gap-4'>
+											<RadioGroupItem value='1' />
+											<RadioGroupItem value='2' />
+											<RadioGroupItem value='3' />
+										</RadioGroup>
 									</CardContent>
 								</Card>
 							</div>
@@ -216,7 +233,7 @@ export default function HomePage() {
 					</section>
 
 					<section className='panel relative flex h-screen flex-col justify-start pt-40 text-center md:justify-between md:pt-0'>
-						<nav className='flex flex-none items-start justify-center gap-4 px-4 pb-7 md:flex-1 md:items-end'>
+						<nav className='mx-auto flex max-w-lg flex-none items-start justify-center gap-4 px-4 pb-7 md:flex-1 md:items-end'>
 							<CopyCode />
 						</nav>
 						<div className='flex h-56 flex-col items-center gap-4 md:pt-6'>
