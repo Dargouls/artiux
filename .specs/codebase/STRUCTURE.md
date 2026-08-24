@@ -5,59 +5,70 @@
 ## Directory Tree
 
 ```
-artiux-lab/
-├── .claude/skills/            Claude Code skill defs (not app code)
-├── public/                    static assets (svgs, images, font json)
-├── src/
-│   ├── app/                   Next.js App Router routes
-│   │   ├── components/        one route per showcase component (badge, button, calendar, dialog, drawer, select, textField, icons, ...)
-│   │   ├── layers/, three/, test/   experimental/demo routes
-│   │   ├── layout.tsx, page.tsx, loading.tsx, globals.css
-│   │   └── snap-old.tsx        dead file (see CONCERNS.md)
-│   ├── artiux-components/     canonical design-system source (badge, button, calendar, card, dialog, drawer, select, sidebar, tabs, textField, tooltip, icons, ...)
-│   ├── artiux-hooks/          use-mobile.tsx, useOutsideClick.ts
-│   ├── artiux-utils/          getColors.ts
-│   ├── assets/                brand, components, images
-│   ├── components/            legacy component set + shadcn ui/ + demo widgets (charts, animatedForm, grainient, cardSwap, layout/)
-│   ├── hook/                  legacy hooks (useLenis, useOutsideClick, useScrollSmoother, useSnap)
-│   ├── interfaces/            iconProps.ts
-│   ├── lib/utils.ts           cn() helper (only file)
-│   └── views/home/index.tsx   landing page view
-├── components.json            shadcn config
-├── next.config.ts
-├── postcss.config.mjs         tailwind v4 plugin
-├── tsconfig.json              strict:true, @/* → ./src/*
-├── vercel.json
-├── pnpm-lock.yaml / yarn.lock (both present — see CONCERNS.md)
-└── package.json
+src/
+├─ app/                        Next.js App Router
+│  ├─ layout.tsx, page.tsx, loading.tsx, globals.css, favicon.ico
+│  ├─ layers/
+│  ├─ three/
+│  └─ components/               doc/demo routes, one folder per library component
+│     ├─ layout.tsx, page.tsx   (listing page for /components)
+│     └─ <name>/  { layout.tsx (title metadata only), page.tsx (docs/demo) }
+│        (28 folders: badge, breadcrumb, bubble-button, button, buttonGroup,
+│         calendar, card, checkboxCompose, circle-transition, circularProgress,
+│         dialog, drawer, iconButton, icons, inputNumber, multiSelect,
+│         progressBar, radioCompose, radioGroup, ripple-container, select,
+│         step-form, switch, tabs, text, textField, to-left, utils)
+│
+├─ artiux/                     the publishable component library
+│  ├─ components/<name>/       index.tsx (or <name>.tsx) — 26 components
+│  ├─ hooks/                   use-mobile.tsx, useOutsideClick.ts
+│  └─ utils/                   getColors.ts
+│
+├─ assets/                     brand/, components/, images/
+├─ components/                 site-only marketing/docs UI (NOT the library)
+│  ├─ animatedForm/, barChart/, breadcrumb/, button/, cardSwap/,
+│  │  circularProgress/, command/, componentCard/, copyCode/, customize/,
+│  │  draggableBox/, dropdownMenu/, grainient/, label/,
+│  │  layout/ (footer/, header/, sidebarWrapper/, transitionWrapper/),
+│  │  lineChart/, link/, modernCard/, movingSquares/, musicBars/,
+│  │  pageLoader/, pieChart/, previewCode/, radio/, stepFormProvider/,
+│  │  textField/, ui/
+│
+├─ data/
+├─ hook/                       site-only hooks (useSnap, useScrollSmoother, ...)
+├─ interfaces/
+├─ lib/                        utils.ts → cn() helper
+└─ views/
+   └─ home/  index.tsx         landing page composition
 ```
 
 ## Module Organization
 
-### `src/app`
+### `src/app` — Next.js routing shell
 
-**Purpose:** Routing + per-component showcase/demo pages.
-**Location:** `src/app/**/page.tsx`
-**Key files:** `layout.tsx` (mounts `<Analytics/>`, `<Toaster/>`), `src/app/components/*` (one folder per showcased component)
+**Purpose:** Route definitions, global layout, fonts, providers (ViewTransitions, Toaster, Analytics).
+**Location:** `src/app/layout.tsx` (root), `src/app/components/layout.tsx` (docs shell).
+**Key files:** `src/app/globals.css` (Tailwind v4 theme + safelist), `src/app/page.tsx`.
 
-### `src/artiux-components`
+### `src/artiux` — the component library itself
 
-**Purpose:** Canonical, actively developed design-system component library.
-**Location:** `src/artiux-components/<component>/index.tsx`
-**Key files:** `icons/index.tsx` (5311 lines), `sidebar.tsx` (707 lines)
+**Purpose:** Source-of-truth for every component the library ships; this is what end users copy into their own projects.
+**Location:** `src/artiux/components/<name>/index.tsx`.
+**Key files:** `src/artiux/utils/getColors.ts` (shared color-class resolver), `src/artiux/hooks/use-mobile.tsx` (responsive variant switch).
 
-### `src/components`
+### `src/components` — docs/site-only UI
 
-**Purpose:** Legacy component implementations + shadcn primitives + page-specific demo widgets.
-**Location:** `src/components/<component>/<component>.tsx`, `src/components/ui/*`
-**Key files:** `ui/sparkles.tsx` (424 lines), `grainient/index.tsx` (WebGL shader background), `animatedForm/animatedForm.tsx`
+**Purpose:** Builds the artiux.dev website chrome and docs page furniture (header, footer, sidebar nav, code-copy blocks, charts for demos). Explicitly NOT part of the shippable library (per README).
+**Location:** `src/components/*`.
+**Key files:** `src/components/copyCode`, `src/components/previewCode` (render the "copy this code" blocks on every doc page), `src/components/layout/sidebarWrapper` (docs nav).
 
 ## Where Things Live
 
-**UI components (canonical):** `src/artiux-components/`
-**UI components (legacy/demo):** `src/components/`
-**Hooks:** split across `src/hook/` and `src/artiux-hooks/` (some files byte-identical duplicates)
-**Utils:** `src/lib/utils.ts` (shadcn `cn`), `src/artiux-utils/getColors.ts`
-**Types/interfaces:** `src/interfaces/`
-**Styling config:** `postcss.config.mjs` + `@theme` block in `src/app/globals.css` (Tailwind v4, no `tailwind.config.js`)
-**Configuration:** none — no `.env*` files, no `process.env` usage anywhere in `src`
+**Adding/editing a library component:**
+- Component source: `src/artiux/components/<name>/index.tsx`
+- Doc/demo page: `src/app/components/<name>/page.tsx` (+ `layout.tsx` for `<title>` metadata)
+- Config: no per-component config files; styling inline via Tailwind + `cva`.
+
+**Site chrome (header/footer/sidebar):** `src/components/layout/*`
+
+**Landing page:** `src/views/home/index.tsx`, wired via `src/app/page.tsx`
