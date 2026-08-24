@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ArtIux Lab
 
-## Getting Started
+Biblioteca de componentes animados para React, feita para Next.js + Tailwind CSS + TypeScript. Modelo de uso: copie o código do componente e cole no seu projeto.
 
-First, run the development server:
+## O que é
+
+Biblioteca de componentes em Next.js com documentação e demonstração com mais de 24 componentes — botões, selects, drawers, dialogs, formulários com animação, progress bars, calendário etc. Cada componente tem página própria em [src/app/components](src/app/components), com preview ao vivo e bloco de código pronto para copiar.
+
+Duas pastas dos componentes coexistem hoje:
+
+- [src/artiux/components](src/artiux/components) — componentes exportáveis prontos para serem utilizados em projetos.
+- [src/app/components](src/app/components) — Componentes usados apenas na construção da UI do website artiux.dev
+
+## Intenção
+
+Inspirado no Shadcn e React-bits, o objetivo é ser uma biblioteca de componentes totalmente animados com GSAP, Motion, ripple, transições e etc; Sendo o foco principal em componentes básicos de UI's modernas.
+O time apenas cola direto no projeto, mantendo consistência visual.
+
+## Próximos passos
+
+- Remover componentes soltos e testes, organizando também as pastas do repositório.
+- Revisar api dos componentes garantindo devX.
+- Realizar testes em diversos cenários e implantar testes automatizados para garantir manutenabilidade.
+- Implementar instalação via CLI
+
+## Rodando localmente
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```bash
+pnpm dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Abre em [http://localhost:3000](http://localhost:3000). A lista de componentes fica em `/components`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Stack
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Next.js 15 (Turbopack) · React 19 · Tailwind CSS 4 · TypeScript · Radix UI · GSAP · Motion · Three.js (`@react-three/fiber`) · Zustand · React Hook Form + Zod

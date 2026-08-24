@@ -11,9 +11,6 @@ importers:
 
   .:
     dependencies:
-      '@artiux/components':
-        specifier: link:C:/Users/Usuario/Documents/Trabalhos/ArtIux/artiux
-        version: link:../artiux
       '@gsap/react':
         specifier: ^2.1.2
         version: 2.1.2(gsap@3.15.0)(react@19.2.3)

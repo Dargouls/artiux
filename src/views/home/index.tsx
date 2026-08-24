@@ -51,8 +51,14 @@ export default function HomePage() {
 	];
 
 	const CardArrowLink = ({ href }: { href: string }) => (
-		<Link href={href} asChild className='absolute right-3 top-3 z-10'>
-			<IconButton icon='arrow-up-right' variant='ghost' size='sm' aria-label='Ver componente' />
+		<Link href={href} asChild>
+			<IconButton
+				icon='arrow-up-right'
+				className='absolute! right-0 top-0 z-10 p-4'
+				variant='ghost'
+				size='sm'
+				aria-label='Ver componente'
+			/>
 		</Link>
 	);
 

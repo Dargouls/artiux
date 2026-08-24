@@ -9,7 +9,6 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
-		"@artiux/components": "link:C:/Users/Usuario/Documents/Trabalhos/ArtIux/artiux",
 		"@gsap/react": "^2.1.2",
 		"@hookform/resolvers": "^5.1.1",
 		"@mona-health/react-input-mask": "^3.0.3",
