@@ -65,14 +65,8 @@ import { Badge } from '@/artiux/components/badge';
 						>
 							Badge
 						</Badge>
-						<Badge color='info' ornament='settings'>
-							Com ícone
-						</Badge>
 						<Badge color='destructive' active={false}>
 							Inativo
-						</Badge>
-						<Badge color='success' size='sm'>
-							Pequeno
 						</Badge>
 					</PreviewCode>
 				</section>

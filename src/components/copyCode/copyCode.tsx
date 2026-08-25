@@ -14,22 +14,6 @@ interface CopyCodeProps extends React.HTMLAttributes<HTMLDivElement> {
 	fileName?: string;
 }
 
-const previewCode = `'use client';
-
-import { Copy } from 'lucide-react';
-import { motion, useInView } from 'motion/react';
-import { useRef } from 'react';
-
-interface CopyCodeProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-export default function CopyCode({ ...props }: CopyCodeProps) {
-	const background = '#09090B';
-	const border = '#3B341F';
-	const ref = useRef(null);
-	const isInView = useInView(ref, { once: false, margin: '-100px' });
-
-	return (`;
-
 const previewInstalls = `yarn add @motion/react`;
 
 const packageManagers = ['pnpm', 'npm', 'yarn', 'bun'] as const;
@@ -68,7 +52,7 @@ function buildCommands(installs: string): Record<PackageManager, string> {
 	};
 }
 
-export default function CopyCode({ installs = previewInstalls, code = previewCode, fileName, ...props }: CopyCodeProps) {
+export default function CopyCode({ installs = previewInstalls, code, fileName, ...props }: CopyCodeProps) {
 	const ref = useRef(null);
 	const isInView = useInView(ref, { once: false, margin: '-100px' });
 	const [expanded, setExpanded] = useState(false);
@@ -106,57 +90,59 @@ export default function CopyCode({ installs = previewInstalls, code = previewCod
 				</div>
 			</div>
 
-			<motion.div
-				ref={ref}
-				initial={{ opacity: 0, y: 16 }}
-				animate={isInView && { opacity: 1, y: 0 }}
-				transition={{ delay: 0.2, duration: 0.5, type: 'spring' }}
-				className='overflow-hidden rounded-2xl border-2 border-[#3B341F] bg-[#09090B] shadow-2xl'
-			>
-				<div className='flex items-center justify-between gap-2 border-b border-[#3B341F] px-4 py-3'>
-					<div className='text-muted-foreground flex min-w-0 items-center gap-2 text-xs'>
-						<Icon icon='code' className='size-3.5 shrink-0' />
-						<span className='truncate'>{fileName ?? 'código'}</span>
-					</div>
-
-					<div className='flex shrink-0 items-center gap-3'>
-						<button
-							onClick={() => setExpanded((prev) => !prev)}
-							className='text-muted-foreground flex items-center gap-1 text-xs outline-none transition-colors hover:text-white'
-						>
-							{expanded ? 'Recolher' : 'Expandir'}
-							<Icon icon='chevron-down' className={cn('size-3.5 transition-transform duration-300', expanded && 'rotate-180')} />
-						</button>
-
-						<CodeButton code={code} />
-					</div>
-				</div>
-
+			{code && (
 				<motion.div
-					animate={{ height: expanded ? 'auto' : '14rem' }}
-					transition={{ duration: 0.3, ease: 'easeInOut' }}
-					className='relative overflow-hidden'
+					ref={ref}
+					initial={{ opacity: 0, y: 16 }}
+					animate={isInView && { opacity: 1, y: 0 }}
+					transition={{ delay: 0.2, duration: 0.5, type: 'spring' }}
+					className='overflow-hidden rounded-2xl border-2 border-[#3B341F] bg-[#09090B] shadow-2xl'
 				>
-					<SyntaxHighlighter
-						language={language}
-						style={vscDarkPlus}
-						wrapLongLines
-						customStyle={{
-							margin: 0,
-							padding: '1rem',
-							background: 'transparent',
-							fontSize: '0.75rem',
-							lineHeight: '1.625',
-						}}
-					>
-						{code}
-					</SyntaxHighlighter>
+					<div className='flex items-center justify-between gap-2 border-b border-[#3B341F] px-4 py-3'>
+						<div className='text-muted-foreground flex min-w-0 items-center gap-2 text-xs'>
+							<Icon icon='code' className='size-3.5 shrink-0' />
+							<span className='truncate'>{fileName ?? 'código'}</span>
+						</div>
 
-					{!expanded && (
-						<div className='pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#09090B] to-transparent' />
-					)}
+						<div className='flex shrink-0 items-center gap-3'>
+							<button
+								onClick={() => setExpanded((prev) => !prev)}
+								className='text-muted-foreground flex items-center gap-1 text-xs outline-none transition-colors hover:text-white'
+							>
+								{expanded ? 'Recolher' : 'Expandir'}
+								<Icon icon='chevron-down' className={cn('size-3.5 transition-transform duration-300', expanded && 'rotate-180')} />
+							</button>
+
+							<CodeButton code={code} />
+						</div>
+					</div>
+
+					<motion.div
+						animate={{ height: expanded ? 'auto' : '14rem' }}
+						transition={{ duration: 0.3, ease: 'easeInOut' }}
+						className='relative overflow-hidden'
+					>
+						<SyntaxHighlighter
+							language={language}
+							style={vscDarkPlus}
+							wrapLongLines
+							customStyle={{
+								margin: 0,
+								padding: '1rem',
+								background: 'transparent',
+								fontSize: '0.75rem',
+								lineHeight: '1.625',
+							}}
+						>
+							{code}
+						</SyntaxHighlighter>
+
+						{!expanded && (
+							<div className='pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#09090B] to-transparent' />
+						)}
+					</motion.div>
 				</motion.div>
-			</motion.div>
+			)}
 		</div>
 	);
 }

@@ -239,8 +239,8 @@ export default function HomePage() {
 					</section>
 
 					<section className='panel relative flex h-screen flex-col justify-start pt-40 text-center md:justify-between md:pt-0'>
-						<nav className='mx-auto flex max-w-lg flex-none items-start justify-center gap-4 px-4 pb-7 md:flex-1 md:items-end'>
-							<CopyCode />
+						<nav className='mx-auto flex w-full max-w-lg flex-none items-start justify-center gap-4 px-4 pb-7 md:flex-1 md:items-end'>
+							<CopyCode code='' />
 						</nav>
 						<div className='flex h-56 flex-col items-center gap-4 md:pt-6'>
 							<h1 className='font-poppins text-4xl font-light'>
