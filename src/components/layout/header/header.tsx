@@ -87,8 +87,8 @@ const NavMobile = () => {
 							<Link href='/contact'>Contato</Link>
 						</li> */}
 						<li>
-							<Link href='https://www.gabrielzv.com' target='_blank' onClick={close}>
-								<RainbowButton>Meu Portfólio</RainbowButton>
+							<Link href='https://github.com/gabrielzv11/artiux' target='_blank' onClick={close}>
+								<RainbowButton>Github</RainbowButton>
 							</Link>
 						</li>
 					</ul>
@@ -112,8 +112,8 @@ const NavDesktop = () => {
 					<Link href='/contact'>Contato</Link>
 				</li> */}
 				<li>
-					<Link href='https://www.gabrielzv.com' target='_blank'>
-						<RainbowButton>Meu Portfólio</RainbowButton>
+					<Link href='https://github.com/gabrielzv11/artiux' target='_blank'>
+						<RainbowButton>Github</RainbowButton>
 					</Link>
 				</li>
 			</ul>
