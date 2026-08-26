@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 
 import CopyCode from '@/components/copyCode/copyCode';
@@ -9,11 +10,13 @@ import PreviewCode from '@/components/previewCode/previewCode';
 
 import { Aside } from '@/artiux/components/aside';
 import { Button } from '@/artiux/components/button';
+import { Mark } from '@/artiux/components/mark';
 
 const asideItems = [
 	{ id: 'preview', label: 'Prévia' },
-	{ id: 'props', label: 'Props' },
+	{ id: 'customize', label: 'Customizar' },
 	{ id: 'code', label: 'Instalação' },
+	{ id: 'props', label: 'Props' },
 ];
 
 const variants = ['primary', 'secondary', 'ghost'] as const;
@@ -56,7 +59,29 @@ import { Button } from '@/artiux/components/button';
 			<div className='min-w-0 flex-1'>
 				<div>
 					<h1 className='mt-20 text-5xl font-bold'>Button</h1>
-					<p className='text-muted-foreground mt-4 block text-xl'>Um botão com efeito ripple, estado de loading e ornamentos</p>
+					<p className='text-muted-foreground mt-4 block text-xl'>
+						Um botão com efeito ripple, estado de loading e ornamentos. Utiliza internamente os componentes{' '}
+						<Link href='/components/icons'>
+							<Mark>Icon</Mark>
+						</Link>
+						,{' '}
+						<Link href='/components/circularProgress'>
+							<Mark>CircularProgress</Mark>
+						</Link>
+						,{' '}
+						<Link href='/components/ripple-container'>
+							<Mark>RippleContainer</Mark>
+						</Link>{' '}
+						e{' '}
+						<Link href='/components/text'>
+							<Mark>Text</Mark>
+						</Link>
+						, além da função{' '}
+						<Link href='/components/utils'>
+							<Mark>cn</Mark>
+						</Link>{' '}
+						— instale-os antes de copiar o código abaixo.
+					</p>
 				</div>
 
 				<section id='preview' className='my-8 scroll-mt-24'>
@@ -81,25 +106,30 @@ import { Button } from '@/artiux/components/button';
 						<ControlDropdown label='Color' value={color} options={colors} onChange={setColor} />
 						<ControlDropdown label='Size' value={size} options={sizes} onChange={setSize} />
 						<ControlDropdown label='Ornament' value={ornament} options={ornaments} onChange={setOrnament} />
-						<ControlDropdown label='Ornament position' value={ornamentPosition} options={ornamentPositions} onChange={setOrnamentPosition} />
+						<ControlDropdown
+							label='Ornament position'
+							value={ornamentPosition}
+							options={ornamentPositions}
+							onChange={setOrnamentPosition}
+						/>
 						<ControlSwitch label='Loading' checked={loading} onChange={setLoading} />
 						<ControlSwitch label='Disabled' checked={disabled} onChange={setDisabled} />
 					</Customize>
-				</section>
-
-				<section id='props' className='my-8 scroll-mt-24'>
-					<PropsTable rows={propRows} />
 				</section>
 
 				<section id='code' className='my-8 scroll-mt-24'>
 					<h3 className='text-2xl font-bold'>Instalação:</h3>
 					<div className='mt-4 place-content-start'>
 						<CopyCode
-							installs='yarn add class-variance-authority motion lucide-react'
+							installs='yarn add class-variance-authority motion'
 							code={componentCode}
 							fileName='artiux/components/button/index.tsx'
 						/>
 					</div>
+				</section>
+
+				<section id='props' className='my-8 scroll-mt-24'>
+					<PropsTable rows={propRows} />
 				</section>
 			</div>
 
