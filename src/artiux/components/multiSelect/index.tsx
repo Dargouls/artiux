@@ -212,7 +212,7 @@ const Trigger = forwardRef<
 									mass: 0.8,
 								}}
 							>
-								<Badge className='rounded-lg' ornament='close' ornamentPosition='right' size='sm' onClick={(e) => handleRemove(value, e)}>
+								<Badge className='rounded-lg' ornament='x' ornamentPosition='right' size='sm' onClick={(e) => handleRemove(value, e)}>
 									{getLabel(value)}
 								</Badge>
 							</motion.div>
