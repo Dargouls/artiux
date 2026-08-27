@@ -337,7 +337,7 @@ function MultiSelectComponent(
 												>
 													<Badge
 														className='rounded-lg'
-														ornament='close'
+														ornament='x'
 														ornamentPosition='right'
 														size='sm'
 														onClick={(e) => handleRemove(value, e)}
